@@ -63,6 +63,7 @@
     - [2026-05-28](#2026-05-28)
     - [2026-05-29](#2026-05-29)
     - [2026-05-30](#2026-05-30)
+    - [2026-06-01](#2026-06-01)
   - [Fix Bugs](#fix-bugs)
     - [2026-05-02](#2026-05-02-1)
     - [2026-05-04](#2026-05-04-1)
@@ -939,6 +940,10 @@ Login with an admin account first and get admin token.
    -> Update FileHelper: deleteFile() throw InvalidFileException
    -> Update GlobalExceptionHandler: Add handleMultipartException() to handle file size exceeded 5MB, because application.properties: File > 5MB → Spring reject → MultipartException
 3. ProductsPage & BrandsPage: Toast in useEffect location state handled
+
+### 2026-06-01
+
+1. Unit test for BE
 
 ## Fix Bugs
 
