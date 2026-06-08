@@ -7,7 +7,8 @@ import { getProducts, deleteProduct } from "../../services/products-api";
 import useAuth from "../../components/context/use-auth";
 import NoProductImage from "../../assets/no-product-image.jpeg";
 import { BASE_URL } from "../../utils/constants";
-import { formatPrice, formatDate } from "../../utils/utils";
+import { formatPrice, formatDate, filterInput } from "../../utils/utils";
+import { toast, Bounce } from "react-toastify";
 
 export default function ProductsPage() {
   const navigate = useNavigate();
@@ -40,6 +41,15 @@ export default function ProductsPage() {
 
   // Set status true when handling location state
   const locationStateHandled = useRef(false);
+
+  // Validation message
+  const validationMessage =
+    priceFrom !== "" && priceTo !== "" && Number(priceFrom) > Number(priceTo)
+      ? '"From price" cannot be greater than "To price".'
+      : (priceFrom !== "" && Number(priceFrom) < 0) ||
+          (priceTo !== "" && Number(priceTo) < 0)
+        ? "Price cannot be negative."
+        : "";
 
   // List & Search
   const fetchProducts = (currentPage, keyword, priceFromVal, priceToVal) => {
@@ -84,13 +94,21 @@ export default function ProductsPage() {
       });
   };
 
-  // Check if price from > price to
+  // Check if  price from > price to
   // setState
   useEffect(() => {
-    setDisabled(
-      priceFrom !== "" && priceTo !== "" && Number(priceFrom) > Number(priceTo),
-    );
-  }, [priceFrom, priceTo]);
+    const fromNum = Number(priceFrom);
+    const toNum = Number(priceTo);
+
+    const invalidRange = priceFrom !== "" && priceTo !== "" && fromNum > toNum;
+
+    const hasNegative =
+      (priceFrom !== "" && fromNum < 0) || (priceTo !== "" && toNum < 0);
+
+    const isEmpty = search === "" && priceFrom === "" && priceTo === "";
+
+    setDisabled(invalidRange || hasNegative || isEmpty);
+  }, [priceFrom, priceTo, search]);
 
   // Load for first time, or when list changes (by change page / search)
   // setPage or setAppliedSearch -> fetch products again
@@ -186,21 +204,53 @@ export default function ProductsPage() {
     }
   }, [location.state]);
 
-  // Clear error/success response
+  // Show error / success with toast
   useEffect(() => {
-    if (!error && !success) return;
-
-    const timer = setTimeout(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       setError(null);
+    } else if (success) {
+      toast.success(success, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       setSuccess(null);
-    }, 3000);
-
-    return () => clearTimeout(timer);
+    }
   }, [error, success]);
 
   // Search -> apply search keyword, page = 1
   const handleSearch = () => {
     setAppliedFilters({ search, priceFrom, priceTo });
+    setPage(1);
+  };
+
+  // Clear search
+  const handleClearSearch = () => {
+    setSearch("");
+    setPriceFrom("");
+    setPriceTo("");
+    setAppliedFilters({
+      search: "",
+      priceFrom: "",
+      priceTo: "",
+    });
     setPage(1);
   };
 
@@ -269,69 +319,104 @@ export default function ProductsPage() {
         <div className="products-actions-container">
           <div className="products-actions-wrapper">
             {!isLoading && !isErrorList && (
-              <div className="action-groups">
-                {/* Search brand name & product name */}
-                <div className="search-group">
-                  <i className="bi bi-search search-icon"></i>
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="Search by product name or brand name…"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                  />
-                </div>
-                {/* Filter: price from, price to */}
-                <div className="filter-group">
-                  {/* Price from */}
-                  <div className="input-group">
-                    <input
-                      className="input"
-                      type="number"
-                      placeholder="From price..."
-                      value={priceFrom}
-                      onChange={(e) => setPriceFrom(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      autoComplete="off"
-                    />
+              <>
+                <div className="action-groups">
+                  {/* Search brand name & product name + Filter: price from, price to */}
+                  <div className="search-group">
+                    <div className="search-input">
+                      <input
+                        className="input input-search"
+                        type="text"
+                        placeholder="Search by product name or brand name…"
+                        value={search}
+                        onChange={(e) => setSearch(filterInput(e.target.value))}
+                        onKeyDown={handleKeyDown}
+                      />
+                      <i className="bi bi-search search-icon"></i>
+                    </div>
+
+                    <div className="price-note-group">
+                      {/* Price from */}
+                      <div className="price-group">
+                        <div className="price-title">From</div>
+                        <div className="input-group">
+                          <input
+                            className="input"
+                            type="number"
+                            min="0"
+                            step="1000"
+                            placeholder="From price..."
+                            value={priceFrom}
+                            onChange={(e) => setPriceFrom(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            autoComplete="off"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Price to */}
+
+                      <div className="price-group">
+                        <div className="price-title">To</div>
+                        <div className="input-group">
+                          <input
+                            className="input"
+                            type="number"
+                            min="0"
+                            step="1000"
+                            placeholder="To price..."
+                            value={priceTo}
+                            onChange={(e) => setPriceTo(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            autoComplete="off"
+                          />
+                        </div>
+                      </div>
+                      {validationMessage && (
+                        <div className="search-validation">
+                          {validationMessage}
+                        </div>
+                      )}
+                    </div>
+                    <div className="button-group">
+                      <button
+                        className="btn btn-search"
+                        disabled={disabled}
+                        onClick={handleSearch}
+                      >
+                        Search
+                      </button>
+                      <button
+                        className={`btn btn-clear ${
+                          appliedFilters.search === "" &&
+                          appliedFilters.priceFrom === "" &&
+                          appliedFilters.priceTo === ""
+                            ? "disabled"
+                            : ""
+                        }`}
+                        onClick={handleClearSearch}
+                      >
+                        <i className="bi bi-x"></i> Clear
+                      </button>
+                    </div>
                   </div>
-                  {/* Price to */}
-                  <div className="input-group">
-                    <input
-                      className="input"
-                      type="number"
-                      placeholder="To price..."
-                      value={priceTo}
-                      onChange={(e) => setPriceTo(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      autoComplete="off"
-                    />
-                  </div>
-                  <button
-                    className="btn btn-search"
-                    disabled={disabled}
-                    onClick={handleSearch}
-                  >
-                    Search
-                  </button>
+                  {isAdmin && (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() =>
+                        navigate("/products/add", {
+                          state: {
+                            page: page,
+                            appliedFilters: appliedFilters,
+                          },
+                        })
+                      }
+                    >
+                      Add Product
+                    </button>
+                  )}
                 </div>
-                {isAdmin && (
-                  <button
-                    className="btn btn-primary"
-                    onClick={() =>
-                      navigate("/products/add", {
-                        state: {
-                          page: page,
-                          appliedFilters: appliedFilters,
-                        },
-                      })
-                    }
-                  >
-                    Add new product
-                  </button>
-                )}
-              </div>
+              </>
             )}
             {!isLoading && !isErrorList && products.length > 0 && (
               <div className="show-records">
@@ -339,17 +424,6 @@ export default function ProductsPage() {
                 {Math.min(pageSize * page, totalElements)} of {totalElements}{" "}
                 {isSearching ? "search " : ""}
                 records
-              </div>
-            )}
-            {/* Error/Success response */}
-            {error && (
-              <div className="alert alert-danger" role="alert">
-                {error}
-              </div>
-            )}
-            {success && (
-              <div className="alert alert-success" role="alert">
-                {success}
               </div>
             )}
           </div>
@@ -565,7 +639,7 @@ export default function ProductsPage() {
                 &times;
               </button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body modal-body-delete">
               <p>
                 Are you sure you want to delete product{" "}
                 <strong>{deleteModal.productName}</strong>?

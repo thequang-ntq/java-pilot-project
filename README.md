@@ -60,6 +60,9 @@
     - [2026-05-25](#2026-05-25)
     - [2026-05-26](#2026-05-26)
     - [2026-05-27](#2026-05-27)
+    - [2026-05-28](#2026-05-28)
+    - [2026-05-29](#2026-05-29)
+    - [2026-05-30](#2026-05-30)
   - [Fix Bugs](#fix-bugs)
     - [2026-05-02](#2026-05-02-1)
     - [2026-05-04](#2026-05-04-1)
@@ -858,7 +861,69 @@ Login with an admin account first and get admin token.
 
 ### 2026-05-27
 
-1.
+1. Understand the code
+2. Fix by mentor's note:
+   2.1. Table has extra bottom space -> .table-responsive .table: margin-bottom: 0;
+   2.2. .action-wrapper -> remove gap (upgrade distance between search bar and records, records and alert)
+   2.3. Update UI for table pages
+   -> Search merge with Search bar, add & edit button change color, clear button keep UI and close to search button, sanitize search, disable search when not have data (search empty, appliedSearch not check)
+   -> search-group input before search-icon
+   -> visibility hidden for hide UI but keep the distance that that component take place
+   -> Search, From Price, To Price, Search button, Clear merge to 1, have: From, To (price-title), config width range: search-group need flex: 1 with min-width: 0 to auto shrink; input need width: 100%; search-group need display: grid + grid-template-columns to fix children's width (ProductsPage), or display: flex to auto fix width (BrandsPage)
+   -> When on small device, use grid-template-rows to adjust by row (flex-column)
+   -> Price from, price to >= 0 (in ProductsPage): Add check negative in useEffect setDisabled search button. And for 2 invalid conditions: invalidRange & hasNegative -> Note for the reason to disabled search: search-validation below action-groups / actions (with validation messages) & add event listeners for window resize to check isDesktop or not
+   -> gap: 0 for actions-wrapper; gap change according to media queries for action-groups/actions
+
+### 2026-05-28
+
+1. Clear button default -> disabled
+2. Just show note below Price range, not show when search empty (Change validation message position)
+3. gap in actions/action-groups
+4. Detail modal in desktop for BrandsPage, ProductsPage: change display type, improve width, height.
+   4.1. grid-column: 1 / -1; for delete modal to display title & warning into 2 rows
+   4.2. modal-body: flex flex-direction: column
+   4.3. Change to flex-column when in small device (modal-body)
+   4.4. overflow: hidden in .modal; and position: sticky + z-index in .modal-header; overflow-wrap: break-word + overflow: auto; in modal-body
+5. BrandFormPage 1 col, no left-column & right-column. ProductFormPage 2 col, has left-column & right-column
+   5.1. BrandFormPage & ProductForPage have thumbnail, so when have image not change the form structure
+6. form-fields change max-height to min-height 56dvh to fit the desktop height, other device change min-height of form-fields. Use min-height at desktop, max-height at device to fixed size of form always in page, internal scroll
+7. Focus to delete required error in BrandFormPage & ProductFormPage
+   7.1. onFocus = clearError(...);
+8. Input type = file in BrandFormPage & ProductFormPage
+   8.1. Change CSS for input type = file
+   8.2. Check if not show image or error -> show spacer (Spacing)
+   8.3. Add max file size constants in FE to check in FE + check file size in application.properties in BE
+   8.4. Check file type image/ in FE, need to check in BE (Not yet)
+   8.5. Custom choose file button (htmlFor connect custom button with input file, change flex column in .field for ProductFromPage)
+   8.6. onClick in input (display none and linked with custom file btn) and remove -> setError empty
+   8.7. Border for choose file group
+   8.8. modal-body-delete: flex-column
+9. Selection arrow for Brand selection in ProductFormPage
+   9.1. How to make selection arrow - button absolute (caret-down-fill) not changed in position when have field error -> field-input-wrapper, error outside
+   9.2. arrow-active -> when dropdown, arrow change color
+10. Magic bytes (using Apache Tika) to check if file is image in Spring Boot BE.
+    10.1. Add Apache Tika (Tika Core) dependency in pom.xml
+    10.2. Add function isImageFile using Tika Core in common/util/FileHelper.java
+    10.3. Add check isImageFile in editFile function in common/util/FileHelper.java
+    10.4. Create InvalidFileException (CustomException) in exception/ folder, for handling isImageFile
+    10.5. Throw InvalidFileException in toEntity() & updateEntity(), before editFile() in ProductMapper & BrandMapper upto ServiceImpl
+    10.6. Catch exception in ServiceImpl (Brand, Product), catch InvalidFileException before catch Exception in add() & update()
+11. Limit to 5 file types: png, jpg, jpeg, webp, gif in FE, update UI according to it
+    11.1. Change accept type in input file to: accept=".png,.jpg,.jpeg,.webp,.gif"  
+    11.2. Add allowed file types in constants.js, fix handleImageChange() / handleLogoChange() in ProductFormPage, BrandFormPage
+12. Brand drop down: open up (not top 100%), so that not be hide when Brand field near at the end of form.
+
+### 2026-05-29
+
+1. ReactToast (Add, update, delete message)
+   1.1. ToastContainer at main.jsx, import ToastContainer & ReactToastify.css
+   1.2. import toast, Bounce from react-toastify in BrandsPage, ProductsPage, LoginPage (useEffect to render just 1 time)
+   1.3. useEffect render 1 time for error and success, setError/setSuccess null after toast, delete alert
+2. Change onChange for onFocus for clearError in LoginPage
+3. Change LogoutModal (long for desktop)
+4. Add ReactToast instead of alert in DashboardPage
+
+### 2026-05-30
 
 ## Fix Bugs
 

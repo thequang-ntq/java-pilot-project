@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import MainLayout from "../../components/layout/MainLayout/MainLayout";
 import useAuth from "../../components/context/use-auth";
 import "./LoginPage.css";
 import { sanitize, filterInput } from "../../utils/utils";
 import { login } from "../../services/auth-api";
+import { toast, Bounce } from "react-toastify";
 
 export default function LoginPage() {
   const { loginContext } = useAuth();
@@ -67,10 +68,27 @@ export default function LoginPage() {
     if (e.key === "Enter") handleSubmit();
   };
 
-  // Delete old error when user begin to input again, delete submit error
+  // Show error with toast
+  useEffect(() => {
+    if (loginError) {
+      toast.error(loginError, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      setLoginError(null);
+    }
+  }, [loginError]);
+
+  // Delete old error in error fields
   const clearError = (field) => {
     setErrors((prev) => ({ ...prev, [field]: "" }));
-    setLoginError("");
   };
 
   return (
@@ -89,11 +107,6 @@ export default function LoginPage() {
               <p className="sub">Sign in to your account to continue.</p>
             </div>
 
-            {/* Login error */}
-            {loginError && (
-              <div className="alert alert-danger">{loginError}</div>
-            )}
-
             {/* Form */}
             <div className="login-form">
               {/* Username */}
@@ -109,6 +122,8 @@ export default function LoginPage() {
                   value={username}
                   onChange={(e) => {
                     setUsername(filterInput(e.target.value));
+                  }}
+                  onFocus={() => {
                     clearError("username");
                   }}
                   onKeyDown={handleKeyDown}
@@ -133,6 +148,8 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => {
                       setPassword(filterInput(e.target.value));
+                    }}
+                    onFocus={() => {
                       clearError("password");
                     }}
                     onKeyDown={handleKeyDown}

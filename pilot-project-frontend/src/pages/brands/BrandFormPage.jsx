@@ -5,7 +5,12 @@ import "./BrandFormPage.css";
 import { getBrandById, addBrand, updateBrand } from "../../services/brands-api";
 import { sanitize, filterInput } from "../../utils/utils";
 import NoBrandImage from "../../assets/no-brand-image.jpg";
-import { BASE_URL } from "../../utils/constants";
+import {
+  BASE_URL,
+  MAX_FILE_SIZE_MB,
+  MAX_FILE_SIZE_BYTES,
+  ALLOWED_TYPES,
+} from "../../utils/constants";
 
 export default function BrandFormPage() {
   const { id } = useParams(); // Get id from URL
@@ -78,10 +83,17 @@ export default function BrandFormPage() {
   const handleLogoChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (!file.type.startsWith("image/")) {
+      if (!ALLOWED_TYPES.includes(file.type)) {
         setErrors((prev) => ({
           ...prev,
-          logo: "Please select an image file.",
+          logo: "Only PNG, JPG, JPEG, WEBP, GIF files are allowed.",
+        }));
+        return;
+      }
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        setErrors((prev) => ({
+          ...prev,
+          logo: `Image size must not exceed ${MAX_FILE_SIZE_MB}MB.`,
         }));
         return;
       }
@@ -176,58 +188,73 @@ export default function BrandFormPage() {
             {/* Form */}
             <div className="form">
               <div className="form-fields">
-                <div className="left-column">
-                  {/* Name */}
-                  <div className="field">
-                    <label className="field-label" htmlFor="brand-name">
-                      Brand Name <span className="required">*</span>
-                    </label>
-                    <div className="field-input-group">
-                      <input
-                        id="brand-name"
-                        className={`field-input ${errors.name ? "field-input-error" : ""}`}
-                        type="text"
-                        placeholder="Enter brand name"
-                        value={name}
-                        onChange={(e) => {
-                          setName(filterInput(e.target.value));
-                          clearError("name");
-                        }}
-                        maxLength={50}
-                        autoComplete="off"
-                      />
-                      {errors.name && (
-                        <span className="field-error">{errors.name}</span>
-                      )}
-                    </div>
+                {/* Name */}
+                <div className="field">
+                  <label className="field-label" htmlFor="brand-name">
+                    Brand Name <span className="required">*</span>
+                  </label>
+                  <div className="field-input-group">
+                    <input
+                      id="brand-name"
+                      className={`field-input ${errors.name ? "field-input-error" : ""}`}
+                      type="text"
+                      placeholder="Enter brand name"
+                      value={name}
+                      onChange={(e) => {
+                        setName(filterInput(e.target.value));
+                      }}
+                      onFocus={() => {
+                        clearError("name");
+                      }}
+                      maxLength={50}
+                      autoComplete="off"
+                    />
+                    {errors.name && (
+                      <span className="field-error">{errors.name}</span>
+                    )}
                   </div>
                 </div>
 
-                <div className="right-column">
-                  {/* Logo */}
-                  <div className="field">
-                    <label className="field-label" htmlFor="brand-logo">
-                      Logo
-                    </label>
-                    <div className="field-input-group">
-                      <input
-                        id="brand-logo"
-                        className="field-file"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleLogoChange}
-                      />
+                {/* Logo */}
+                <div className="field">
+                  <label className="field-label">Logo</label>
+                  <div className="field-input-group logo-input-group">
+                    <div className="choose-file-group">
+                      <label htmlFor="brand-logo" className="custom-file-btn">
+                        Choose Image
+                      </label>
                       {/* Show file name */}
                       {logoFileName && (
                         <div className="file-name">{logoFileName}</div>
                       )}
-                      {/* Show error */}
-                      {errors.logo && (
-                        <span className="field-error">{errors.logo}</span>
-                      )}
-                      {/* Preview logo */}
-                      {logoPreview && (
-                        <div className="field-preview">
+                    </div>
+                    <input
+                      id="brand-logo"
+                      className="field-file"
+                      type="file"
+                      accept=".png,.jpg,.jpeg,.webp,.gif"
+                      onChange={handleLogoChange}
+                      onClick={(e) => {
+                        e.target.value = null;
+                        setErrors((prev) => ({ ...prev, logo: "" }));
+                      }}
+                    />
+                    {/* File types */}
+                    <span className="file-types">
+                      PNG, JPG, JPEG, WEBP, GIF • Max {MAX_FILE_SIZE_MB}MB
+                    </span>
+
+                    {/* Blank */}
+                    {!errors.logo && <div className="spacer"></div>}
+                    {/* Show error */}
+                    {errors.logo && (
+                      <span className="field-error">{errors.logo}</span>
+                    )}
+
+                    {/* Preview logo */}
+                    <div className="field-preview">
+                      {logoPreview ? (
+                        <>
                           <img
                             src={logoPreview}
                             onError={(e) => {
@@ -243,6 +270,7 @@ export default function BrandFormPage() {
                               setLogoFile(null);
                               setLogoFileName("");
                               setIsLogoDeleted(true);
+                              setErrors((prev) => ({ ...prev, logo: "" }));
                               // Reset input file
                               document.getElementById("brand-logo").value = "";
                             }}
@@ -250,29 +278,31 @@ export default function BrandFormPage() {
                           >
                             ✕
                           </button>
-                        </div>
+                        </>
+                      ) : (
+                        <div className="thumbnail">No image yet</div>
                       )}
                     </div>
                   </div>
+                </div>
 
-                  {/* Description */}
-                  <div className="field">
-                    <label className="field-label" htmlFor="brand-description">
-                      Description
-                    </label>
-                    <div className="field-input-group">
-                      <textarea
-                        id="brand-description"
-                        className="field-textarea"
-                        placeholder="Enter brand description"
-                        value={description}
-                        onChange={(e) => {
-                          setDescription(filterInput(e.target.value));
-                        }}
-                        maxLength={255}
-                        rows={4}
-                      />
-                    </div>
+                {/* Description */}
+                <div className="field">
+                  <label className="field-label" htmlFor="brand-description">
+                    Description
+                  </label>
+                  <div className="field-input-group">
+                    <textarea
+                      id="brand-description"
+                      className="field-textarea"
+                      placeholder="Enter brand description"
+                      value={description}
+                      onChange={(e) => {
+                        setDescription(filterInput(e.target.value));
+                      }}
+                      maxLength={255}
+                      rows={4}
+                    />
                   </div>
                 </div>
               </div>

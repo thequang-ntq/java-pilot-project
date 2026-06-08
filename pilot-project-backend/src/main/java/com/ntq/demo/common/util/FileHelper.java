@@ -1,8 +1,10 @@
 package com.ntq.demo.common.util;
+import com.ntq.demo.common.constant.Constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.tika.Tika;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -16,6 +18,28 @@ import java.util.UUID;
  */
 public class FileHelper {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
+	private static final Tika TIKA = new Tika();
+
+	/**
+	 * Check if request file has the right type in 1 of 5: png, jpg, jpeg, webp, gif
+	 *
+	 * @param file
+	 * @return true if right, otherwise false
+	 */
+	public static boolean isImageFile(MultipartFile file) {
+		if (file == null || file.isEmpty()) return false;
+		try {
+			/**
+			 * Tika read magic bytes from stream, not loading all the file into RAM
+			 */
+			String mimeType = TIKA.detect(file.getInputStream());
+			LOGGER.info("Detected MIME type: {}", mimeType);
+			return Constants.ALLOWED_IMAGE_TYPES.contains(mimeType);
+		} catch (IOException e) {
+			LOGGER.error("Failed to detect file type: {}", e.getMessage(), e);
+			return false;
+		}
+	}
 
 	/**
 	 * Save new file, delete old file if exists
@@ -34,6 +58,14 @@ public class FileHelper {
 		}
 
 		MultipartFile file = files[0];
+
+		/**
+		 * Check if image file or not
+		 */
+		if (!isImageFile(file)) {
+			LOGGER.warn("Rejected non-image file: {}", file.getOriginalFilename());
+			return null;
+		}
 
 		try {
 			/**

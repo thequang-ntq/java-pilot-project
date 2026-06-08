@@ -7,6 +7,8 @@ import { getBrands, deleteBrand } from "../../services/brands-api";
 import useAuth from "../../components/context/use-auth";
 import NoBrandImage from "../../assets/no-brand-image.jpg";
 import { BASE_URL } from "../../utils/constants";
+import { filterInput } from "../../utils/utils";
+import { toast, Bounce } from "react-toastify";
 
 export default function BrandsPage() {
   const navigate = useNavigate();
@@ -29,6 +31,7 @@ export default function BrandsPage() {
   const [success, setSuccess] = useState(null); // Success response (get, add, edit, delete, get id)
   const [isErrorList, setIsErrorList] = useState(false); // Check if error list (error while fetch brands)
   const [highlightedId, setHighlightedId] = useState(null); // Highlight data add/edit
+  const [disabled, setDisabled] = useState(false);
 
   // Set status true when handling location state
   const locationStateHandled = useRef(false);
@@ -68,6 +71,11 @@ export default function BrandsPage() {
         setIsLoading(false);
       });
   };
+
+  // If search empty -> disable search button
+  useEffect(() => {
+    setDisabled(search === "");
+  }, [search]);
 
   // Load for first time, or when list changes (by change page / search)
   // setPage or setAppliedSearch -> fetch brands again
@@ -142,16 +150,35 @@ export default function BrandsPage() {
     }
   }, [location.state]);
 
-  // Clear error/success response
+  // Show error / success with toast
   useEffect(() => {
-    if (!error && !success) return;
-
-    const timer = setTimeout(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       setError(null);
+    } else if (success) {
+      toast.success(success, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       setSuccess(null);
-    }, 3000);
-
-    return () => clearTimeout(timer);
+    }
   }, [error, success]);
 
   // Search -> apply search keyword, page = 1
@@ -160,8 +187,15 @@ export default function BrandsPage() {
     setPage(1);
   };
 
+  // Clear search
+  const handleClearSearch = () => {
+    setSearch("");
+    setAppliedSearch("");
+    setPage(1);
+  };
+
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") handleSearch();
+    if (e.key === "Enter" && !disabled) handleSearch();
   };
 
   // Set brand to be delete
@@ -218,56 +252,58 @@ export default function BrandsPage() {
       <section className="brands-actions">
         <div className="brands-actions-container">
           <div className="brands-actions-wrapper">
-            <div className="actions">
-              {!isLoading && !isErrorList && (
-                <div className="search-group">
-                  <i className="bi bi-search search-icon"></i>
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="Search by brand name…"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                  />
-                  <button className="btn btn-search" onClick={handleSearch}>
-                    Search
-                  </button>
+            {!isLoading && !isErrorList && (
+              <>
+                <div className="actions">
+                  <div className="search-group">
+                    <input
+                      className="input"
+                      type="text"
+                      placeholder="Search by brand name…"
+                      value={search}
+                      onChange={(e) => setSearch(filterInput(e.target.value))}
+                      onKeyDown={handleKeyDown}
+                    />
+                    <i className="bi bi-search search-icon"></i>
+                    <button
+                      className="btn btn-search"
+                      disabled={disabled}
+                      onClick={handleSearch}
+                    >
+                      Search
+                    </button>
+                    <button
+                      className={`btn btn-clear ${!appliedSearch ? "disabled" : ""}`}
+                      onClick={handleClearSearch}
+                    >
+                      <i className="bi bi-x"></i> Clear
+                    </button>
+                  </div>
+                  {isAdmin && (
+                    <button
+                      className="btn btn-add"
+                      onClick={() =>
+                        navigate(`/brands/add`, {
+                          state: {
+                            page: page,
+                            appliedSearch: appliedSearch,
+                          },
+                        })
+                      }
+                    >
+                      Add Brand
+                    </button>
+                  )}
                 </div>
-              )}
-              {!isLoading && !isErrorList && isAdmin && (
-                <button
-                  className="btn btn-add"
-                  onClick={() =>
-                    navigate(`/brands/add`, {
-                      state: {
-                        page: page,
-                        appliedSearch: appliedSearch,
-                      },
-                    })
-                  }
-                >
-                  Add new brand
-                </button>
-              )}
-            </div>
+              </>
+            )}
+
             {!isLoading && !isErrorList && brands.length > 0 && (
               <div className="show-records">
                 Showing {pageSize * (page - 1) + 1} to{" "}
                 {Math.min(pageSize * page, totalElements)} of {totalElements}{" "}
                 {isSearching ? "search " : ""}
                 records
-              </div>
-            )}
-            {/* Error/Success response */}
-            {error && (
-              <div className="alert alert-danger" role="alert">
-                {error}
-              </div>
-            )}
-            {success && (
-              <div className="alert alert-success" role="alert">
-                {success}
               </div>
             )}
           </div>
@@ -454,7 +490,7 @@ export default function BrandsPage() {
                 &times;
               </button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body modal-body-delete">
               <p>
                 Are you sure you want to delete brand{" "}
                 <strong>{deleteModal.brandName}</strong>?

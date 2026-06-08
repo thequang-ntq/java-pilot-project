@@ -5,6 +5,7 @@ import com.ntq.demo.dto.request.ProductRequest;
 import com.ntq.demo.dto.response.ProductResponse;
 import com.ntq.demo.entity.BrandEntity;
 import com.ntq.demo.entity.ProductEntity;
+import com.ntq.demo.exception.InvalidFileException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,6 +66,12 @@ public class ProductMapper {
 		 */
 		MultipartFile[] imageFiles = request.getImageFiles();
 		if (imageFiles != null && imageFiles[0].getSize() > 0) {
+			/**
+			 * Check if file is image and right type, throw upto ServiceImpl layer to catch
+			 */
+			if (!FileHelper.isImageFile(imageFiles[0])) {
+				throw new InvalidFileException("Invalid image file type");
+			}
 			String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, null);
 			product.setImage(imagePath);
 		}
@@ -105,6 +112,12 @@ public class ProductMapper {
 		 * Has new file
 		 */
 		if (imageFiles != null && imageFiles.length > 0 && imageFiles[0].getSize() > 0) {
+			/**
+			 * Check if file is image and right type, throw upto ServiceImpl layer to catch
+			 */
+			if (!FileHelper.isImageFile(imageFiles[0])) {
+				throw new InvalidFileException("Invalid image file type");
+			}
 			String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, product.getImage());
 			product.setImage(imagePath);
 		}

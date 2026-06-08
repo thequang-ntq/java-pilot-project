@@ -5,6 +5,7 @@ import { getBrands } from "../../services/brands-api";
 import { getProducts } from "../../services/products-api";
 import { formatPrice } from "../../utils/utils";
 import useAuth from "../../components/context/use-auth";
+import { toast, Bounce } from "react-toastify";
 
 export default function DashboardPage() {
   const { auth } = useAuth();
@@ -20,17 +21,6 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(false); // Is loading spinner?
   const [error, setError] = useState(null); // Error response
   const [isError, setIsError] = useState(false); // Check if error (error while fetch data)
-
-  // Clear error/success response
-  useEffect(() => {
-    if (!error) return;
-
-    const timer = setTimeout(() => {
-      setError(null);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [error]);
 
   // Load data
   useEffect(() => {
@@ -102,6 +92,24 @@ export default function DashboardPage() {
       });
   }, []);
 
+  // Show error with toast
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      setError(null);
+    }
+  }, [error]);
+
   return (
     <MainLayout pageClassName="dashboard-page" isLoading={isLoading}>
       <section className="dashboard-header">
@@ -115,12 +123,6 @@ export default function DashboardPage() {
       <section className="dashboard-content">
         <div className="dashboard-content-container">
           <div className="dashboard-content-wrapper">
-            {error && (
-              <div className="alert alert-danger" role="alert">
-                {error}
-              </div>
-            )}
-
             {!isLoading && isError && (
               <div className="not-found">Cannot load data for dashboard.</div>
             )}

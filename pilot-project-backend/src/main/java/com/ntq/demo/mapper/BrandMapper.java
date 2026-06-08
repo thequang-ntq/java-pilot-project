@@ -4,6 +4,7 @@ import com.ntq.demo.common.util.FileHelper;
 import com.ntq.demo.dto.request.BrandRequest;
 import com.ntq.demo.dto.response.BrandResponse;
 import com.ntq.demo.entity.BrandEntity;
+import com.ntq.demo.exception.InvalidFileException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,6 +53,12 @@ public class BrandMapper {
 		 */
 		MultipartFile[] logoFiles = request.getLogoFiles();
 		if (logoFiles != null && logoFiles[0].getSize() > 0) {
+			/**
+			 * Check if file is image and right type, throw upto ServiceImpl layer to catch
+			 */
+			if (!FileHelper.isImageFile(logoFiles[0])) {
+				throw new InvalidFileException("Invalid image file type");
+			}
 			String imagePath = FileHelper.editFile(brandLogoFolderPath, logoFiles, null);
 			brand.setLogo(imagePath);
 		}
@@ -87,6 +94,12 @@ public class BrandMapper {
 		 * Has new file
 		 */
 		if (logoFiles != null && logoFiles.length > 0 && logoFiles[0].getSize() > 0) {
+			/**
+			 * Check if file is image and right type, throw upto ServiceImpl layer to catch
+			 */
+			if (!FileHelper.isImageFile(logoFiles[0])) {
+				throw new InvalidFileException("Invalid image file type");
+			}
 			String imagePath = FileHelper.editFile(brandLogoFolderPath, logoFiles, brand.getLogo());
 			brand.setLogo(imagePath);
 		}

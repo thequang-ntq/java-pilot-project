@@ -2,6 +2,7 @@ package com.ntq.demo.service.impl;
 
 import com.ntq.demo.common.constant.Constants;
 import com.ntq.demo.common.util.FileHelper;
+import com.ntq.demo.exception.InvalidFileException;
 import com.ntq.demo.mapper.ProductMapper;
 import com.ntq.demo.repository.BrandRepository;
 import com.ntq.demo.repository.ProductRepository;
@@ -16,10 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -154,6 +153,8 @@ public class ProductServiceImpl implements ProductService {
 			responseMsg = "Product is added successfully";
 			responseCode = Constants.RESULT_CD_SUCCESS;
 			return new ResponseDataModel<>(responseCode, responseMsg, data);
+		} catch (InvalidFileException e) {
+			return new ResponseDataModel<>(Constants.RESULT_CD_FAIL, e.getMessage());
 		} catch (Exception e) {
 			responseMsg = "Error when adding product";
 			LOGGER.error("Error when adding product: {}", e.getMessage(), e);
@@ -197,6 +198,8 @@ public class ProductServiceImpl implements ProductService {
 			responseMsg = "Product is updated successfully";
 			responseCode = Constants.RESULT_CD_SUCCESS;
 			return new ResponseDataModel<>(responseCode, responseMsg, data);
+		} catch (InvalidFileException e) {
+			return new ResponseDataModel<>(Constants.RESULT_CD_FAIL, e.getMessage());
 		} catch (Exception e) {
 			responseMsg = "Error when updating product";
 			LOGGER.error("Error when updating product {}: {}", productId, e.getMessage(), e);

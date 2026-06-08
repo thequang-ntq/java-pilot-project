@@ -43,27 +43,8 @@
   .form
   .form-fields {
   width: 100%;
-  max-height: 54dvh;
+  min-height: 56dvh;
   overflow: auto;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-md);
-}
-
-.brand-form-page
-  .brand-form-section
-  .brand-form-container
-  .brand-form-wrapper
-  .form
-  .form-fields
-  .left-column,
-.brand-form-page
-  .brand-form-section
-  .brand-form-container
-  .brand-form-wrapper
-  .form
-  .form-fields
-  .right-column {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
@@ -120,6 +101,21 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.brand-form-page
+  .brand-form-section
+  .brand-form-container
+  .brand-form-wrapper
+  .form
+  .form-fields
+  .field
+  .logo-input-group {
+  padding: var(--space-sm);
+  border: 1.5px solid var(--clr-body-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  transition: border-color 0.2s ease;
 }
 
 .brand-form-page
@@ -209,6 +205,7 @@
   min-height: 6rem;
 }
 
+/* File image */
 .brand-form-page
   .brand-form-section
   .brand-form-container
@@ -217,9 +214,44 @@
   .form-fields
   .field
   .field-input-group
-  .field-file {
+  .choose-file-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
   font-size: var(--text-sm);
+  border: 1.5px solid var(--clr-body-border);
+}
+
+.brand-form-page
+  .brand-form-section
+  .brand-form-container
+  .brand-form-wrapper
+  .form
+  .form-fields
+  .field
+  .field-input-group
+  .choose-file-group
+  .custom-file-btn {
+  padding: var(--space-xs);
+  background: var(--clr-body-accent);
+  color: var(--clr-bg);
+  font-weight: 500;
   cursor: pointer;
+  transition: 0.2s;
+}
+
+.brand-form-page
+  .brand-form-section
+  .brand-form-container
+  .brand-form-wrapper
+  .form
+  .form-fields
+  .field
+  .field-input-group
+  .choose-file-group
+  .custom-file-btn:hover {
+  background: #1548d5;
 }
 
 .brand-form-page
@@ -231,10 +263,45 @@
   .field
   .field-input-group
   .file-name {
-  font-size: var(--text-sm);
-  cursor: pointer;
+  flex: 1;
+  overflow-wrap: break-word;
+  font-size: var(--text-xs);
+  font-weight: 600;
 }
 
+.brand-form-page
+  .brand-form-section
+  .brand-form-container
+  .brand-form-wrapper
+  .form
+  .form-fields
+  .field
+  .field-input-group
+  .field-file {
+  display: none;
+}
+
+.brand-form-page
+  .brand-form-section
+  .brand-form-container
+  .brand-form-wrapper
+  .form
+  .form-fields
+  .field
+  .field-input-group
+  .file-types {
+  border: 1.5px solid var(--clr-body-border);
+  border-top: 0;
+  padding: 0 var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--clr-text-muted);
+}
+
+.spacer {
+  padding-block: var(--space-xs);
+}
+
+/* Preview */
 .brand-form-page
   .brand-form-section
   .brand-form-container
@@ -248,8 +315,11 @@
   height: 10rem;
   border: 1.5px solid var(--clr-body-border);
   border-radius: var(--radius-sm);
-  margin-top: var(--space-sm);
+  margin-top: var(--space-xs);
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .brand-form-page
@@ -272,9 +342,6 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: var(--text-sm);
   font-weight: 700;
   transition: background 0.2s ease;
@@ -305,7 +372,28 @@
   img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+}
+
+.brand-form-page
+  .brand-form-section
+  .brand-form-container
+  .brand-form-wrapper
+  .form
+  .form-fields
+  .field
+  .field-input-group
+  .field-preview
+  .thumbnail {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: var(--clr-no-image-bg);
+  background-size: 200% 100%;
+  animation: loading 1.2s infinite;
 }
 
 /* Form divider */
@@ -408,8 +496,7 @@
     .brand-form-wrapper
     .form
     .form-fields {
-    display: flex;
-    flex-direction: column;
+    max-height: 63dvh;
   }
 
   .brand-form-page
@@ -444,8 +531,7 @@
     .brand-form-wrapper
     .form
     .form-fields {
-    display: flex;
-    flex-direction: column;
+    max-height: 64dvh;
   }
 
   .brand-form-page
@@ -480,8 +566,7 @@
     .brand-form-wrapper
     .form
     .form-fields {
-    display: flex;
-    flex-direction: column;
+    max-height: 65dvh;
   }
 }
 

@@ -23,18 +23,6 @@
   gap: var(--space-md);
 }
 
-/* Alert */
-.dashboard-page
-  .dashboard-content
-  .dashboard-content-container
-  .dashboard-content-wrapper
-  .alert {
-  font-size: var(--text-sm);
-  padding: var(--space-xs) var(--space-sm);
-  text-align: center;
-  align-self: center;
-}
-
 .dashboard-page
   .dashboard-content
   .dashboard-content-container

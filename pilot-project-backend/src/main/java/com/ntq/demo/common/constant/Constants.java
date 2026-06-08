@@ -1,5 +1,7 @@
 package com.ntq.demo.common.constant;
 
+import java.util.Set;
+
 /**
  * This class is used to declare constant for project
  *
@@ -30,6 +32,15 @@ public class Constants {
 	public static final int RESULT_CD_FORBIDDEN = 403; // Wrong role (authorization)
 	public static final int RESULT_CD_NOT_FOUND = 404; // Not found
 	public static final int RESULT_CD_DUPL = 409; // Duplicated
-
 	public static final int RESULT_CD_FAIL = 500; // Internal server error
+
+	/**
+	 * Allowed image types (MIME Type): png, jpg, jpeg, webp, gif
+	 */
+	public static final Set<String> ALLOWED_IMAGE_TYPES = Set.of(
+		"image/png",
+		"image/jpeg", // jpg & jpeg has the same MIME type
+		"image/webp",
+		"image/gif"
+	);
 }

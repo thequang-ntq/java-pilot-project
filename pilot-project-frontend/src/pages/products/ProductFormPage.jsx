@@ -10,7 +10,12 @@ import {
 import { getBrands } from "../../services/brands-api";
 import { sanitize, filterInput } from "../../utils/utils";
 import NoProductImage from "../../assets/no-product-image.jpeg";
-import { BASE_URL } from "../../utils/constants";
+import {
+  BASE_URL,
+  MAX_FILE_SIZE_MB,
+  MAX_FILE_SIZE_BYTES,
+  ALLOWED_TYPES,
+} from "../../utils/constants";
 
 export default function ProductFormPage() {
   const { id } = useParams(); // Get ID from URL
@@ -161,7 +166,7 @@ export default function ProductFormPage() {
     setBrandSearch(value);
     setBrandId(""); // Reset brandId while searching
     setShowBrandDropdown(true);
-    clearError("brandId");
+    // clearError("brandId");
   };
 
   // Handle choose brand from dropdown
@@ -169,7 +174,7 @@ export default function ProductFormPage() {
     setBrandId(brand.brandId.toString());
     setBrandSearch(brand.brandName);
     setShowBrandDropdown(false);
-    clearError("brandId");
+    // clearError("brandId");
   };
 
   // Validate for submit
@@ -190,10 +195,17 @@ export default function ProductFormPage() {
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (!file.type.startsWith("image/")) {
+      if (!ALLOWED_TYPES.includes(file.type)) {
         setErrors((prev) => ({
           ...prev,
-          image: "Please select an image file.",
+          image: "Only PNG, JPG, JPEG, WEBP, GIF files are allowed.",
+        }));
+        return;
+      }
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        setErrors((prev) => ({
+          ...prev,
+          image: `Image size must not exceed ${MAX_FILE_SIZE_MB}MB.`,
         }));
         return;
       }
@@ -308,6 +320,8 @@ export default function ProductFormPage() {
                         value={name}
                         onChange={(e) => {
                           setName(filterInput(e.target.value));
+                        }}
+                        onFocus={() => {
                           clearError("name");
                         }}
                         maxLength={50}
@@ -334,6 +348,8 @@ export default function ProductFormPage() {
                         value={quantity}
                         onChange={(e) => {
                           setQuantity(e.target.value);
+                        }}
+                        onFocus={() => {
                           clearError("quantity");
                         }}
                       />
@@ -359,6 +375,8 @@ export default function ProductFormPage() {
                         value={price}
                         onChange={(e) => {
                           setPrice(e.target.value);
+                        }}
+                        onFocus={() => {
                           clearError("price");
                         }}
                       />
@@ -374,35 +392,51 @@ export default function ProductFormPage() {
                       Brand <span className="required">*</span>
                     </label>
                     <div className="field-input-group">
-                      {/* Search and select a brand name, but value is brand id */}
-                      <input
-                        id="product-brand"
-                        className={`field-input ${errors.brandId ? "field-input-error" : ""}`}
-                        type="text"
-                        placeholder="Search and select a brand"
-                        value={brandSearch}
-                        onChange={handleBrandSearchChange}
-                        onFocus={() => setShowBrandDropdown(true)}
-                        maxLength={50}
-                        autoComplete="off"
-                      />
+                      <div className="field-input-wrapper">
+                        {/* Search and select a brand name, but value is brand id */}
+                        <input
+                          id="product-brand"
+                          className={`field-input ${errors.brandId ? "field-input-error" : ""}`}
+                          type="text"
+                          placeholder="Search and select a brand"
+                          value={brandSearch}
+                          onChange={handleBrandSearchChange}
+                          onFocus={() => {
+                            setShowBrandDropdown(true);
+                            clearError("brandId");
+                          }}
+                          maxLength={50}
+                          autoComplete="off"
+                        />
+                        {/* Selection arrow */}
+                        <button
+                          className={`arrow-button ${showBrandDropdown ? "arrow-active" : ""}`}
+                          onClick={() => {
+                            setShowBrandDropdown(true);
+                            clearError("brandId");
+                          }}
+                        >
+                          <i className="bi bi-caret-down-fill arrow-icon"></i>
+                        </button>
+
+                        {/* Brand dropdown */}
+                        {showBrandDropdown && brands.length > 0 && (
+                          <div className="brand-dropdown">
+                            {brands.map((brand) => (
+                              <div
+                                key={brand.brandId}
+                                className="brand-dropdown-item"
+                                onClick={() => handleSelectBrand(brand)}
+                              >
+                                {brand.brandName}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                       {/* Error of field */}
                       {errors.brandId && (
                         <span className="field-error">{errors.brandId}</span>
-                      )}
-                      {/* Brand dropdown */}
-                      {showBrandDropdown && brands.length > 0 && (
-                        <div className="brand-dropdown">
-                          {brands.map((brand) => (
-                            <div
-                              key={brand.brandId}
-                              className="brand-dropdown-item"
-                              onClick={() => handleSelectBrand(brand)}
-                            >
-                              {brand.brandName}
-                            </div>
-                          ))}
-                        </div>
                       )}
                     </div>
                   </div>
@@ -424,6 +458,8 @@ export default function ProductFormPage() {
                         value={saleDate}
                         onChange={(e) => {
                           setSaleDate(e.target.value);
+                        }}
+                        onFocus={() => {
                           clearError("saleDate");
                         }}
                       />
@@ -436,52 +472,77 @@ export default function ProductFormPage() {
                 <div className="right-column">
                   {/* Image */}
                   <div className="field">
-                    <label className="field-label" htmlFor="product-image">
-                      Image
-                    </label>
-                    <div className="field-input-group">
+                    <label className="field-label">Image</label>
+                    <div className="field-input-group image-input-group">
+                      <div className="choose-file-group">
+                        <label
+                          htmlFor="product-image"
+                          className="custom-file-btn"
+                        >
+                          Choose Image
+                        </label>
+                        {/* Show file name */}
+                        {imageFileName && (
+                          <div className="file-name">{imageFileName}</div>
+                        )}
+                      </div>
                       <input
                         id="product-image"
                         className="field-file"
                         type="file"
-                        accept="image/*"
+                        accept=".png,.jpg,.jpeg,.webp,.gif"
                         onChange={handleImageChange}
+                        onClick={(e) => {
+                          e.target.value = null;
+                          setErrors((prev) => ({ ...prev, image: "" }));
+                        }}
                       />
-                      {/* Show file name */}
-                      {imageFileName && (
-                        <div className="file-name">{imageFileName}</div>
-                      )}
+                      {/* File types */}
+                      <span className="file-types">
+                        PNG, JPG, JPEG, WEBP, GIF • Max {MAX_FILE_SIZE_MB}MB
+                      </span>
+
+                      {/* Blank */}
+                      {!errors.image && <div className="spacer"></div>}
+
                       {/* Show error */}
                       {errors.image && (
                         <span className="field-error">{errors.image}</span>
                       )}
-                      {imagePreview && (
-                        <div className="field-preview">
-                          <img
-                            src={imagePreview}
-                            onError={(e) => {
-                              e.target.src = NoProductImage;
-                            }}
-                            alt="Product preview"
-                          />
-                          <button
-                            type="button"
-                            className="field-preview-remove"
-                            onClick={() => {
-                              setImagePreview("");
-                              setImageFile(null);
-                              setImageFileName("");
-                              setIsImageDeleted(true);
-                              // Reset input file
-                              document.getElementById("product-image").value =
-                                "";
-                            }}
-                            title="Remove logo"
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      )}
+
+                      {/* Preview logo */}
+                      <div className="field-preview">
+                        {imagePreview ? (
+                          <>
+                            <img
+                              src={imagePreview}
+                              onError={(e) => {
+                                e.target.src = NoProductImage;
+                              }}
+                              alt="Product preview"
+                            />
+                            <button
+                              type="button"
+                              className="field-preview-remove"
+                              onClick={() => {
+                                setImagePreview("");
+                                setImageFile(null);
+                                setImageFileName("");
+                                setIsImageDeleted(true);
+                                setErrors((prev) => ({ ...prev, image: "" }));
+                                // Reset input file
+                                document.getElementById("product-image").value =
+                                  "";
+                              }}
+                              title="Remove logo"
+                            >
+                              ✕
+                            </button>
+                          </>
+                        ) : (
+                          <div className="thumbnail">No image yet</div>
+                        )}
+                      </div>
                     </div>
                   </div>
 

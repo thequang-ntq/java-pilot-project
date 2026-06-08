@@ -13,7 +13,7 @@
     0.7
   ); /* Header & Footer Border */
   --clr-body-accent: rgb(53, 53, 255); /* Body: link, highlight text */
-  --clr-header-footer-accent: #ffd166; /* Header & Footer: active link */
+  --clr-header-footer-accent: #efac10; /* Header & Footer: active link */
   --clr-body-text: #000; /* Main body text */
   --clr-header-footer-text: #fff; /* Main header & Footer text */
   --clr-muted: #898991; /* Sub text */
@@ -27,6 +27,13 @@
   --clr-error-border: #fecaca;
   --clr-dropdown-bg: #d8d8d8;
   --clr-auth-bg: linear-gradient(135deg, #f8f8f8 0%, #fff 60%, #fdf6e3 100%);
+  --clr-danger-light: #fef2f2;
+  --clr-no-image-bg: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
 
   /* FLUID SPACING - CLAMP() */
   --space-xs: clamp(

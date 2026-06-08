@@ -61,37 +61,6 @@
 }
 
 /* ========================================
-    Alerts
-  ======================================== */
-.login-page .login-card .login-card-container .login-card-wrapper .login-alert {
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  line-height: 1.5;
-}
-
-.login-page
-  .login-card
-  .login-card-container
-  .login-card-wrapper
-  .login-alert-success {
-  background: var(--clr-success-bg);
-  color: var(--clr-success-text);
-  border: 1.5px solid var(--clr-success-border);
-}
-
-.login-page
-  .login-card
-  .login-card-container
-  .login-card-wrapper
-  .login-alert-error {
-  background: var(--clr-error-bg);
-  color: var(--clr-error-text);
-  border: 1.5px solid var(--clr-error-border);
-}
-
-/* ========================================
     Form
   ======================================== */
 .login-page .login-card .login-card-container .login-card-wrapper .login-form {
