@@ -36,9 +36,6 @@ import java.util.List;
 public class BrandServiceImpl implements BrandService {
 	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-	@Value("${parent.folder.images.brand}")
-	private String brandLogoFolderPath;
-
 	@Autowired
 	private BrandRepository BrandRepository;
 
@@ -51,8 +48,13 @@ public class BrandServiceImpl implements BrandService {
 		String responseMsg = "";
 
 		try {
+			/**
+			 * Add LIMIT, OFFSET, ORDER BY in Repository method (SQL query)
+			 */
 			Pageable pageable = PageRequest.of(
-				//JPA index start at 0, but FE start at 1
+				/**
+				 * JPA index start at 0, but FE start at 1
+				 */
 				page - 1,
 				Constants.DEFAULT_PAGE_SIZE,
 				Sort.by("brandId").ascending()
@@ -60,11 +62,11 @@ public class BrandServiceImpl implements BrandService {
 
 			/**
 			 * JPA page object that is database query result
-			 * Get all brands that not been deleted / Search brands by keyword (brand name) and not been deleted
+			 * Get all brands / Search brands by keyword (brand name) -> pagination by pageable
 			 */
 			Page<BrandEntity> brandPage = BrandRepository.findByBrandNameContainingIgnoreCase(
-					keyword == null ? "" : keyword,
-					pageable
+				keyword == null ? "" : keyword,
+				pageable
 			);
 
 			/**
@@ -118,7 +120,7 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	@Override
-	public ResponseDataModel<Void> add(BrandRequest request) {
+	public ResponseDataModel<BrandResponse> add(BrandRequest request) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
 
@@ -131,20 +133,12 @@ public class BrandServiceImpl implements BrandService {
 			}
 
 			BrandEntity brand = brandMapper.toEntity(request);
-
-			/**
-			 * Logo image handling
-			 */
-			MultipartFile[] logoFiles = request.getLogoFiles();
-			if (logoFiles != null && logoFiles[0].getSize() > 0) {
-				String imagePath = FileHelper.editFile(brandLogoFolderPath, logoFiles, null);
-				brand.setLogo(imagePath);
-			}
-
-			BrandRepository.saveAndFlush(brand);
+			BrandEntity savedBrand = BrandRepository.saveAndFlush(brand);
+			BrandResponse data = brandMapper.toResponse(savedBrand);
 
 			responseMsg = "Brand is added successfully";
 			responseCode = Constants.RESULT_CD_SUCCESS;
+			return new ResponseDataModel<>(responseCode, responseMsg, data);
 		} catch (Exception e) {
 			responseMsg = "Error when adding brand";
 			LOGGER.error("Error when adding brand: {}", e.getMessage(), e);
@@ -153,7 +147,7 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	@Override
-	public ResponseDataModel<Void> update(int brandId, BrandRequest request) {
+	public ResponseDataModel<BrandResponse> update(int brandId, BrandRequest request) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
 
@@ -174,21 +168,12 @@ public class BrandServiceImpl implements BrandService {
 			}
 
 			brandMapper.updateEntity(request, brand);
-
-			/**
-			 * Logo image handling
-			 * Edit File auto delete old image if brand has new image
-			 */
-			MultipartFile[] logoFiles = request.getLogoFiles();
-			if (logoFiles != null && logoFiles[0].getSize() > 0) {
-				String imagePath = FileHelper.editFile(brandLogoFolderPath, logoFiles, brand.getLogo());
-				brand.setLogo(imagePath);
-			}
-
-			BrandRepository.saveAndFlush(brand);
+			BrandEntity updatedBrand = BrandRepository.saveAndFlush(brand);
+			BrandResponse data = brandMapper.toResponse(updatedBrand);
 
 			responseMsg = "Brand is updated successfully";
 			responseCode = Constants.RESULT_CD_SUCCESS;
+			return new ResponseDataModel<>(responseCode, responseMsg, data);
 		} catch (Exception e) {
 			responseMsg = "Error when updating brand";
 			LOGGER.error("Error when updating brand {}: {}", brandId, e.getMessage(), e);

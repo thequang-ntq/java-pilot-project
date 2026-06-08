@@ -1,6 +1,6 @@
 package com.ntq.demo.entity;
 
-import com.ntq.demo.enums.Role;
+import com.ntq.demo.model.Role;
 import jakarta.persistence.*;
 import lombok.*;
 

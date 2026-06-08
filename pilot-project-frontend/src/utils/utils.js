@@ -4,14 +4,14 @@
 // Handle basic XSS, render HTML, send backend, get database
 export function sanitize(str) {
   return str
-    .replace(/[<>"'&]/g, "")
+    .replace(/[<>"'`;/**/{}]/g, "")
     .replace(/\s+/g, " ")
     .trim();
 }
 
 // Replace special character with empty, multiple space with one space when enter input
 export function filterInput(value) {
-  return value.replace(/[<>"'&]/g, "").replace(/\s+/g, " ");
+  return value.replace(/[<>"'`;/**/{}]/g, "").replace(/\s+/g, " ");
 }
 
 // Generate random UUID v4

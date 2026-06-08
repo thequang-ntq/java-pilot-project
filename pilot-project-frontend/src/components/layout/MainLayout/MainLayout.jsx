@@ -9,6 +9,7 @@ export default function MainLayout({
   pageClassName,
   children,
   isAuthenticationPage,
+  isLoading,
 }) {
   const { auth } = useAuth(); // Auth context
 
@@ -236,6 +237,14 @@ export default function MainLayout({
           .filter(Boolean)
           .join(" ")}
       >
+        {/* Loading spinner */}
+        {isLoading && (
+          <div className="loading-wrapper">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
         {children}
       </main>
 

@@ -23,4 +23,9 @@ public class BrandRequest {
 	private MultipartFile[] logoFiles;
 
 	private String description;
+
+	/**
+	 * True if user delete file
+	 */
+	private String deleteLogo;
 }

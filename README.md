@@ -49,6 +49,16 @@
     - [2026-05-14](#2026-05-14)
     - [2026-05-15](#2026-05-15)
     - [2026-05-16](#2026-05-16)
+    - [2026-05-17](#2026-05-17)
+    - [2026-05-18](#2026-05-18)
+    - [2026-05-19](#2026-05-19)
+    - [2026-05-20](#2026-05-20)
+    - [2026-05-21](#2026-05-21)
+    - [2026-05-22](#2026-05-22)
+    - [2026-05-23](#2026-05-23)
+    - [2026-05-24](#2026-05-24)
+    - [2026-05-25](#2026-05-25)
+    - [2026-05-26](#2026-05-26)
   - [Fix Bugs](#fix-bugs)
     - [2026-05-02](#2026-05-02-1)
     - [2026-05-04](#2026-05-04-1)
@@ -162,19 +172,11 @@ React (IDE: VS Code): pilot-project-frontend
       - Pagination.css
       - Pagination.jsx
     - layout/
-      - Header/
-        - Header.jsx
-        - Header.css
       - MainLayout/
         - MainLayout.jsx
         - MainLayout.css
-      - Footer/
-        - Footer.jsx
-        - Footer.css
     - routes/
       - RouteGuard.jsx: authentication and authorization for going to the routes
-  - data/
-    - admin-mock-data.js: template data and services for Admin Brands & Products
   - pages/:
     - brands/
       - BrandsPage
@@ -194,6 +196,8 @@ React (IDE: VS Code): pilot-project-frontend
   - utils/:
     - constants.js
     - utils.js
+- .env
+- index.html
 
 ## Technology & Knowledge
 
@@ -678,6 +682,165 @@ Login with an admin account first and get admin token.
    3.5. Spring Boot -> change entity, repository functions, service names according to DB; add cors in Spring Security
 4. Do: LogoutModal.
 
+### 2026-05-17
+
+1. Do: BrandsPage, update BrandsPage css, create utils/constants.js, add success / error message, response
+2. Add: Loading spinner in MainLayout
+3. Do: LoginPage, update LoginPage css
+4. BrandsPage:
+   4.1. useEffect handle state - goToLastPage: How to update total pages then load list with new total pages -> fetch brands then setPage (page changes so fetch brands again)
+   4.2. confirmDelete -> update total pages then load list (setPage to make page changes)
+   4.3. How to check if image path URL not load (onError={(e) => {
+   e.target.src = NoBrandImage;
+   }})
+   4.4. margin: 0 auto; for .table-logo to center image
+
+### 2026-05-18
+
+1. Do BrandFormPage & BrandsPage. Things to do:
+   1.1. Return fetch brands and return response, throw err to fix add problem: Come back from Form Page to List Page -> Empty
+   1.2. Error -> fetch brands not return Promise -> Cannot read state -> Add not success (need "return")
+   1.3. Error -> return wrong page after add/edit
+   1.4. Error -> delete if page
+   1.5. Error -> return wrong page when go back (add goToPage for Go Back, no replace)
+   1.6. Responsive: Table columns (hide name & logo cols, layout fixed width, column spacing), pagination, modal fit content
+   1.7. NoBrandImage cannot be as an image in edit -> logoPreview (not null, not empty)
+2. Do Pagination (5 pages + Prev Next in Desktop + Tablet, 3 pages + Prev Next in Mobile + Small tablet)
+3. Do ProductFormPage & ProductsPage (The same as 2 Brand pages):
+   3.1. Detail model (Copy to brand):
+   - modal: overflow: hidden, width + max-height
+   - detail-row: display flex, flex-row, align-items: center
+   - model-body: overflow-x,y: auto;
+   - Show: 7 in desktop -> 4 in tablet -> 3 in small tablet -> 2 in mobile
+
+### 2026-05-19
+
+1. ProductFormPage:
+   1.1. Promise.all
+   1.2. Rest parameter (...content)
+   1.3. CSS
+   1.4. Problems: If brand too much -> How do we handle (Instead of get all brands, we can get limit dropdown 20 brands, and in this field, we can input characters to search brands, max top 20 brands can have in dropdown) !
+   1.5. Show records (UI) in ProductsPage !
+   1.6. Price step=1000 because money unit is VND
+   1.7. CSS: Brand padding, open arrow in select tag
+   1.8. CSS: select tag not selected, input date not selected - className add condition, input[type="date"] - className and condition
+2. DashboardPage:
+   2.1. --space-md for alert/success and other elements
+3. UI in BrandsPage and ProductsPage:
+   3.1. Limit dropdown 10 brands, and in this field, we can input characters to search brands, max top 10 brands can have in dropdown when search or list all (ProductFormPage) -> OK
+   -> Add functions in ProductFormPage
+   -> Change CSS in ProductFormPage.css
+   3.2. Show records (in Pagination) -> OK
+   -> Add totalElements, pageSize, fetch in ProductsPage, BrandsPage (Create new 2 useState), responsive display column in pagination for mobile & small tablets.
+   -> Add isSearching, fetch in ProductsPage, BrandsPage -> If appliedSearch or 1 of 3 object of appliedFilters not empty
+   -> State + resize listener for window.innerWidth in Pagination, logic pagination in pagination
+   3.3. Select list dropdown in ProductsPage is overflow-x and overflow-y in mobile -> OK
+   -> Change CSS: overflow-y: auto in .brand-dropdown, and no overflow in .field
+   3.4. More data to products and brands (at least 50 for each) -> OK
+   3.5. Price from and Price to from input to choice. -> Tomorrow
+   3.6. Not return to right type of page and right page number when back from ProductFormPage to ProductsPage, BrandFormPage to BrandsPage. -> Tomorrow
+
+### 2026-05-20
+
+1. Brand, Product:
+   1.1. Price from and Price to from input to choice. -> OK
+   -> Add dropdown in product form page to products page: showPriceFromDropdown, showPriceToDropdown, priceFromDropdownRef, priceToDropdownRef, add selection default: Select a price to dropdown list
+   1.2. Not return to right type of page and right page number when back from ProductFormPage to ProductsPage, BrandFormPage to BrandsPage -> Error
+   -> Go back or click Back button on Browser or go to other page then go back this page => Must keep the last pagination page numbers before.
+   -> Add, update -> Go back to right page, highlight row have been added/updated. |||
+   -> List search -> Add/Edit -> Done -> Then should we come back to search list or original list -> Search list. If add/edit then go back but it's don't have nay data (because add/edit to another search condition) -> Go to search with old condition too, just notify items no longer matches current filters.
+
+2. Fix by note of mentor
+   2.1. Small the gap, change size of text, image, table in: MainLayout, BrandsPage, Pagination
+   2.2. Add description column in BrandsPage. Remove this column in small tablet, mobile.
+   2.3. Change to display: column for actions in BrandsPage
+   2.4. Merge show records from Pagination to BrandsPage
+   2.5. Change default page size to 5
+
+### 2026-05-21
+
+1. Fix by note of mentor
+   1.1. Small the gap, change size of text, image, table in: ProductsPage
+   1.2. Add description column in ProductsPage. Remove this column in small tablet, mobile.
+   1.3. Change to display: column for actions in ProductsPage
+   1.4. Merge show records from Pagination to ProductsPage
+   1.5. Change default page size to 5
+   1.6. Change price from and price to -> input text in ProductsPage
+   1.7. isErrorList error in ProductsPage and BrandsPage -> Table & components section -actions (First section) - except for error & success alert.
+   1.8. isError handling - Hide data, show alert, show text and CSS for alert in DashboardPage
+   1.9. Edit & Delete button same width & height in BrandsPage & ProductsPage
+   1.10. Disable Search button when Price from > Price to in ProductsPage
+   -> disabled, setDisabled, useEffect for that, handleKeyDown has !disabled
+   1.11. ProductsPage & BrandsPage: Table not scroll with the screen; it only scrolls within itself: https://www.w3schools.com/css/css_overflow.asp
+   -> Fixed height for table with overflow: auto at table-responsive
+   -> Update 5 records and show all 5 records in one page, height: min(auto, 65dvh)
+   -> text-overflow ellipsis + white-space: normal overflow: hidden for all table data, table header
+   -> Table fixed for desktop
+   1.12. BrandFormPage, ProductFormPage: Form not scroll with screen (just within itself) or fixed/sticky button (Save, Reset, Go Back) and form scroll normal.
+   -> Small gap, text, image size.
+
+### 2026-05-22
+
+1. BrandFormPage, ProductFormPage
+   1.1. Small gap, text, image size
+   1.2. .field display flex row
+   1.3. Add div to input and span error
+   1.4. Internal scroll for form field, 3 button fixed position: max-height: 65dvh + overflow: auto;
+   -> Add .form-fields div for all fields
+   -> Add divider between form-fields and actions
+   -> Add close X to delete preview image and set image to BE to null
+   -> Remove button reset, 2 other buttons: Back - Add/Save (position: sticky, bottom: 0;...). Also position sticky bottom 0 to pagination
+   -> Responsive
+   1.5. Line clamp 3 to table name & table description (CSS in BrandsPage and ProductsPage), others clamp 1
+   -> ProductsPage: Product name, brand name, description
+   -> BrandsPage: Brand name, description
+   1.6. Modal internal scroll
+   1.7. Preserve pagination state and list context when navigating from BrandsPage / ProductsPage to BrandFormPage / ProductFormPage, so using Back actions (page button, browser back, or header link) restores the previous page number and corresponding list state correctly
+   1.8. After successful add/edit operations in BrandFormPage or ProductFormPage, return to the correct list state:
+   -> Keep the correct pagination state (last page for add, previous page for edit).
+   -> Preserve applied search/filter state so the returned list matches the previous search result or full list view.
+   -> If the newly added/edited item does not match the current search/filter conditions, the previous list and pagination should still remain unchanged without showing the new item.
+   -> appliedSearch: appliedSearch in state for add & edit button in BrandsPage & ProductsPage, add appliedSearch for state in BrandFormPage & ProductFormPage: catch getById, get and catch handleSubmit, Back button
+   -> useEffect handle state in BrandsPage & ProductsPage: Check if search state exists, then use it to replace original appliedSearch
+2. Backend
+   2.1. enums/Role -> model/Role
+   2.2. PilotProjectBackendApplication to com.ntq.demo
+   2.3. security/SecurityConfig -> config/SecurityConfig
+   2.4. security/CustomUserDetailsService -> service/impl/CustomUserDetailsService
+   2.5. resources/config/... -> resources/...
+
+### 2026-05-23
+
+1. Padding in main, .action-wrapper; margin-bottom in .alert; font-weight in show-records for BrandsPage, ProductsPage
+2. setAppliedSearch(returnedSearch) trigger useEffect([page, appliedSearch]) before logic setPage() triggered -> old fetch => No restore state, fetch just once. Manual fetch with right params, after that setState() to restore UI, then check newTotalPages/goToPages === pages, if has then setPage trigger useEffect, else manual fetch 1 more time.
+3. Image/logo add/edit logic in BrandFormPage & ProductFormPage
+   3.1. Add isLogoDeleted, logoFileName, add logic set file name (Load from DB) in useEffect getBrandById; save file name and reset delete flag in handleLogoChange
+   3.2. Add logic when isLogoDeleted & isEdit & not have logo file -> Logo deleted when edit in handleSubmit
+   3.3. Change JSX html display logo
+4. Delete logo/image in edit data that has logo/image then update -> Not work
+   4.1. Add deleteLogo/deleteImage field in BrandRequest and ProductRequest, check in update in BrandService and ProductService if has it then deleteFile and setLogo null
+   4.2. In BrandFormPage & ProductFormPage, append deleteLogo/deleteImage: true
+
+### 2026-05-24
+
+1. Backend
+   1.1. Change CustomUserDetailsService -> UserDetailsServiceImpl
+   1.2. Merge handling images from service impl -> toEntity and updateEntity in mapper
+2. Highlight data when add/edit success
+   2.1. Add data in ResponseDataModel in add and update function in [BrandServiceImpl, ProductServiceImpl] for Backend
+   2.2. Add brandId/productId in handleSubmit -> apiCall -> state for BrandFormPage, ProductFormPage
+   2.3. Add brandId/productId and row-highlighted in location.state, tbody tr for BrandsPage, ProductsPage
+   2.4. Add row-highlighted css for BrandsPage, ProductsPage
+   2.5. setHighlight after fetch success -> Into goToNewPage & goToPage
+
+### 2026-05-25
+
+1. Add real data with images
+
+### 2026-05-26
+
+1. Squash commits
+
 ## Fix Bugs
 
 ### 2026-05-02
@@ -710,7 +873,8 @@ Login with an admin account first and get admin token.
 | 2026-04-25               | Database, Backend     | MySQL, Spring Boot     |
 | 2026-04-27 -> 2026-05-04 | Backend               | Spring Boot            |
 | 2026-05-05 -> 2026-05-06 | Backend, Frontend     | Spring Boot, React     |
-| 2026-05-07 -> 2026-05-16 | DB, Backend, Frontend | DB, Spring Boot, React |
+| 2026-05-07 -> 2026-05-18 | DB, Backend, Frontend | DB, Spring Boot, React |
+| 2026-05-19               | Frontend              | React                  |
 
 ## Future Work
 

@@ -1,19 +1,185 @@
 /* ========================================
+  Dashboard header
+======================================== */
+.dashboard-page
+  .dashboard-header
+  .dashboard-header-container
+  .dashboard-header-wrapper
+  .title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+
+/* ========================================
+  Dashboard content
+======================================== */
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Alert */
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper
+  .alert {
+  font-size: var(--text-sm);
+  padding: var(--space-xs) var(--space-sm);
+  text-align: center;
+  align-self: center;
+}
+
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper
+  .not-found {
+  color: var(--clr-not-found);
+  padding: var(--space-xl) 0;
+  width: 100%;
+  text-align: center;
+}
+
+/* Stats grid */
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper
+  .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+}
+
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper
+  .stats-grid
+  .stat-card {
+  background: var(--clr-bg);
+  border: 1.5px solid var(--clr-body-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper
+  .stats-grid
+  .stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow);
+}
+
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper
+  .stats-grid
+  .stat-card
+  .stat-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  color: var(--clr-header-footer-text);
+  flex-shrink: 0;
+  background: var(--clr-header-footer-bg);
+}
+
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper
+  .stats-grid
+  .stat-card
+  .stat-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper
+  .stats-grid
+  .stat-card
+  .stat-info
+  .stat-value {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--clr-body-text);
+  margin: 0 0 var(--space-xs) 0;
+  word-break: break-word;
+}
+
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper
+  .stats-grid
+  .stat-card
+  .stat-info
+  .stat-label {
+  font-size: var(--text-sm);
+  color: var(--clr-muted);
+  margin: 0;
+}
+
+/* ========================================
   Mobile: 0px - 479.98px
 ======================================== */
 @media screen and (max-width: 479.98px) {
+  .dashboard-page
+    .dashboard-content
+    .dashboard-content-container
+    .dashboard-content-wrapper
+    .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ========================================
   Small Tablet: 480px - 767.98px
 ======================================== */
 @media screen and (min-width: 480px) and (max-width: 767.98px) {
+  .dashboard-page
+    .dashboard-content
+    .dashboard-content-container
+    .dashboard-content-wrapper
+    .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ========================================
   Tablet: 768px - 1023.98px
 ======================================== */
 @media screen and (min-width: 768px) and (max-width: 1023.98px) {
+  .dashboard-page
+    .dashboard-content
+    .dashboard-content-container
+    .dashboard-content-wrapper
+    .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ========================================

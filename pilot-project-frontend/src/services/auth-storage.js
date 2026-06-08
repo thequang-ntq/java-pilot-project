@@ -11,6 +11,7 @@ const REFRESH_TOKEN_KEY = "refresh_token";
 // Get
 export const getToken = () => localStorage.getItem(ACCESS_TOKEN_KEY);
 export const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY);
+
 export const getUsername = () => {
   const token = getToken();
   if (!token) return null;

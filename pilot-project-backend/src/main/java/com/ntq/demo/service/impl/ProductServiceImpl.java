@@ -35,9 +35,6 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-	@Value("${parent.folder.images.product}")
-	private String productImageFolderPath;
-
 	@Autowired
 	private ProductRepository ProductRepository;
 
@@ -53,6 +50,9 @@ public class ProductServiceImpl implements ProductService {
 		String responseMsg = "";
 
 		try {
+			/**
+			 * Add LIMIT, OFFSET, ORDER BY in Repository method (SQL query)
+			 */
 			Pageable pageable = PageRequest.of(
 				page - 1,
 				Constants.DEFAULT_PAGE_SIZE,
@@ -62,6 +62,7 @@ public class ProductServiceImpl implements ProductService {
 			/**
 			 * JPA page object that is database query result
 			 * Get all products / Search products by keyword (product name / brand name) and price range
+			 * pagination by pageable
 			 */
 			Page<ProductEntity> productPage = ProductRepository.searchProducts(
 				keyword == null ? "" : keyword,
@@ -126,7 +127,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ResponseDataModel<Void> add(ProductRequest request) {
+	public ResponseDataModel<ProductResponse> add(ProductRequest request) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
 
@@ -147,20 +148,12 @@ public class ProductServiceImpl implements ProductService {
 			}
 
 			ProductEntity product = productMapper.toEntity(request, brand);
-
-			/**
-			 * Product image handling
-			 */
-			MultipartFile[] imageFiles = request.getImageFiles();
-			if (imageFiles != null && imageFiles[0].getSize() > 0) {
-				String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, null);
-				product.setImage(imagePath);
-			}
-
-			ProductRepository.saveAndFlush(product);
+			ProductEntity savedProduct = ProductRepository.saveAndFlush(product);
+			ProductResponse data = productMapper.toResponse(savedProduct);
 
 			responseMsg = "Product is added successfully";
 			responseCode = Constants.RESULT_CD_SUCCESS;
+			return new ResponseDataModel<>(responseCode, responseMsg, data);
 		} catch (Exception e) {
 			responseMsg = "Error when adding product";
 			LOGGER.error("Error when adding product: {}", e.getMessage(), e);
@@ -169,7 +162,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ResponseDataModel<Void> update(int productId, ProductRequest request) {
+	public ResponseDataModel<ProductResponse> update(int productId, ProductRequest request) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
 
@@ -198,21 +191,12 @@ public class ProductServiceImpl implements ProductService {
 			}
 
 			productMapper.updateEntity(request, product, brand);
-
-			/**
-			 * Product image handling
-			 * Edit File auto delete old image if product has new image
-			 */
-			MultipartFile[] imageFiles = request.getImageFiles();
-			if (imageFiles != null && imageFiles[0].getSize() > 0) {
-				String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, product.getImage());
-				product.setImage(imagePath);
-			}
-
-			ProductRepository.saveAndFlush(product);
+			ProductEntity updatedProduct = ProductRepository.saveAndFlush(product);
+			ProductResponse data = productMapper.toResponse(updatedProduct);
 
 			responseMsg = "Product is updated successfully";
 			responseCode = Constants.RESULT_CD_SUCCESS;
+			return new ResponseDataModel<>(responseCode, responseMsg, data);
 		} catch (Exception e) {
 			responseMsg = "Error when updating product";
 			LOGGER.error("Error when updating product {}: {}", productId, e.getMessage(), e);

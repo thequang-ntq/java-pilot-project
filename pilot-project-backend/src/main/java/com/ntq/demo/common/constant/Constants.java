@@ -18,7 +18,7 @@ public class Constants {
 	/**
 	 * Pagination
 	 */
-	public static final int DEFAULT_PAGE_SIZE = 10;
+	public static final int DEFAULT_PAGE_SIZE = 5;
 
 	/**
 	 * Result codes

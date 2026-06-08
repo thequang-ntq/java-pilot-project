@@ -39,4 +39,9 @@ public class ProductRequest {
 	private MultipartFile[] imageFiles;
 
 	private String description;
+
+	/**
+	 * True if user delete file
+	 */
+	private String deleteImage;
 }

@@ -50,4 +50,4 @@ build/
 
 ### Custom ###
 images
-logs/pilot-project-backend.log
+logs

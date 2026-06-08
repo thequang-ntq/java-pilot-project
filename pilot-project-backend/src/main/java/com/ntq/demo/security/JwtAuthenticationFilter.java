@@ -1,6 +1,7 @@
 package com.ntq.demo.security;
 
 import com.ntq.demo.common.constant.Constants;
+import com.ntq.demo.service.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private JwtTokenProvider jwtTokenProvider;
 
 	@Autowired
-	private CustomUserDetailsService customUserDetailsService;
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -53,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				 */
 				UserDetails userDetails = null;
 				try {
-					userDetails = customUserDetailsService.loadUserByUsername(username);
+					userDetails = userDetailsServiceImpl.loadUserByUsername(username);
 				} catch (Exception e) {
 					LOGGER.warn("User {} not found in DB or disabled, skip authentication", username);
 				}

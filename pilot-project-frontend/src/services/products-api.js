@@ -5,7 +5,7 @@ export const getProducts = (params) =>
 
 export const getProductById = (id) => axiosInstance.get(`/products/${id}`);
 
-export const createProduct = (formData) =>
+export const addProduct = (formData) =>
   axiosInstance.post("/products", formData);
 
 export const updateProduct = (id, formData) =>

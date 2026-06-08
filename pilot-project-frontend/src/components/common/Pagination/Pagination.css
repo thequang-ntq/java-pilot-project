@@ -1,23 +1,38 @@
+/* ========================================
+  Pagination
+======================================== */
+.pagination-section .pagination-container {
+  width: 100%;
+}
+
+.pagination-section .pagination-container .pagination-wrapper {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .pagination {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
-  margin-top: var(--space-sm);
   flex-wrap: wrap;
 }
 
 .pagination .pagination-btn,
 .pagination .pagination-dot {
-  min-width: 2.25rem;
-  height: 2.25rem;
+  min-width: 2rem;
+  height: 2rem;
   padding: var(--space-xs) var(--space-sm);
   border: 1.5px solid var(--clr-body-border);
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--clr-body-text);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -30,6 +45,7 @@
 }
 
 .pagination .pagination-dot {
+  width: 1.5rem;
   border-radius: 50%;
 }
 
@@ -44,6 +60,15 @@
 .pagination .pagination-btn:disabled {
   opacity: 0.35;
   cursor: not-allowed;
+}
+
+.pagination .pagination-ellipsis {
+  min-width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
 }
 
 /* ========================================

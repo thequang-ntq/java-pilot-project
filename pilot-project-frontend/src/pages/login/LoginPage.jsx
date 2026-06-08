@@ -15,6 +15,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false); // Show password by eye toggle
   const [errors, setErrors] = useState({}); // Input fields error
   const [loginError, setLoginError] = useState(""); // Login error to notify
+  const [isLoading, setIsLoading] = useState(false);
 
   // Validate not empty at input fields frontend
   const validate = () => {
@@ -42,6 +43,8 @@ export default function LoginPage() {
       password: sanitize(password),
     };
 
+    setIsLoading(true);
+
     // Check account
     login(formatted)
       .then((res) => {
@@ -53,6 +56,9 @@ export default function LoginPage() {
       .catch((err) => {
         setPassword("");
         setLoginError(err.userMessage || "An error occurred during login");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -68,7 +74,11 @@ export default function LoginPage() {
   };
 
   return (
-    <MainLayout pageClassName="login-page" isAuthenticationPage>
+    <MainLayout
+      pageClassName="login-page"
+      isAuthenticationPage
+      isLoading={isLoading}
+    >
       {/* Card */}
       <section className="login-card">
         <div className="login-card-container">
@@ -81,7 +91,7 @@ export default function LoginPage() {
 
             {/* Login error */}
             {loginError && (
-              <div className="login-alert login-alert-error">{loginError}</div>
+              <div className="alert alert-danger">{loginError}</div>
             )}
 
             {/* Form */}
@@ -147,7 +157,11 @@ export default function LoginPage() {
               </div>
 
               {/* Submit */}
-              <button className="login-btn" onClick={handleSubmit}>
+              <button
+                type="submit"
+                className="login-btn"
+                onClick={handleSubmit}
+              >
                 Log in
               </button>
             </div>
