@@ -5,7 +5,11 @@ import useAuth from "../../context/use-auth";
 import "./LoginPage.css";
 import { sanitize, filterInput } from "../../utils/utils";
 import { login } from "../../services/auth-api";
+<<<<<<< HEAD
 import { errorToast } from "./../../components/common/Toast/Toast";
+=======
+import { toast, Bounce } from "react-toastify";
+>>>>>>> main
 
 export default function LoginPage() {
   const { loginContext } = useAuth();
@@ -71,7 +75,21 @@ export default function LoginPage() {
   // Show error with toast
   useEffect(() => {
     if (loginError) {
+<<<<<<< HEAD
       errorToast(loginError);
+=======
+      toast.error(loginError, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+>>>>>>> main
       setLoginError(null);
     }
   }, [loginError]);
@@ -145,7 +163,11 @@ export default function LoginPage() {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => {
+<<<<<<< HEAD
                       setPassword(e.target.value);
+=======
+                      setPassword(filterInput(e.target.value));
+>>>>>>> main
                     }}
                     onFocus={() => {
                       clearError("password");

@@ -6,6 +6,21 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: var(--space-sm);
+<<<<<<< HEAD
+=======
+}
+
+.brand-form-page
+  .brand-form-section
+  .brand-form-container
+  .brand-form-wrapper
+  .form-header
+  .title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--clr-body-text);
+  margin-bottom: 0;
+>>>>>>> main
 }
 
 /* Form */
@@ -360,7 +375,7 @@
   img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .brand-form-page
@@ -447,7 +462,12 @@
   .form
   .form-actions
   .btn-primary:hover {
+<<<<<<< HEAD
   filter: brightness(1.4);
+=======
+  background: rgba(0, 0, 0, 0.8);
+  filter: brightness(1.2);
+>>>>>>> main
 }
 
 .brand-form-page
@@ -484,7 +504,10 @@
     .form
     .form-fields {
     max-height: 63dvh;
+<<<<<<< HEAD
     gap: var(--space-xl);
+=======
+>>>>>>> main
   }
 
   .brand-form-page
@@ -555,7 +578,10 @@
     .form
     .form-fields {
     max-height: 65dvh;
+<<<<<<< HEAD
     gap: var(--space-xl);
+=======
+>>>>>>> main
   }
 }
 

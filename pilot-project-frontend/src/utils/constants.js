@@ -10,5 +10,9 @@ export const ALLOWED_TYPES = [
 ];
 
 // Check file size
+<<<<<<< HEAD
 export const MAX_FILE_SIZE_MB = 25;
+=======
+export const MAX_FILE_SIZE_MB = 5;
+>>>>>>> main
 export const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;

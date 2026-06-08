@@ -942,6 +942,8 @@ Login with an admin account first and get admin token.
    -> Update GlobalExceptionHandler: Add handleMultipartException() to handle file size exceeded 5MB, because application.properties: File > 5MB → Spring reject → MultipartException
 3. ProductsPage & BrandsPage: Toast in useEffect location state handled
 
+<<<<<<< HEAD
+
 ### 2026-06-01
 
 1. Unit test for BE
@@ -971,6 +973,10 @@ Login with an admin account first and get admin token.
 3. Toast padding more between X and text, X center
 4. Move axios-instance and auth-storage to utils
 5. Remember account
+
+=======
+
+> > > > > > > main
 
 ## Fix Bugs
 

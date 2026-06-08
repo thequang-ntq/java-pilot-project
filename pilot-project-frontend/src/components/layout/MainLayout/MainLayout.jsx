@@ -246,15 +246,23 @@ export default function MainLayout({
           .join(" ")}
       >
         {/* Loading spinner */}
+<<<<<<< HEAD
         {(isLoading || isLogout) && (
+=======
+        {isLoading && (
+>>>>>>> main
           <div className="loading-wrapper">
             <div className="spinner-border" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
         )}
+<<<<<<< HEAD
         {!isAuthenticationPage && <h1 className="title">{title}</h1>}
         <div className="main-remains">{children}</div>
+=======
+        {children}
+>>>>>>> main
       </main>
 
       {/* Footer */}
