@@ -803,7 +803,7 @@
 .product-modal-overlay .modal .modal-body .detail-row .detail-label {
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--clr-muted);
+  color: var(--clr-body-text);
   text-transform: uppercase;
 }
 
