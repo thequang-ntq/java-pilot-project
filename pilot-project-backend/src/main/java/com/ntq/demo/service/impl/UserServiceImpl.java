@@ -46,7 +46,8 @@ public class UserServiceImpl implements UserService {
 		String responseMsg = "";
 
 		try {
-			UserEntity user = UserRepository.findByUsername(request.getUsername()).orElse(null);
+			String sanitizedUsername = CommonUtil.sanitize(request.getUsername());
+			UserEntity user = UserRepository.findByUsername(sanitizedUsername).orElse(null);
 
 			/**
 			 * Use BCrypt to compare password instead of MD5 hash comparison

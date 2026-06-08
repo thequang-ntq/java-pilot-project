@@ -1,5 +1,6 @@
 package com.ntq.demo.common.util;
 
+import com.ntq.demo.common.constant.Constants;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -10,6 +11,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 public class CommonUtil {
 	private static final BCryptPasswordEncoder BCRYPT = new BCryptPasswordEncoder();
+
+	/**
+	 * Sanitize input string
+	 *
+	 * @param str Input string
+	 * @return Sanitized string
+	 */
+	public static String sanitize(String str) {
+		if (str == null || str.isBlank()) {
+			return "";
+		}
+		String sanitized = str.replaceAll(Constants.DANGEROUS_CHARS_REGEX, "");
+		sanitized = sanitized.replaceAll("\\s+", " ");
+		return sanitized.trim();
+	}
 
 	/**
 	 * Encode password with BCrypt

@@ -4,11 +4,22 @@ import MainLayout from "../../components/layout/MainLayout/MainLayout";
 import "./ProductsPage.css";
 import Pagination from "../../components/common/Pagination/Pagination";
 import { getProducts, deleteProduct } from "../../services/products-api";
+<<<<<<< HEAD
+import useAuth from "../../context/use-auth";
+import NoProductImage from "../../assets/no-product-image.jpeg";
+import { BASE_URL } from "../../utils/constants";
+import { formatPrice, formatDate, filterInput } from "../../utils/utils";
+import {
+  errorToast,
+  successToast,
+} from "./../../components/common/Toast/Toast";
+=======
 import useAuth from "../../components/context/use-auth";
 import NoProductImage from "../../assets/no-product-image.jpeg";
 import { BASE_URL } from "../../utils/constants";
 import { formatPrice, formatDate, filterInput } from "../../utils/utils";
 import { toast, Bounce } from "react-toastify";
+>>>>>>> main
 
 export default function ProductsPage() {
   const navigate = useNavigate();
@@ -45,7 +56,11 @@ export default function ProductsPage() {
   // Validation message
   const validationMessage =
     priceFrom !== "" && priceTo !== "" && Number(priceFrom) > Number(priceTo)
+<<<<<<< HEAD
+      ? '"From price" can\'t be greater than "To price".'
+=======
       ? '"From price" cannot be greater than "To price".'
+>>>>>>> main
       : (priceFrom !== "" && Number(priceFrom) < 0) ||
           (priceTo !== "" && Number(priceTo) < 0)
         ? "Price cannot be negative."
@@ -139,6 +154,11 @@ export default function ProductsPage() {
 
     // Show error / success with toast by message from location.state
     if (type === "error" && message) {
+<<<<<<< HEAD
+      errorToast(message);
+    } else if (type === "success" && message) {
+      successToast(message);
+=======
       toast.error(message, {
         position: "top-center",
         autoClose: 2500,
@@ -162,6 +182,7 @@ export default function ProductsPage() {
         theme: "light",
         transition: Bounce,
       });
+>>>>>>> main
     }
 
     // Set highlight turnoff after 3s
@@ -231,6 +252,12 @@ export default function ProductsPage() {
   // Show error / success with toast from others (delete, etc..)
   useEffect(() => {
     if (error) {
+<<<<<<< HEAD
+      errorToast(error);
+      setError(null);
+    } else if (success) {
+      successToast(success);
+=======
       toast.error(error, {
         position: "top-center",
         autoClose: 2500,
@@ -255,6 +282,7 @@ export default function ProductsPage() {
         theme: "light",
         transition: Bounce,
       });
+>>>>>>> main
       setSuccess(null);
     }
   }, [error, success]);
@@ -328,6 +356,13 @@ export default function ProductsPage() {
   };
 
   return (
+<<<<<<< HEAD
+    <MainLayout
+      pageClassName="products-page"
+      title="Products Management"
+      isLoading={isLoading}
+    >
+=======
     <MainLayout pageClassName="products-page" isLoading={isLoading}>
       {/* Page headers */}
       <section className="products-header">
@@ -338,6 +373,7 @@ export default function ProductsPage() {
         </div>
       </section>
 
+>>>>>>> main
       {/* Actions bar */}
       <section className="products-actions">
         <div className="products-actions-container">
@@ -350,11 +386,19 @@ export default function ProductsPage() {
                     <div className="search-input">
                       <input
                         className="input input-search"
+<<<<<<< HEAD
+                        name="productSearch"
+=======
+>>>>>>> main
                         type="text"
                         placeholder="Search by product name or brand name…"
                         value={search}
                         onChange={(e) => setSearch(filterInput(e.target.value))}
                         onKeyDown={handleKeyDown}
+<<<<<<< HEAD
+                        autoComplete="on"
+=======
+>>>>>>> main
                       />
                       <i className="bi bi-search search-icon"></i>
                     </div>
@@ -366,6 +410,10 @@ export default function ProductsPage() {
                         <div className="input-group">
                           <input
                             className="input"
+<<<<<<< HEAD
+                            name="priceFrom"
+=======
+>>>>>>> main
                             type="number"
                             min="0"
                             step="1000"
@@ -373,18 +421,29 @@ export default function ProductsPage() {
                             value={priceFrom}
                             onChange={(e) => setPriceFrom(e.target.value)}
                             onKeyDown={handleKeyDown}
+<<<<<<< HEAD
+                            autoComplete="on"
+=======
                             autoComplete="off"
+>>>>>>> main
                           />
                         </div>
                       </div>
 
                       {/* Price to */}
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
                       <div className="price-group">
                         <div className="price-title">To</div>
                         <div className="input-group">
                           <input
                             className="input"
+<<<<<<< HEAD
+                            name="priceTo"
+=======
+>>>>>>> main
                             type="number"
                             min="0"
                             step="1000"
@@ -392,7 +451,11 @@ export default function ProductsPage() {
                             value={priceTo}
                             onChange={(e) => setPriceTo(e.target.value)}
                             onKeyDown={handleKeyDown}
+<<<<<<< HEAD
+                            autoComplete="on"
+=======
                             autoComplete="off"
+>>>>>>> main
                           />
                         </div>
                       </div>
@@ -468,7 +531,11 @@ export default function ProductsPage() {
                 <>
                   <div className="table-responsive">
                     <table className="table table-striped table-hover">
+<<<<<<< HEAD
+                      <thead className="table-primary">
+=======
                       <thead className="table-dark">
+>>>>>>> main
                         <tr>
                           <th id="table-header-id">ID</th>
                           <th id="table-header-name">Product Name</th>

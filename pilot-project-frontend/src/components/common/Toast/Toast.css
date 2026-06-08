@@ -1,0 +1,19 @@
+.Toastify__toast {
+  display: flex !important;
+  align-items: center !important;
+  padding: var(--space-sm) var(--space-md) !important;
+  padding-right: var(--space-xl) !important;
+  gap: var(--space-md) !important;
+  position: relative !important;
+}
+
+.Toastify__close-button {
+  position: absolute !important;
+  top: 30% !important;
+}
+
+.Toastify__toast-body {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+}

@@ -51,6 +51,7 @@ build/
 ### Custom ###
 images
 logs
+application-local.properties
 application-dev.properties
 application-prod.properties
 .env

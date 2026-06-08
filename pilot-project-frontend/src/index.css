@@ -4,7 +4,7 @@
 
   /* COLOR */
   --clr-bg: #fff; /* Body background */
-  --clr-header-footer-bg: #000; /* Header & Footer background */
+  --clr-header-footer-bg: #475569; /* Header & Footer background */
   --clr-body-border: rgba(0, 0, 0, 0.7); /* Body border */
   --clr-header-footer-border: rgba(
     255,
@@ -13,12 +13,17 @@
     0.7
   ); /* Header & Footer Border */
   --clr-body-accent: rgb(53, 53, 255); /* Body: link, highlight text */
+<<<<<<< HEAD
+  --clr-header-footer-accent: #22d3ee; /* Header & Footer: active link */
+=======
   --clr-header-footer-accent: #efac10; /* Header & Footer: active link */
+>>>>>>> main
   --clr-body-text: #000; /* Main body text */
   --clr-header-footer-text: #fff; /* Main header & Footer text */
-  --clr-muted: #898991; /* Sub text */
+  --clr-muted: #cbd5e1; /* Sub text */
   --clr-not-found: rgb(109, 109, 109); /* Not found text */
   --clr-danger: #d32f2f;
+  --clr-notice-icon: #ef4444;
   --clr-success-text: #166534;
   --clr-success-bg: #f0fdf4;
   --clr-success-border: #bbf7d0;
@@ -34,6 +39,11 @@
     #e0e0e0 50%,
     #f0f0f0 75%
   );
+<<<<<<< HEAD
+  --clr-logout-button: #64748b;
+  --clr-pagination-button: #60a5fa;
+=======
+>>>>>>> main
 
   /* FLUID SPACING - CLAMP() */
   --space-xs: clamp(
@@ -90,8 +100,8 @@
   ); /* Card heading, widget, 22px->32px */
   --text-2xl: clamp(
     1.8rem,
-    4vw + 0.5rem,
-    3.2rem
+    3vw + 0.5rem,
+    2.2rem
   ); /* Main section heading (h2), 29px->51px */
   --text-hero: clamp(
     2.5rem,

@@ -6,7 +6,7 @@ import {
   isAuthenticated,
   setAuth,
   clearAuth,
-} from "../../services/auth-storage.js";
+} from "../utils/auth-storage.js";
 
 // Component fully wrapped app to provide authentication (login), use in App.jsx
 export default function AuthProvider({ children }) {

@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import MainLayout from "../../components/layout/MainLayout/MainLayout";
-import useAuth from "../../components/context/use-auth";
+import useAuth from "../../context/use-auth";
 import "./LoginPage.css";
 import { sanitize, filterInput } from "../../utils/utils";
 import { login } from "../../services/auth-api";
+<<<<<<< HEAD
+import { errorToast } from "./../../components/common/Toast/Toast";
+=======
 import { toast, Bounce } from "react-toastify";
+>>>>>>> main
 
 export default function LoginPage() {
   const { loginContext } = useAuth();
@@ -41,7 +45,7 @@ export default function LoginPage() {
     // Formatted input to check
     const formatted = {
       username: sanitize(username),
-      password: sanitize(password),
+      password: password,
     };
 
     setIsLoading(true);
@@ -71,6 +75,9 @@ export default function LoginPage() {
   // Show error with toast
   useEffect(() => {
     if (loginError) {
+<<<<<<< HEAD
+      errorToast(loginError);
+=======
       toast.error(loginError, {
         position: "top-center",
         autoClose: 2500,
@@ -82,6 +89,7 @@ export default function LoginPage() {
         theme: "light",
         transition: Bounce,
       });
+>>>>>>> main
       setLoginError(null);
     }
   }, [loginError]);
@@ -108,7 +116,13 @@ export default function LoginPage() {
             </div>
 
             {/* Form */}
-            <div className="login-form">
+            <form
+              className="login-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+            >
               {/* Username */}
               <div className="field">
                 <label className="field-label" htmlFor="login-username">
@@ -116,6 +130,7 @@ export default function LoginPage() {
                 </label>
                 <input
                   id="login-username"
+                  name="username"
                   className={`field-input ${errors.username ? "field-input-error" : ""}`}
                   type="text"
                   placeholder="Enter your username"
@@ -127,7 +142,7 @@ export default function LoginPage() {
                     clearError("username");
                   }}
                   onKeyDown={handleKeyDown}
-                  autoComplete="off"
+                  autoComplete="on"
                 />
                 {errors.username && (
                   <span className="field-error">{errors.username}</span>
@@ -142,18 +157,23 @@ export default function LoginPage() {
                 <div className="field-input-wrap">
                   <input
                     id="login-password"
+                    name="password"
                     className={`field-input ${errors.password ? "field-input-error" : ""}`}
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => {
+<<<<<<< HEAD
+                      setPassword(e.target.value);
+=======
                       setPassword(filterInput(e.target.value));
+>>>>>>> main
                     }}
                     onFocus={() => {
                       clearError("password");
                     }}
                     onKeyDown={handleKeyDown}
-                    autoComplete="off"
+                    autoComplete="on"
                   />
                   <button
                     type="button"
@@ -181,7 +201,7 @@ export default function LoginPage() {
               >
                 Log in
               </button>
-            </div>
+            </form>
 
             {/* Footer links */}
             <div className="login-card-footer">

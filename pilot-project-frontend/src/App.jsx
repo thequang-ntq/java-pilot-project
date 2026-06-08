@@ -6,13 +6,9 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import {
-  RootRedirect,
-  GuestRoute,
-  AdminRoute,
-} from "./components/routes/RouteGuard";
+import { RootRedirect, GuestRoute, AdminRoute } from "./routes/RouteGuard";
 import { useEffect } from "react";
-import AuthProvider from "./components/context/AuthContext";
+import AuthProvider from "./context/AuthContext";
 import BrandsPage from "./pages/brands/BrandsPage";
 import ProductsPage from "./pages/products/ProductsPage";
 import LoginPage from "./pages/login/LoginPage";

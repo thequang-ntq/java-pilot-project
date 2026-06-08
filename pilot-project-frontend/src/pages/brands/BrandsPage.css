@@ -1,4 +1,6 @@
 /* ========================================
+<<<<<<< HEAD
+=======
   Page header
 ======================================== */
 .brands-page
@@ -11,6 +13,7 @@
 }
 
 /* ========================================
+>>>>>>> main
   Actions bar
 ======================================== */
 .brands-page .brands-actions .brands-actions-container .brands-actions-wrapper {
@@ -102,7 +105,11 @@
   .search-group
   .btn-search {
   padding: 0 var(--space-md);
+<<<<<<< HEAD
+  background: var(--clr-body-accent);
+=======
   background: var(--clr-header-footer-bg);
+>>>>>>> main
   color: var(--clr-header-footer-text);
   border: none;
   border-radius: 0;
@@ -119,8 +126,12 @@
   .brands-actions-wrapper
   .search-group
   .btn-search:hover {
+<<<<<<< HEAD
+  filter: brightness(1.6);
+=======
   background: rgba(0, 0, 0, 0.8);
   filter: brightness(1.2);
+>>>>>>> main
 }
 
 .brands-page
@@ -333,7 +344,11 @@
   thead
   th {
   font-weight: 600;
+<<<<<<< HEAD
+  color: var(--clr-body-text);
+=======
   color: var(--clr-header-footer-text);
+>>>>>>> main
 }
 
 /* Table body */
@@ -565,8 +580,13 @@
   position: relative;
   background: var(--clr-bg);
   border-radius: var(--radius-lg);
+<<<<<<< HEAD
+  width: min(600px, 70dvw);
+  height: min(600px, 65dvh);
+=======
   width: min(700px, 75dvw);
   height: min(700px, 75dvh);
+>>>>>>> main
   display: flex;
   flex-direction: column;
 
@@ -647,7 +667,7 @@
 .brand-modal-overlay .modal .modal-body .detail-row .detail-label {
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--clr-muted);
+  color: var(--clr-body-text);
   text-transform: uppercase;
 }
 
@@ -741,7 +761,33 @@
     .table
     thead
     #table-header-id {
+<<<<<<< HEAD
+    width: 10%;
+  }
+
+  .brands-page
+    .brands-table
+    .brands-table-container
+    .brands-table-wrapper
+    .table-responsive
+    .table
+    thead
+    #table-header-name {
+    width: 40%;
+  }
+
+  .brands-page
+    .brands-table
+    .brands-table-container
+    .brands-table-wrapper
+    .table-responsive
+    .table
+    thead
+    #table-header-logo {
+    width: 25%;
+=======
     width: 20%;
+>>>>>>> main
   }
 
   .brands-page
@@ -752,7 +798,11 @@
     .table
     thead
     #table-header-actions {
+<<<<<<< HEAD
+    width: 25%;
+=======
     width: 80%;
+>>>>>>> main
   }
 
   .brands-page
@@ -761,6 +811,8 @@
     .brands-table-wrapper
     .table-responsive
     .table
+<<<<<<< HEAD
+=======
     #table-header-name,
   .brands-page
     .brands-table
@@ -768,6 +820,7 @@
     .brands-table-wrapper
     .table-responsive
     .table
+>>>>>>> main
     #table-header-description,
   .brands-page
     .brands-table
@@ -775,6 +828,17 @@
     .brands-table-wrapper
     .table-responsive
     .table
+<<<<<<< HEAD
+    #table-data-description {
+    display: none;
+  }
+
+  .brand-modal-overlay .modal {
+    width: min(700px, 75dvw);
+    height: min(400px, 45dvh);
+  }
+
+=======
     #table-header-logo,
   .brands-page
     .brands-table
@@ -800,6 +864,7 @@
     display: none;
   }
 
+>>>>>>> main
   .brand-modal-overlay .modal .modal-body {
     display: flex;
     flex-direction: column;
@@ -838,7 +903,22 @@
     .table
     thead
     #table-header-name {
+<<<<<<< HEAD
+    width: 40%;
+  }
+
+  .brands-page
+    .brands-table
+    .brands-table-container
+    .brands-table-wrapper
+    .table-responsive
+    .table
+    thead
+    #table-header-logo {
+    width: 25%;
+=======
     width: 45%;
+>>>>>>> main
   }
 
   .brands-page
@@ -849,7 +929,11 @@
     .table
     thead
     #table-header-actions {
+<<<<<<< HEAD
+    width: 25%;
+=======
     width: 45%;
+>>>>>>> main
   }
 
   .brands-page
@@ -865,6 +949,17 @@
     .brands-table-wrapper
     .table-responsive
     .table
+<<<<<<< HEAD
+    #table-data-description {
+    display: none;
+  }
+
+  .brand-modal-overlay .modal {
+    width: min(600px, 60dvw);
+    height: min(500px, 50dvh);
+  }
+
+=======
     #table-header-logo,
   .brands-page
     .brands-table
@@ -883,6 +978,7 @@
     display: none;
   }
 
+>>>>>>> main
   .brand-modal-overlay .modal .modal-body {
     display: flex;
     flex-direction: column;
@@ -956,6 +1052,14 @@
     #table-header-actions {
     width: 20%;
   }
+<<<<<<< HEAD
+
+  .brand-modal-overlay .modal {
+    width: min(600px, 60dvw);
+    height: min(500px, 50dvh);
+  }
+=======
+>>>>>>> main
 }
 
 /* ========================================

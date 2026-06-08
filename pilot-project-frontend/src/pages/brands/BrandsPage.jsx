@@ -4,11 +4,22 @@ import MainLayout from "../../components/layout/MainLayout/MainLayout";
 import "./BrandsPage.css";
 import Pagination from "../../components/common/Pagination/Pagination";
 import { getBrands, deleteBrand } from "../../services/brands-api";
+<<<<<<< HEAD
+import useAuth from "../../context/use-auth";
+import NoBrandImage from "../../assets/no-brand-image.jpg";
+import { BASE_URL } from "../../utils/constants";
+import { filterInput } from "../../utils/utils";
+import {
+  errorToast,
+  successToast,
+} from "./../../components/common/Toast/Toast";
+=======
 import useAuth from "../../components/context/use-auth";
 import NoBrandImage from "../../assets/no-brand-image.jpg";
 import { BASE_URL } from "../../utils/constants";
 import { filterInput } from "../../utils/utils";
 import { toast, Bounce } from "react-toastify";
+>>>>>>> main
 
 export default function BrandsPage() {
   const navigate = useNavigate();
@@ -102,6 +113,11 @@ export default function BrandsPage() {
 
     // Show error / success with toast by message from location.state
     if (type === "error" && message) {
+<<<<<<< HEAD
+      errorToast(message);
+    } else if (type === "success" && message) {
+      successToast(message);
+=======
       toast.error(message, {
         position: "top-center",
         autoClose: 2500,
@@ -125,6 +141,7 @@ export default function BrandsPage() {
         theme: "light",
         transition: Bounce,
       });
+>>>>>>> main
     }
 
     // Set highlight turnoff after 3s
@@ -177,6 +194,12 @@ export default function BrandsPage() {
   // Show error / success with toast from others (delete, etc..)
   useEffect(() => {
     if (error) {
+<<<<<<< HEAD
+      errorToast(error);
+      setError(null);
+    } else if (success) {
+      successToast(success);
+=======
       toast.error(error, {
         position: "top-center",
         autoClose: 2500,
@@ -201,6 +224,7 @@ export default function BrandsPage() {
         theme: "light",
         transition: Bounce,
       });
+>>>>>>> main
       setSuccess(null);
     }
   }, [error, success]);
@@ -260,6 +284,8 @@ export default function BrandsPage() {
     if (!imagePath) return NoBrandImage;
     return `${BASE_URL}/${imagePath}`;
   };
+<<<<<<< HEAD
+=======
 
   return (
     <MainLayout pageClassName="brands-page" isLoading={isLoading}>
@@ -271,7 +297,14 @@ export default function BrandsPage() {
           </div>
         </div>
       </section>
+>>>>>>> main
 
+  return (
+    <MainLayout
+      pageClassName="brands-page"
+      title="Brands Management"
+      isLoading={isLoading}
+    >
       {/* Actions bar */}
       <section className="brands-actions">
         <div className="brands-actions-container">
@@ -282,11 +315,19 @@ export default function BrandsPage() {
                   <div className="search-group">
                     <input
                       className="input"
+<<<<<<< HEAD
+                      name="brandSearch"
+=======
+>>>>>>> main
                       type="text"
                       placeholder="Search by brand name…"
                       value={search}
                       onChange={(e) => setSearch(filterInput(e.target.value))}
                       onKeyDown={handleKeyDown}
+<<<<<<< HEAD
+                      autoComplete="on"
+=======
+>>>>>>> main
                     />
                     <i className="bi bi-search search-icon"></i>
                     <button
@@ -348,7 +389,11 @@ export default function BrandsPage() {
                 <>
                   <div className="table-responsive">
                     <table className="table table-striped table-hover">
+<<<<<<< HEAD
+                      <thead className="table-primary">
+=======
                       <thead className="table-dark">
+>>>>>>> main
                         <tr>
                           <th id="table-header-id">ID</th>
                           <th id="table-header-name">Brand Name</th>

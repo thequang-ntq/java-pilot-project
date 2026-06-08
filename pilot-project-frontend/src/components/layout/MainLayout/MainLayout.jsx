@@ -1,12 +1,13 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import NoAvatar from "../../../assets/no-avatar.png";
-import LogoutModal from "../../../pages/logout/LogoutModal";
-import useAuth from "../../context/use-auth";
+import useAuth from "../../../context/use-auth";
+import { logout } from "../../../services/auth-api";
 import "./MainLayout.css";
 
 export default function MainLayout({
   pageClassName,
+  title,
   children,
   isAuthenticationPage,
   isLoading,
@@ -15,9 +16,11 @@ export default function MainLayout({
 
   const [isOpen, setIsOpen] = useState(false); // check if drawer is opening
   const [dropdownOpen, setDropdownOpen] = useState(false); // check if dropdown if open
-  const [showLogout, setShowLogout] = useState(false); // show Logout modal
   const drawerRef = useRef(null);
   const dropdownRef = useRef(null);
+  const { logoutContext } = useAuth();
+  const navigate = useNavigate();
+  const [isLogout, setIsLogout] = useState(false);
 
   // Close menu when resize to desktop
   useEffect(() => {
@@ -73,7 +76,17 @@ export default function MainLayout({
   const handleLogoutClick = () => {
     setDropdownOpen(false);
     setIsOpen(false);
-    setShowLogout(true); //Open LogoutModal
+    setIsLogout(true);
+
+    logout()
+      .catch((err) => {
+        console.error("Logout error:", err.userMessage);
+      })
+      .finally(() => {
+        setIsLogout(false);
+        logoutContext();
+        navigate("/login", { replace: true });
+      });
   };
 
   // Shared nav links: desktop nav, mobile nav
@@ -218,11 +231,6 @@ export default function MainLayout({
                   </Link>
                 )}
               </div>
-
-              {/* Logout modal */}
-              {showLogout && (
-                <LogoutModal onClose={() => setShowLogout(false)} />
-              )}
             </div>
           </div>
         </header>
@@ -238,14 +246,23 @@ export default function MainLayout({
           .join(" ")}
       >
         {/* Loading spinner */}
+<<<<<<< HEAD
+        {(isLoading || isLogout) && (
+=======
         {isLoading && (
+>>>>>>> main
           <div className="loading-wrapper">
             <div className="spinner-border" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
         )}
+<<<<<<< HEAD
+        {!isAuthenticationPage && <h1 className="title">{title}</h1>}
+        <div className="main-remains">{children}</div>
+=======
         {children}
+>>>>>>> main
       </main>
 
       {/* Footer */}
@@ -258,28 +275,6 @@ export default function MainLayout({
                 <div className="sub">
                   © 2026 · Built with Spring Boot + React
                 </div>
-              </div>
-
-              <div className="social">
-                <a
-                  className="icon"
-                  target="_blank"
-                  href="https://github.com/thequang-ntq"
-                  rel="noopener noreferrer"
-                >
-                  <i className="bi bi-github" />
-                </a>
-                <a
-                  className="icon"
-                  target="_blank"
-                  href="https://www.linkedin.com/in/nguyenthequang-dev/"
-                  rel="noopener noreferrer"
-                >
-                  <i className="bi bi-linkedin" />
-                </a>
-                <a className="icon" href="mailto:thequang012004@gmail.com">
-                  <i className="bi bi-envelope-fill" />
-                </a>
               </div>
             </div>
           </div>
