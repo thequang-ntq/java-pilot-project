@@ -24,7 +24,12 @@ public class Constants {
 	 * Result codes
 	 */
 	public static final int RESULT_CD_SUCCESS = 200;
-	public static final int RESULT_CD_FAIL = 500;
-	public static final int RESULT_CD_DUPL = 409; //Duplicate
-	public static final int RESULT_CD_INVALID = 400; //Validation fail
+
+	public static final int RESULT_CD_INVALID = 400; // Validation fail (@Valid in Controller)
+	public static final int RESULT_CD_UNAUTHORIZED = 401; // Not login, access/refresh token expired/invalid
+	public static final int RESULT_CD_FORBIDDEN = 403; // Wrong role (authorization)
+	public static final int RESULT_CD_NOT_FOUND = 404; // Not found
+	public static final int RESULT_CD_DUPL = 409; // Duplicated
+
+	public static final int RESULT_CD_FAIL = 500; // Internal server error
 }

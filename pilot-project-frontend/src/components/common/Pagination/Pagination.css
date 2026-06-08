@@ -1,0 +1,71 @@
+.pagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.pagination .pagination-btn,
+.pagination .pagination-dot {
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1.5px solid var(--clr-body-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--clr-body-text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.pagination .pagination-dot {
+  border-radius: 50%;
+}
+
+.pagination .pagination-btn:hover:not(:disabled),
+.pagination .pagination-dot.active,
+.pagination .pagination-dot:hover {
+  background: var(--clr-body-text);
+  color: var(--clr-bg);
+  border-color: var(--clr-body-text);
+}
+
+.pagination .pagination-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ========================================
+  Mobile: 0px - 479.98px
+======================================== */
+@media screen and (max-width: 479.98px) {
+}
+
+/* ========================================
+  Small Tablet: 480px - 767.98px
+======================================== */
+@media screen and (min-width: 480px) and (max-width: 767.98px) {
+}
+
+/* ========================================
+  Tablet: 768px - 1023.98px
+======================================== */
+@media screen and (min-width: 768px) and (max-width: 1023.98px) {
+}
+
+/* ========================================
+  Desktop: >= 1024px
+======================================== */
+@media screen and (min-width: 1024px) {
+}

@@ -1,0 +1,338 @@
+/* ========================================
+  Form Section
+======================================== */
+.add-edit-brand-page .add-edit-brand-section {
+  padding-block: var(--space-xl);
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+  text-align: left;
+  align-items: flex-start;
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form-header
+  .title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--clr-body-text);
+}
+
+/* Submit error alert */
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form-alert {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-md);
+  text-align: left;
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form-alert-error {
+  background: var(--clr-error-bg);
+  color: var(--clr-error-text);
+  border: 1px solid var(--clr-error-border);
+}
+
+/* Form */
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form {
+  background: var(--clr-bg);
+  border: 1.5px solid var(--clr-body-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Field */
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  text-align: left;
+  align-items: flex-start;
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--clr-body-text);
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-label
+  .required {
+  color: var(--clr-danger);
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-input,
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-textarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1.5px solid var(--clr-body-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-input:focus,
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-textarea:focus {
+  outline: none;
+  border-color: var(--clr-body-accent);
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-input-error {
+  border-color: var(--clr-danger);
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-error {
+  font-size: var(--text-xs);
+  color: var(--clr-danger);
+  font-weight: 500;
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-file {
+  font-size: var(--text-sm);
+  padding: var(--space-xs);
+  cursor: pointer;
+  width: 100%;
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-preview {
+  width: 10rem;
+  height: 10rem;
+  border: 1.5px solid var(--clr-body-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-xs);
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .field
+  .field-preview
+  img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Form actions */
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .form-actions
+  .btn {
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .form-actions
+  .btn:hover {
+  filter: brightness(0.9);
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .form-actions
+  .btn-reset {
+  background: var(--clr-muted);
+  color: var(--clr-header-footer-text);
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .form-actions
+  .btn-primary {
+  background: var(--clr-header-footer-bg);
+  color: var(--clr-header-footer-text);
+}
+
+.add-edit-brand-page
+  .add-edit-brand-section
+  .add-edit-brand-container
+  .add-edit-brand-wrapper
+  .form
+  .form-actions
+  .btn-secondary {
+  background: transparent;
+  color: var(--clr-body-text);
+  border: 1.5px solid var(--clr-body-border);
+}
+
+/* ========================================
+    Mobile: 0px - 479.98px
+  ======================================== */
+@media screen and (max-width: 479.98px) {
+}
+
+/* ========================================
+    Small Tablet: 480px - 767.98px
+  ======================================== */
+@media screen and (min-width: 480px) and (max-width: 767.98px) {
+}
+
+/* ========================================
+    Tablet: 768px - 1023.98px
+  ======================================== */
+@media screen and (min-width: 768px) and (max-width: 1023.98px) {
+  .add-edit-brand-page
+    .add-edit-brand-section
+    .add-edit-brand-container
+    .add-edit-brand-wrapper
+    .form
+    .form-actions {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+}
+
+/* ========================================
+    Desktop: >= 1024px
+  ======================================== */
+@media screen and (min-width: 1024px) {
+}

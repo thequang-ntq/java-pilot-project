@@ -6,13 +6,13 @@ import lombok.*;
 import java.util.List;
 
 /**
- * This class is used to declare properties and mapping them with brand table from database
+ * This class is used to declare properties and mapping them with brands table from database
  *
  * @author Quang
  * @since 2026-04-27
  */
 @Entity
-@Table(name = "brand")
+@Table(name = "brands")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,12 +32,9 @@ public class BrandEntity {
 	@Column(name = "description")
 	private String description;
 
-	@Column(name = "is_deleted", nullable = false)
-	private Boolean isDeleted = false;
-
 	/**
 	 * Products of this brand (inverse side, mapped by ProductEntity."brand").
 	 */
-	@OneToMany(mappedBy = "brand", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "brand", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductEntity> products;
 }

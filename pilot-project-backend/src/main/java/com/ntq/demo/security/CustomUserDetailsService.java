@@ -1,7 +1,7 @@
 package com.ntq.demo.security;
 
-import com.ntq.demo.dao.AccountDao;
-import com.ntq.demo.entity.AccountEntity;
+import com.ntq.demo.repository.UserRepository;
+import com.ntq.demo.entity.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * This class is used to load account from database for Spring Security
- * Called every request to verify account still exists and active in DB
+ * This class is used to load user from database for Spring Security
+ * Called every request to verify user still exists and active in DB
  *
  * @author Quang
  * @since 2026-05-03
@@ -26,35 +26,35 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
 	@Autowired
-	private AccountDao AccountDao;
+	private UserRepository UserRepository;
 
 	/**
-	 * Load account from DB by account name
+	 * Load user from DB by username
 	 * Called by JwtAuthenticationFilter every request
 	 *
-	 * @param accountName from JWT token
-	 * @return UserDetails with account info
-	 * @throws UsernameNotFoundException if account not found in DB
+	 * @param username from JWT token
+	 * @return UserDetails with user info
+	 * @throws UsernameNotFoundException if user not found in DB
 	 */
 	@Override
-	public UserDetails loadUserByUsername(String accountName) throws UsernameNotFoundException {
-		AccountEntity account = AccountDao.findByAccountName(accountName).orElse(null);
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		UserEntity user = UserRepository.findByUsername(username).orElse(null);
 
-		if (account == null) {
-			LOGGER.warn("Account not found in DB: {}", accountName);
-			throw new UsernameNotFoundException("Account not found: " + accountName);
+		if (user == null) {
+			LOGGER.warn("User not found in DB: {}", username);
+			throw new UsernameNotFoundException("User not found: " + username);
 		}
 
-		LOGGER.info("Loaded account from DB: {}, role: {}", accountName, account.getRole().name());
+		LOGGER.info("Loaded user from DB: {}, role: {}", username, user.getRole().name());
 
 		/**
-		 * Build UserDetails from AccountEntity
+		 * Build UserDetails from userEntity
 		 * ROLE_ prefix required of Spring Security
 		 */
 		return new User(
-			account.getAccountName(),
+			user.getUsername(),
 			null,
-			List.of(new SimpleGrantedAuthority("ROLE_" + account.getRole().name()))
+			List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
 		);
 	}
 }

@@ -40,27 +40,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		if (token != null && jwtTokenProvider.validateToken(token)) {
 			try {
 				/**
-				 * Step 1: Extract account name and role from JWT token
+				 * Step 1: Extract username and role from JWT token
 				 */
-				String accountName = jwtTokenProvider.getAccountName(token);
+				String username = jwtTokenProvider.getUsername(token);
 				String role = jwtTokenProvider.getRole(token);
 
 				/**
-				 * Step 2: Load account from DB to verify still exists
-				 * If account deleted/disabled after token issued -> null -> skip
+				 * Step 2: Load user from DB to verify still exists
+				 * If user deleted after token issued -> null -> skip
 				 * This is the key difference vs only reading from JWT:
 				 * DB is source of truth, not the token
 				 */
 				UserDetails userDetails = null;
 				try {
-					userDetails = customUserDetailsService.loadUserByUsername(accountName);
+					userDetails = customUserDetailsService.loadUserByUsername(username);
 				} catch (Exception e) {
-					LOGGER.warn("Account {} not found in DB or disabled, skip authentication", accountName);
+					LOGGER.warn("User {} not found in DB or disabled, skip authentication", username);
 				}
 
 				/**
-				 * Step 3: Only set SecurityContext if account exists in DB
-				 * userDetails != null -> account still valid in DB
+				 * Step 3: Only set SecurityContext if user exists in DB
+				 * userDetails != null -> user still valid in DB
 				 * Use role from DB (userDetails.getAuthorities()) not from token
 				 * -> role changed in DB -> reflected immediately
 				 */
@@ -73,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 						);
 
 					SecurityContextHolder.getContext().setAuthentication(authentication);
-					LOGGER.info("Authenticated account: {}, role: {}", accountName, role);
+					LOGGER.info("Authenticated user: {}, role: {}", username, role);
 				}
 			} catch (Exception e) {
 				LOGGER.error("Cannot set authentication: {}", e.getMessage());

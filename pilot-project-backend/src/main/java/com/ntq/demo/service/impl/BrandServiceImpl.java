@@ -2,14 +2,16 @@ package com.ntq.demo.service.impl;
 
 import com.ntq.demo.common.constant.Constants;
 import com.ntq.demo.common.util.FileHelper;
-import com.ntq.demo.dao.BrandDao;
+import com.ntq.demo.entity.ProductEntity;
+import com.ntq.demo.mapper.BrandMapper;
+import com.ntq.demo.repository.BrandRepository;
 import com.ntq.demo.entity.BrandEntity;
-import com.ntq.demo.model.request.BrandRequest;
-import com.ntq.demo.model.response.BrandResponse;
-import com.ntq.demo.model.response.PageResponse;
-import com.ntq.demo.model.response.ResponseDataModel;
+import com.ntq.demo.dto.request.BrandRequest;
+import com.ntq.demo.dto.response.BrandResponse;
+import com.ntq.demo.model.PageResponse;
+import com.ntq.demo.model.ResponseDataModel;
 import com.ntq.demo.service.BrandService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,10 @@ public class BrandServiceImpl implements BrandService {
 	private String brandLogoFolderPath;
 
 	@Autowired
-	private BrandDao BrandDao;
+	private BrandRepository BrandRepository;
+
+	@Autowired
+	private BrandMapper brandMapper;
 
 	@Override
 	public ResponseDataModel<PageResponse<BrandResponse>> getList(int page, String keyword) {
@@ -57,23 +62,16 @@ public class BrandServiceImpl implements BrandService {
 			 * JPA page object that is database query result
 			 * Get all brands that not been deleted / Search brands by keyword (brand name) and not been deleted
 			 */
-			Page<BrandEntity> brandPage = BrandDao.findByIsDeletedFalseAndBrandNameContainingIgnoreCase(
-				keyword == null ? "" : keyword,
-				pageable
+			Page<BrandEntity> brandPage = BrandRepository.findByBrandNameContainingIgnoreCase(
+					keyword == null ? "" : keyword,
+					pageable
 			);
 
 			/**
 			 * Map Entity -> Response DTO
 			 */
 			List<BrandResponse> content = brandPage.getContent().stream()
-				.map(b -> new BrandResponse(
-					b.getBrandId(),
-					b.getBrandName(),
-					b.getLogo(),
-					b.getDescription(),
-					b.getIsDeleted()
-				))
-				.toList();
+				.map(brandMapper::toResponse).toList();
 
 			/**
 			 * Page Response
@@ -94,76 +92,22 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	@Override
-	public ResponseDataModel<PageResponse<BrandResponse>> getListForAdmin(int page, String keyword) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
-		try {
-			Pageable pageable = PageRequest.of(
-				//JPA index start at 0, but FE start at 1
-				page - 1,
-				Constants.DEFAULT_PAGE_SIZE,
-				Sort.by("brandId").ascending()
-			);
-
-			/**
-			 * JPA page object that is database query result
-			 * Get all brands that not been deleted / Search brands by keyword (brand name) and not been deleted
-			 */
-			Page<BrandEntity> brandPage = BrandDao.findByBrandNameContainingIgnoreCase(
-				keyword == null ? "" : keyword,
-				pageable
-			);
-
-			/**
-			 * Map Entity -> Response DTO
-			 */
-			List<BrandResponse> content = brandPage.getContent().stream()
-				.map(b -> new BrandResponse(
-					b.getBrandId(),
-					b.getBrandName(),
-					b.getLogo(),
-					b.getDescription(),
-					b.getIsDeleted()
-				))
-				.toList();
-
-			/**
-			 * Page Response
-			 */
-			PageResponse<BrandResponse> data = new PageResponse<>(
-				content,
-				page,
-				brandPage.getTotalPages(),
-				brandPage.getTotalElements(),
-				Constants.DEFAULT_PAGE_SIZE
-			);
-			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
-		} catch (Exception e) {
-			responseMsg = "Error when getting brand list for admin";
-			LOGGER.error("Error when getting brand list for admin: {}", e.getMessage(), e);
-		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
-	}
-
-	@Override
 	public ResponseDataModel<BrandResponse> getById(int brandId) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
 
 		try {
-			BrandEntity brand = BrandDao.findById(brandId).orElse(null);
+			BrandEntity brand = BrandRepository.findById(brandId).orElse(null);
 
-			if (brand == null || brand.getIsDeleted()) {
-				return new ResponseDataModel<>(Constants.RESULT_CD_INVALID, "Brand not found");
+			if (brand == null) {
+				return new ResponseDataModel<>(Constants.RESULT_CD_NOT_FOUND, "Brand not found");
 			}
 
 			BrandResponse data = new BrandResponse(
 				brand.getBrandId(),
 				brand.getBrandName(),
 				brand.getLogo(),
-				brand.getDescription(),
-				brand.getIsDeleted()
+				brand.getDescription()
 			);
 			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
 		} catch (Exception e) {
@@ -182,14 +126,11 @@ public class BrandServiceImpl implements BrandService {
 			/**
 			 * Check if brand name exists
 			 */
-			if (BrandDao.existsByBrandName(request.getBrandName())) {
+			if (BrandRepository.existsByBrandName(request.getBrandName())) {
 				return new ResponseDataModel<>(Constants.RESULT_CD_DUPL, "Brand name already exists");
 			}
 
-			BrandEntity brand = new BrandEntity();
-			brand.setBrandName(request.getBrandName());
-			brand.setDescription(request.getDescription());
-			brand.setIsDeleted(false);
+			BrandEntity brand = brandMapper.toEntity(request);
 
 			/**
 			 * Logo image handling
@@ -200,7 +141,7 @@ public class BrandServiceImpl implements BrandService {
 				brand.setLogo(imagePath);
 			}
 
-			BrandDao.saveAndFlush(brand);
+			BrandRepository.saveAndFlush(brand);
 
 			responseMsg = "Brand is added successfully";
 			responseCode = Constants.RESULT_CD_SUCCESS;
@@ -217,10 +158,10 @@ public class BrandServiceImpl implements BrandService {
 		String responseMsg = "";
 
 		try {
-			BrandEntity brand = BrandDao.findById(brandId).orElse(null);
+			BrandEntity brand = BrandRepository.findById(brandId).orElse(null);
 
-			if (brand == null || brand.getIsDeleted()) {
-				return new ResponseDataModel<>(Constants.RESULT_CD_INVALID, "Brand not found");
+			if (brand == null) {
+				return new ResponseDataModel<>(Constants.RESULT_CD_NOT_FOUND, "Brand not found");
 			}
 
 			/**
@@ -228,12 +169,11 @@ public class BrandServiceImpl implements BrandService {
 			 * If brand name changed and duplicate with another brand in DB -> error
 			 */
 			if (!brand.getBrandName().equals(request.getBrandName())
-					&& BrandDao.existsByBrandName(request.getBrandName())) {
+					&& BrandRepository.existsByBrandName(request.getBrandName())) {
 				return new ResponseDataModel<>(Constants.RESULT_CD_DUPL, "Brand name already exists");
 			}
 
-			brand.setBrandName(request.getBrandName());
-			brand.setDescription(request.getDescription());
+			brandMapper.updateEntity(request, brand);
 
 			/**
 			 * Logo image handling
@@ -245,7 +185,7 @@ public class BrandServiceImpl implements BrandService {
 				brand.setLogo(imagePath);
 			}
 
-			BrandDao.saveAndFlush(brand);
+			BrandRepository.saveAndFlush(brand);
 
 			responseMsg = "Brand is updated successfully";
 			responseCode = Constants.RESULT_CD_SUCCESS;
@@ -262,21 +202,35 @@ public class BrandServiceImpl implements BrandService {
 		String responseMsg = "";
 
 		try {
-			BrandEntity brand = BrandDao.findById(brandId).orElse(null);
+			BrandEntity brand = BrandRepository.findById(brandId).orElse(null);
 
-			if (brand == null || brand.getIsDeleted()) {
-				return new ResponseDataModel<>(Constants.RESULT_CD_INVALID, "Brand not found");
+			if (brand == null) {
+				return new ResponseDataModel<>(Constants.RESULT_CD_NOT_FOUND, "Brand not found");
 			}
 
 			/**
-			 * Soft delete brand and all products of that brand
+			 * Save brand logo path and all product image paths before delete
 			 */
-			brand.setIsDeleted(true);
-			brand.getProducts().forEach(p -> p.setIsDeleted(true));
+			String logo = brand.getLogo();
+			List<String> productImages = brand.getProducts()
+				.stream()
+				.map(ProductEntity::getImage)
+				.filter(image -> image != null && !image.isBlank())
+				.toList();
 
-			BrandDao.saveAndFlush(brand);
+			/**
+			 * Delete all products that in brand, then delete brand, using orphanRemoval in BrandEntity
+			 */
+			BrandRepository.delete(brand);
+			BrandRepository.flush();
 
-			responseMsg = "Brand is deleted successfully";
+			/**
+			 * Delete logo and images
+			 */
+			FileHelper.deleteFile(logo);
+			productImages.forEach(FileHelper::deleteFile);
+
+			responseMsg = "Brand and products in brand is deleted successfully";
 			responseCode = Constants.RESULT_CD_SUCCESS;
 		} catch (Exception e) {
 			responseMsg = "Error when deleting brand";

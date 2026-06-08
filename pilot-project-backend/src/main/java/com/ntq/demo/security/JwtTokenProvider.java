@@ -27,17 +27,17 @@ public class JwtTokenProvider {
 	private String jwtSecret;
 
 	/**
-	 * Generate JWT Access Token from account name and role when login success (short live - 1 hour)
+	 * Generate JWT Access Token from username and role when login success (short live - 1 hour)
 	 *
-	 * @param accountName
+	 * @param username
 	 * @param role
 	 * @return JWT Token
 	 */
-	public String generateAccessToken(String accountName, String role) {
+	public String generateAccessToken(String username, String role) {
 		Date now = new Date();
 		Date expiry = new Date(now.getTime() + Constants.JWT_ACCESS_EXPIRATION_MS);
 
-		return Jwts.builder().subject(accountName).claim("role", role).issuedAt(now).expiration(expiry)
+		return Jwts.builder().subject(username).claim("role", role).issuedAt(now).expiration(expiry)
 			.signWith(getSecretKey()).compact();
 	}
 
@@ -50,11 +50,11 @@ public class JwtTokenProvider {
 	}
 
 	/**
-	 * Get account name from JWT Access Token
+	 * Get username from JWT Access Token
 	 * @param token
-	 * @return Account name
+	 * @return username
 	 */
-	public String getAccountName(String token) {
+	public String getUsername(String token) {
 		return parseClaims(token).getSubject();
 	}
 

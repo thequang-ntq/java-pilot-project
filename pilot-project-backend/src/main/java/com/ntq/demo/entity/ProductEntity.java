@@ -7,13 +7,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * This class is used to declare properties and mapping them with product table from database
+ * This class is used to declare properties and mapping them with products table from database
  *
  * @author Quang
  * @since 2026-04-27
  */
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -48,7 +48,4 @@ public class ProductEntity {
 
 	@Column(name = "description")
 	private String description;
-
-	@Column(name = "is_deleted", nullable = false)
-	private Boolean isDeleted = false;
 }

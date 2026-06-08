@@ -1,7 +1,7 @@
 package com.ntq.demo.controller;
 
-import com.ntq.demo.model.request.BrandRequest;
-import com.ntq.demo.model.response.ResponseDataModel;
+import com.ntq.demo.dto.request.BrandRequest;
+import com.ntq.demo.model.ResponseDataModel;
 import com.ntq.demo.service.BrandService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +22,13 @@ public class BrandController {
 
 	/**
 	 * GET /api/brands?page=1&keyword=apple
-	 * Public - Guest, User, Admin can see
+	 * Public - Guest, Admin can see
 	 */
 	@GetMapping("/brands")
 	public ResponseDataModel<?> getList(
 			@RequestParam(defaultValue = "1") int page,
 			@RequestParam(defaultValue = "") String keyword) {
 		return brandService.getList(page, keyword);
-	}
-
-	/**
-	 * GET /api/admin/brands?page=1&keyword=apple
-	 * Admin
-	 */
-	@GetMapping("/admin/brands")
-	public ResponseDataModel<?> getListForAdmin(
-			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "") String keyword) {
-		return brandService.getListForAdmin(page, keyword);
 	}
 
 	/**
@@ -52,28 +41,28 @@ public class BrandController {
 	}
 
 	/**
-	 * POST /api/admin/brands
+	 * POST /api/brands
 	 * Admin only - add brand
 	 */
-	@PostMapping("/admin/brands")
+	@PostMapping("/brands")
 	public ResponseDataModel<?> add(@Valid @ModelAttribute BrandRequest request) {
 		return brandService.add(request);
 	}
 
 	/**
-	 * PUT /api/admin/brands/1
+	 * PUT /api/brands/1
 	 * Admin only - update brand
 	 */
-	@PutMapping("/admin/brands/{id}")
+	@PutMapping("/brands/{id}")
 	public ResponseDataModel<?> update(@PathVariable int id, @Valid @ModelAttribute BrandRequest request) {
 		return brandService.update(id, request);
 	}
 
 	/**
-	 * DELETE /api/admin/brands/1
-	 * Admin only - soft delete brand + products in brand
+	 * DELETE /api/brands/1
+	 * Admin only - delete brand + products in brand
 	 */
-	@DeleteMapping("/admin/brands/{id}")
+	@DeleteMapping("/brands/{id}")
 	public ResponseDataModel<?> delete(@PathVariable int id) {
 		return brandService.delete(id);
 	}

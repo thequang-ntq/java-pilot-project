@@ -5,12 +5,10 @@ export const getProducts = (params) =>
 
 export const getProductById = (id) => axiosInstance.get(`/products/${id}`);
 
-/** Admin — send FormData (do not set Content-Type; browser sets multipart boundary). */
 export const createProduct = (formData) =>
-  axiosInstance.post("/admin/products", formData);
+  axiosInstance.post("/products", formData);
 
-export const updateProduct = (formData) =>
-  axiosInstance.put("/admin/products", formData);
+export const updateProduct = (id, formData) =>
+  axiosInstance.put(`/products/${id}`, formData);
 
-export const deleteProduct = (id) =>
-  axiosInstance.delete(`/admin/products/${id}`);
+export const deleteProduct = (id) => axiosInstance.delete(`/products/${id}`);

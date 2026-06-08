@@ -1,7 +1,7 @@
 package com.ntq.demo.exception;
 
 import com.ntq.demo.common.constant.Constants;
-import com.ntq.demo.model.response.ResponseDataModel;
+import com.ntq.demo.model.ResponseDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;

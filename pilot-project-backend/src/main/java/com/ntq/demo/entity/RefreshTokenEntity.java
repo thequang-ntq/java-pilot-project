@@ -6,13 +6,13 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 /**
- * This class is used to declare properties and mapping them with refresh_token table from database
+ * This class is used to declare properties and mapping them with refresh_tokens table from database
  *
  * @author Quang
  * @since 2026-05-05
  */
 @Entity
-@Table(name = "refresh_token")
+@Table(name = "refresh_tokens")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,8 +24,8 @@ public class RefreshTokenEntity {
 	private Integer tokenId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "account_id", nullable = false)
-	private AccountEntity account;
+	@JoinColumn(name = "user_id", nullable = false)
+	private UserEntity user;
 
 	@Column(name = "token", nullable = false, unique = true, length = 50)
 	private String token;

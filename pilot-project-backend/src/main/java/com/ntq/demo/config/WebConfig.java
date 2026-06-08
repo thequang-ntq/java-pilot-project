@@ -1,5 +1,6 @@
 package com.ntq.demo.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
 
@@ -11,16 +12,18 @@ import org.springframework.web.servlet.config.annotation.*;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+	@Value("${frontend.url}")
+	private String origin;
 
 	/**
-	 * Allow React: localhost:5173 for calling API
+	 * Allow React: {origin} for calling API
 	 *
 	 * @param registry
 	 */
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/api/**")
-				.allowedOrigins("http://localhost:5173")
+				.allowedOrigins(origin)
 				.allowedMethods("GET", "POST", "PUT", "DELETE")
 				.allowedHeaders(
 						"Authorization",

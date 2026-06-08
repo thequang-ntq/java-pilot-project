@@ -1,0 +1,336 @@
+/* ========================================
+  Login page — authentication layout
+======================================== */
+.login-page {
+  background: var(--clr-auth-bg);
+}
+
+.login-page .login-card .login-card-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========================================
+    Card
+  ======================================== */
+.login-page .login-card .login-card-container .login-card-wrapper {
+  width: min(100%, 24rem);
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--clr-body-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) var(--space-lg);
+  box-shadow: var(--box-shadow);
+}
+
+/* ========================================
+    Card header
+  ======================================== */
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-card-header {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-card-header
+  .title {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--clr-body-text);
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-card-header
+  .sub {
+  font-size: var(--text-sm);
+  color: var(--clr-muted);
+}
+
+/* ========================================
+    Alerts
+  ======================================== */
+.login-page .login-card .login-card-container .login-card-wrapper .login-alert {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-alert-success {
+  background: var(--clr-success-bg);
+  color: var(--clr-success-text);
+  border: 1.5px solid var(--clr-success-border);
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-alert-error {
+  background: var(--clr-error-bg);
+  color: var(--clr-error-text);
+  border: 1.5px solid var(--clr-error-border);
+}
+
+/* ========================================
+    Form
+  ======================================== */
+.login-page .login-card .login-card-container .login-card-wrapper .login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Field */
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field
+  .field-label {
+  text-align: left;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--clr-body-text);
+}
+
+/* Input wrapper — positions eye button */
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field
+  .field-input-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field
+  .field-input-wrap
+  .field-input {
+  padding-right: 2.8rem; /* room for eye button */
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field
+  .field-input-wrap
+  .field-eye {
+  position: absolute;
+  right: var(--space-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field
+  .field-input-wrap
+  .field-eye:hover {
+  opacity: 0.6;
+}
+
+/* Shared input styles */
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field
+  .field-input {
+  width: 100%;
+  padding: var(--space-sm);
+  border: 1.5px solid var(--clr-body-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  color: var(--clr-body-text);
+  background: var(--clr-bg);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field
+  .field-input:focus {
+  outline: none;
+  border-color: var(--clr-body-accent);
+  box-shadow: 0 0 0 3px rgba(53, 53, 255, 0.1);
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field
+  .field-input-error {
+  border-color: var(--clr-danger);
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field
+  .field-input-error:focus {
+  border-color: var(--clr-danger);
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .field
+  .field-error {
+  text-align: left;
+  font-size: var(--text-xs);
+  color: var(--clr-danger);
+  font-weight: 500;
+}
+
+/* Submit button */
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .login-btn {
+  width: 100%;
+  padding: var(--space-sm) 0;
+  background: var(--clr-header-footer-bg);
+  color: var(--clr-header-footer-text);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-form
+  .login-btn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+}
+
+/* ========================================
+    Card footer
+  ======================================== */
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-card-footer {
+  display: flex;
+  flex-direction: row;
+  margin-top: var(--space-sm);
+  width: 100%;
+}
+/* Back link */
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-card-footer
+  .login-back {
+  font-size: var(--text-sm);
+  color: var(--clr-body-accent);
+  margin-left: auto;
+  transition: color 0.2s ease;
+}
+
+.login-page
+  .login-card
+  .login-card-container
+  .login-card-wrapper
+  .login-card-footer
+  .login-back:hover {
+  opacity: 0.7;
+}
+
+/* ========================================
+    Mobile: 0px - 479.98px
+  ======================================== */
+@media screen and (max-width: 479.98px) {
+}
+
+/* ========================================
+    Small Tablet: 480px - 767.98px
+  ======================================== */
+@media screen and (min-width: 480px) and (max-width: 767.98px) {
+}
+
+/* ========================================
+    Tablet: 768px - 1023.98px
+  ======================================== */
+@media screen and (min-width: 768px) and (max-width: 1023.98px) {
+}
+
+/* ========================================
+    Desktop: >= 1024px
+  ======================================== */
+@media screen and (min-width: 1024px) {
+}

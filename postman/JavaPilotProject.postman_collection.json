@@ -10,43 +10,13 @@
       "name": "AuthController",
       "item": [
         {
-          "name": "Register",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"accountName\": \"user3\",\r\n    \"password\": \"123456\",\r\n    \"confirmPassword\": \"123456\"\r\n}\r\n",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:8080/api/auth/register",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "auth",
-                "register"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "Login",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"accountName\": \"testuser\",\r\n    \"password\": \"123456\"\r\n}\r\n",
+              "raw": "{\r\n    \"username\": \"admin1\",\r\n    \"password\": \"123456\"\r\n}\r\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -72,7 +42,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{token_user}}",
+                "value": "Bearer {{token_admin}}",
                 "type": "text"
               }
             ],
@@ -99,7 +69,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"refreshToken\": \"2bbdc8d5-61d0-4318-aa87-fcab47402ebf\"\r\n}",
+              "raw": "{\r\n    \"refreshToken\": \"0f477a5a-d353-4ff9-b7cd-d554eaf247c1\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -129,7 +99,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/brands?page=1&keyword=",
+              "raw": "http://localhost:8080/api/brands?page=&keyword=",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -142,7 +112,7 @@
               "query": [
                 {
                   "key": "page",
-                  "value": "1"
+                  "value": ""
                 },
                 {
                   "key": "keyword",
@@ -190,7 +160,7 @@
               "formdata": [
                 {
                   "key": "brandName",
-                  "value": "Levono 4",
+                  "value": "Levono 3",
                   "type": "text",
                   "uuid": "c1aae0c8-3eef-4d8e-844e-41b0181a7739"
                 },
@@ -209,7 +179,7 @@
               ]
             },
             "url": {
-              "raw": "http://localhost:8080/api/admin/brands",
+              "raw": "http://localhost:8080/api/brands",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -217,7 +187,6 @@
               "port": "8080",
               "path": [
                 "api",
-                "admin",
                 "brands"
               ]
             }
@@ -239,14 +208,8 @@
               "mode": "formdata",
               "formdata": [
                 {
-                  "key": "brandId",
-                  "value": "14",
-                  "type": "text",
-                  "uuid": "60822fea-08aa-4e57-8cc0-ea43935d097d"
-                },
-                {
                   "key": "brandName",
-                  "value": "Levono 4",
+                  "value": "Levono 7",
                   "type": "text",
                   "uuid": "87a772c8-cc8f-42b7-80f3-fcdec4d69362"
                 },
@@ -255,11 +218,17 @@
                   "value": "China!",
                   "type": "text",
                   "uuid": "bd678625-c514-42cd-b09d-f2abbaed1e19"
+                },
+                {
+                  "key": "logoFiles",
+                  "type": "file",
+                  "uuid": "cfdbffb7-6d3d-41d9-a224-6971270330ec",
+                  "src": "/C:/Users/USER/Downloads/product-sample.jpeg"
                 }
               ]
             },
             "url": {
-              "raw": "http://localhost:8080/api/admin/brands",
+              "raw": "http://localhost:8080/api/brands/15",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -267,8 +236,8 @@
               "port": "8080",
               "path": [
                 "api",
-                "admin",
-                "brands"
+                "brands",
+                "15"
               ]
             }
           },
@@ -286,7 +255,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:8080/api/admin/brands/14",
+              "raw": "http://localhost:8080/api/brands/15",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -294,9 +263,8 @@
               "port": "8080",
               "path": [
                 "api",
-                "admin",
                 "brands",
-                "14"
+                "15"
               ]
             }
           },
@@ -313,7 +281,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/products?page=1&keyword=a&priceFrom=20000000&priceTo=30000000",
+              "raw": "http://localhost:8080/api/products?page=2&keyword=&priceFrom=&priceTo=",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -326,19 +294,19 @@
               "query": [
                 {
                   "key": "page",
-                  "value": "1"
+                  "value": "2"
                 },
                 {
                   "key": "keyword",
-                  "value": "a"
+                  "value": ""
                 },
                 {
                   "key": "priceFrom",
-                  "value": "20000000"
+                  "value": ""
                 },
                 {
                   "key": "priceTo",
-                  "value": "30000000"
+                  "value": ""
                 }
               ]
             }
@@ -351,7 +319,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/products/19",
+              "raw": "http://localhost:8080/api/products/1",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -360,7 +328,7 @@
               "path": [
                 "api",
                 "products",
-                "19"
+                "1"
               ]
             }
           },
@@ -382,7 +350,7 @@
               "formdata": [
                 {
                   "key": "productName",
-                  "value": "Levono Laptop HP-15",
+                  "value": "Levono Laptop HP-3",
                   "type": "text",
                   "uuid": "6caa5b0c-3619-4125-8a07-f033b87f9697"
                 },
@@ -400,7 +368,7 @@
                 },
                 {
                   "key": "brandId",
-                  "value": "10",
+                  "value": "15",
                   "type": "text",
                   "uuid": "b3bdbfce-06ee-4896-8d83-9c1ba9bd0919"
                 },
@@ -425,7 +393,7 @@
               ]
             },
             "url": {
-              "raw": "http://localhost:8080/api/admin/products",
+              "raw": "http://localhost:8080/api/products",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -433,7 +401,6 @@
               "port": "8080",
               "path": [
                 "api",
-                "admin",
                 "products"
               ]
             }
@@ -455,20 +422,14 @@
               "mode": "formdata",
               "formdata": [
                 {
-                  "key": "productId",
-                  "value": "20",
-                  "type": "text",
-                  "uuid": "1c198ae6-f564-431f-96ff-cc7eaa99cd6a"
-                },
-                {
                   "key": "productName",
-                  "value": "Levono Laptop HP-15",
+                  "value": "Levono Laptop HP-1",
                   "type": "text",
                   "uuid": "6caa5b0c-3619-4125-8a07-f033b87f9697"
                 },
                 {
                   "key": "quantity",
-                  "value": "60",
+                  "value": "65",
                   "type": "text",
                   "uuid": "5821638a-91e0-425e-8672-6c00872cb7ed"
                 },
@@ -480,7 +441,7 @@
                 },
                 {
                   "key": "brandId",
-                  "value": "10",
+                  "value": "15",
                   "type": "text",
                   "uuid": "b3bdbfce-06ee-4896-8d83-9c1ba9bd0919"
                 },
@@ -489,11 +450,17 @@
                   "value": "2026-04-30",
                   "type": "text",
                   "uuid": "f6ffb5a0-b537-4c6b-bb6a-97d38c50a293"
+                },
+                {
+                  "key": "imageFiles",
+                  "type": "file",
+                  "uuid": "2e4a6271-c5ae-4e8f-b210-3dfb4076254c",
+                  "src": "/C:/Users/USER/Downloads/brand-sample.jpg"
                 }
               ]
             },
             "url": {
-              "raw": "http://localhost:8080/api/admin/products",
+              "raw": "http://localhost:8080/api/products/19",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -501,8 +468,8 @@
               "port": "8080",
               "path": [
                 "api",
-                "admin",
-                "products"
+                "products",
+                "19"
               ]
             }
           },
@@ -520,7 +487,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:8080/api/admin/products/20",
+              "raw": "http://localhost:8080/api/products/21",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -528,423 +495,8 @@
               "port": "8080",
               "path": [
                 "api",
-                "admin",
                 "products",
-                "20"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "OrderController",
-      "item": [
-        {
-          "name": "AddToCart",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token_user}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/cart/products/20",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "cart",
-                "products",
-                "20"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "GetCart",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token_user}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/cart?page=1",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "cart"
-              ],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "UpdateCartItem",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token_user}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/cart/products/15?quantity=3",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "cart",
-                "products",
-                "15"
-              ],
-              "query": [
-                {
-                  "key": "quantity",
-                  "value": "3"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "RemoveCartItem",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token_user}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/cart/products/15",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "cart",
-                "products",
-                "15"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "ClearCart",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token_user}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/cart",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "cart"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "ConfirmOrder",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzc3NzMzMzkyLCJleHAiOjE3Nzc4MTk3OTJ9.y5uDwpN6X26K3yYInMZ3ZaRzqe1I6uJmurFAcl0EqF8",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/cart/confirm",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "cart",
-                "confirm"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "GetOrderHistory",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token_user}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/orders?page=1&keyword=&status=",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "orders"
-              ],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                },
-                {
-                  "key": "keyword",
-                  "value": ""
-                },
-                {
-                  "key": "status",
-                  "value": ""
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "GetOrderDetail",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token_user}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/orders/8?page=1",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "orders",
-                "8"
-              ],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "GetAllOrders",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token_admin}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/admin/orders?page=1&keyword=&status=",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "admin",
-                "orders"
-              ],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                },
-                {
-                  "key": "keyword",
-                  "value": ""
-                },
-                {
-                  "key": "status",
-                  "value": ""
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "GetOrderDetailForAdmin",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token_admin}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/admin/orders/8?page=1",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "admin",
-                "orders",
-                "8"
-              ],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "UpdateOrderStatus",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token_admin}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "http://localhost:8080/api/admin/orders/8/status?status=IN_PROGRESS",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "admin",
-                "orders",
-                "8",
-                "status"
-              ],
-              "query": [
-                {
-                  "key": "status",
-                  "value": "IN_PROGRESS"
-                }
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "OAuth2",
-      "item": [
-        {
-          "name": "OAuth2 Google Callback",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/api/auth/oauth2/callback/google",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "auth",
-                "oauth2",
-                "callback",
-                "google"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "OAuth2 Google Authorize",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/api/auth/oauth2/authorize/google",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "auth",
-                "oauth2",
-                "authorize",
-                "google"
+                "21"
               ]
             }
           },
