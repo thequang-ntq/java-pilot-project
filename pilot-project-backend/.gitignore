@@ -47,3 +47,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Custom ###
+images
+logs/pilot-project-backend.log

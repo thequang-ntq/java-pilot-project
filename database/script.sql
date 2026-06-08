@@ -33,7 +33,7 @@ CREATE TABLE `account` (
   UNIQUE KEY `uq_account_email` (`email`),
   KEY `idx_account_account_name` (`account_name`),
   CONSTRAINT `chk_account_email_format` CHECK (((`email` is null) or regexp_like(`email`,_utf8mb4'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$')))
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'admin1','123','ADMIN',NULL),(2,'admin2','123','ADMIN',NULL),(3,'admin3','123','ADMIN',NULL),(4,'user1','123','USER',NULL),(5,'user2','123','USER',NULL);
+INSERT INTO `account` VALUES (1,'admin1','123','ADMIN',NULL),(2,'admin2','123','ADMIN',NULL),(3,'admin3','123','ADMIN',NULL),(4,'user1','123','USER',NULL),(5,'user2','123','USER',NULL),(7,'testuser','$2a$10$Q/1TtQLFPsDYk736mQTJVuT8/BrDufY3SxJdM0VWakO0dtrhj6jUS','USER',NULL),(8,'admin4','$2a$10$Q/1TtQLFPsDYk736mQTJVuT8/BrDufY3SxJdM0VWakO0dtrhj6jUS','ADMIN',NULL);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -63,7 +63,7 @@ CREATE TABLE `brand` (
   UNIQUE KEY `uq_brand_brand_name` (`brand_name`),
   KEY `idx_brand_brand_name` (`brand_name`),
   KEY `idx_brand_is_deleted` (`is_deleted`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +72,7 @@ CREATE TABLE `brand` (
 
 LOCK TABLES `brand` WRITE;
 /*!40000 ALTER TABLE `brand` DISABLE KEYS */;
-INSERT INTO `brand` VALUES (1,'Apple','images/brand/20221124-1506-94dbck.png','Apple Inc,  California',0),(2,'Samsung','images/brand/20221124-1505-m6nrn9.webp','Samsung Inc,  Korea',0),(3,'Oppo','images/brand/20221124-1505-m0iss6.png','Oppo Inc,  China',0),(4,'LG','images/brand/20221124-1505-vgj6rp.png','LG Inc,  Japan',0),(5,'Xiaomi','images/brand/20221124-1504-ep3pdt.png','Xiaomi Inc,  China',0),(6,'Sony','images/brand/20221124-1504-nak19v.png','Sony Inc,  Japan',0),(7,'Huawei','images/brand/20221124-1503-36khjb.png','Huawei made in China',0),(8,'Vivo','images/brand/20221124-1503-9dc89b.png','Vivo Inc,  China',0),(9,'HTC','images/brand/20221124-1502-d0h72d.png','HTC Inc,  California',0),(10,'Asus','images/brand/20221124-1501-73qa6b.svg','Asus Inc,  China',0),(11,'Realme','images/brand/20221124-1501-12e3hf.png','Realme Inc,  China',0);
+INSERT INTO `brand` VALUES (1,'Apple','images/brand/20221124-1506-94dbck.png','Apple Inc,  California',0),(2,'Samsung','images/brand/20221124-1505-m6nrn9.webp','Samsung Inc,  Korea',0),(3,'Oppo','images/brand/20221124-1505-m0iss6.png','Oppo Inc,  China',0),(4,'LG','images/brand/20221124-1505-vgj6rp.png','LG Inc,  Japan',0),(5,'Xiaomi','images/brand/20221124-1504-ep3pdt.png','Xiaomi Inc,  China',0),(6,'Sony','images/brand/20221124-1504-nak19v.png','Sony Inc,  Japan',0),(7,'Huawei','images/brand/20221124-1503-36khjb.png','Huawei made in China',0),(8,'Vivo','images/brand/20221124-1503-9dc89b.png','Vivo Inc,  China',0),(9,'HTC','images/brand/20221124-1502-d0h72d.png','HTC Inc,  California',0),(10,'Asus','images/brand/20221124-1501-73qa6b.svg','Asus Inc,  China',0),(11,'Realme','images/brand/20221124-1501-12e3hf.png','Realme Inc,  China',0),(12,'Levono','uploads/brand/47dc1cd5-f972-4835-8f74-ccf7940f3100.jpg','China',1),(13,'Levono 3','images/brand/b4c9e71b-f7cf-4135-9217-f3ad2f5f8d04.jpg','China',1);
 /*!40000 ALTER TABLE `brand` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,14 +88,14 @@ CREATE TABLE `order` (
   `account_id` int NOT NULL,
   `order_time` datetime DEFAULT NULL,
   `finish_time` datetime DEFAULT NULL,
-  `status` enum('pre-order','new','in progress','completed','failed') NOT NULL DEFAULT 'pre-order',
+  `status` enum('PRE_ORDER','NEW','IN_PROGRESS','COMPLETED','FAILED') NOT NULL DEFAULT 'PRE_ORDER',
   PRIMARY KEY (`order_id`),
   KEY `idx_order_account_id` (`account_id`),
   KEY `idx_order_status` (`status`),
   KEY `idx_order_order_time` (`order_time`),
   KEY `idx_order_finish_time` (`finish_time`),
   CONSTRAINT `fk_order_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +104,7 @@ CREATE TABLE `order` (
 
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` VALUES (1,4,NULL,NULL,'pre-order'),(2,4,'2026-01-15 09:00:00',NULL,'new'),(3,4,'2026-02-01 10:15:00',NULL,'in progress'),(4,5,'2026-02-20 14:00:00','2026-02-22 16:00:00','completed'),(5,5,'2026-03-05 11:30:00','2026-03-06 09:00:00','failed');
+INSERT INTO `order` VALUES (1,4,NULL,NULL,'PRE_ORDER'),(2,4,'2026-01-15 09:00:00',NULL,'NEW'),(3,4,'2026-02-01 10:15:00',NULL,'IN_PROGRESS'),(4,5,'2026-02-20 14:00:00','2026-02-22 16:00:00','COMPLETED'),(5,5,'2026-03-05 11:30:00','2026-03-06 09:00:00','FAILED'),(8,7,'2026-05-02 22:41:05',NULL,'IN_PROGRESS');
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,7 +135,7 @@ CREATE TABLE `order_detail` (
 
 LOCK TABLES `order_detail` WRITE;
 /*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
-INSERT INTO `order_detail` VALUES (1,1,2,26990000.00),(1,2,1,21090000.00),(2,3,1,17980000.00),(2,4,3,16500000.00),(3,5,1,22390000.00),(3,6,2,21500000.00),(4,7,1,21990000.00),(4,8,4,7990000.00),(5,9,2,20490000.00),(5,10,1,42990000.00);
+INSERT INTO `order_detail` VALUES (1,1,2,26990000.00),(1,2,1,21090000.00),(2,3,1,17980000.00),(2,4,3,16500000.00),(3,5,1,22390000.00),(3,6,2,21500000.00),(4,7,1,21990000.00),(4,8,4,7990000.00),(5,9,2,20490000.00),(5,10,1,42990000.00),(8,11,1,21990000.00);
 /*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,7 +165,7 @@ CREATE TABLE `product` (
   CONSTRAINT `fk_product_brand` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`brand_id`),
   CONSTRAINT `chk_product_price_value` CHECK ((`price` >= 0)),
   CONSTRAINT `chk_product_quantity_value` CHECK ((`quantity` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,7 +174,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Iphone XS Max',100,26990000.00,1,'2019-10-12','IPhone XS Max 128GB.jpg','Made in USA',0),(2,'Iphone X',100,21090000.00,1,'2019-10-09','ipx.jpg','Apple\'s aim with the iPhone X was to create an iPhone.',0),(3,'Iphone 8 Plus',100,17980000.00,1,'2019-10-09','IPhone 8 Plus 64GB.jpg','The iPhone 8 includes a 4.7-inch display.',0),(4,'Iphone 7 Plus',100,16500000.00,1,'2019-10-10','ip7.jpg','The iPhone 7 measures in at 138.3mm tall.',0),(5,'Samsung Galaxy Note 10 Plus',100,22390000.00,2,'2019-10-08','ss note 10+.jpg','It runs on the Samsung Exynos 9 Octa 9825 Chipset.',0),(6,'Samsung Galaxy S10',100,21500000.00,2,'2019-10-08','Samsung Galaxy S10 128GB.jpg','The Galaxy S10 isn’t all that small, of course.',0),(7,'Samsung Galaxy S10 Plus',100,21990000.00,2,'2019-10-08','Samsung Galaxy S10+ 2 128GB.jpg','The Galaxy S10+ is Samsung latest flagship for 2019.',0),(8,'Samsung Galaxy A70',100,7990000.00,2,'2019-10-08','Samsung Galaxy A70 64GB.jpg','It is powered by 2GHz octa-core Qualcomm Snapdragon 675.',0),(9,'Samsung Galaxy Note 9',100,20490000.00,2,'2019-10-08','ss note 9.jpg','Samsung Note version',0),(10,'IPhone 11 Pro Max',100,42990000.00,1,'2019-10-08','iphone-11-pro-max-512gb-gold.jpg','New IPhone',0),(11,'Iphone 11',80,21990000.00,1,'2019-10-08','iphone-11-128gb-purple.jpg','New version',0),(12,'Iphone 6S Plus',100,8990000.00,1,'2019-10-12','IPhone 6 32GB.jpg','Made in USA',0),(13,'Xiaomi Note 7',100,4500000.00,6,'2019-10-08','xiaominote7.jpg','description',0),(14,'Huawei P30 Pro',120,20690000.00,9,'2019-10-08','huawei-p30-pro.jpg','Huawei made in China',0),(15,'Huawei P30',100,15290000.00,9,'2019-10-08','huawei-p30-blue-600x600.jpg','Huawei made in China',0),(16,'Oppo Reno 10X',70,19990000.00,3,'2019-10-08','oppo-reno-10x-zoom-edition-black.jpg','Oppo made in China',0),(17,'Oppo A9',100,7890000.00,3,'2019-10-08','oppo-a9-2020-green-1-600x600.jpg','Oppo China',0),(18,'Oppo A7',50,7000000.00,3,'2019-10-08','oppo-r17-pro-14-600x600.jpg','Oppo China',0);
+INSERT INTO `product` VALUES (1,'Iphone XS Max',100,26990000.00,1,'2019-10-12','IPhone XS Max 128GB.jpg','Made in USA',0),(2,'Iphone X',100,21090000.00,1,'2019-10-09','ipx.jpg','Apple\'s aim with the iPhone X was to create an iPhone.',0),(3,'Iphone 8 Plus',100,17980000.00,1,'2019-10-09','IPhone 8 Plus 64GB.jpg','The iPhone 8 includes a 4.7-inch display.',0),(4,'Iphone 7 Plus',100,16500000.00,1,'2019-10-10','ip7.jpg','The iPhone 7 measures in at 138.3mm tall.',0),(5,'Samsung Galaxy Note 10 Plus',100,22390000.00,2,'2019-10-08','ss note 10+.jpg','It runs on the Samsung Exynos 9 Octa 9825 Chipset.',0),(6,'Samsung Galaxy S10',100,21500000.00,2,'2019-10-08','Samsung Galaxy S10 128GB.jpg','The Galaxy S10 isn’t all that small, of course.',0),(7,'Samsung Galaxy S10 Plus',100,21990000.00,2,'2019-10-08','Samsung Galaxy S10+ 2 128GB.jpg','The Galaxy S10+ is Samsung latest flagship for 2019.',0),(8,'Samsung Galaxy A70',100,7990000.00,2,'2019-10-08','Samsung Galaxy A70 64GB.jpg','It is powered by 2GHz octa-core Qualcomm Snapdragon 675.',0),(9,'Samsung Galaxy Note 9',100,20490000.00,2,'2019-10-08','ss note 9.jpg','Samsung Note version',0),(10,'IPhone 11 Pro Max',100,42990000.00,1,'2019-10-08','iphone-11-pro-max-512gb-gold.jpg','New IPhone',0),(11,'Iphone 11',80,21990000.00,1,'2019-10-08','iphone-11-128gb-purple.jpg','New version',0),(12,'Iphone 6S Plus',100,8990000.00,1,'2019-10-12','IPhone 6 32GB.jpg','Made in USA',0),(13,'Xiaomi Note 7',100,4500000.00,6,'2019-10-08','xiaominote7.jpg','description',0),(14,'Huawei P30 Pro',120,20690000.00,9,'2019-10-08','huawei-p30-pro.jpg','Huawei made in China',0),(15,'Huawei P30',100,15290000.00,9,'2019-10-08','huawei-p30-blue-600x600.jpg','Huawei made in China',0),(16,'Oppo Reno 10X',70,19990000.00,3,'2019-10-08','oppo-reno-10x-zoom-edition-black.jpg','Oppo made in China',0),(17,'Oppo A9',100,7890000.00,3,'2019-10-08','oppo-a9-2020-green-1-600x600.jpg','Oppo China',0),(18,'Oppo A7',50,7000000.00,3,'2019-10-08','oppo-r17-pro-14-600x600.jpg','Oppo China',0),(19,'Levono Laptop HP-14',60,21000000.00,10,'2026-04-30','images/product/1748b32d-aa72-449d-b31c-a1ed0fe87f1f.jpeg',NULL,1);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,4 +195,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-25 17:06:21
+-- Dump completed on 2026-05-04 15:23:10

@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `order` (
     `account_id` INT NOT NULL,
     `order_time` DATETIME DEFAULT NULL,
     `finish_time` DATETIME DEFAULT NULL,
-    `status` ENUM('pre-order', 'new', 'in progress', 'completed', 'failed') NOT NULL DEFAULT 'pre-order',
+    `status` ENUM('PRE_ORDER', 'NEW', 'IN_PROGRESS', 'COMPLETED', 'FAILED') NOT NULL DEFAULT 'PRE_ORDER',
     CONSTRAINT pk_order PRIMARY KEY(`order_id`),
     CONSTRAINT fk_order_account FOREIGN KEY(`account_id`) REFERENCES `account`(`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -165,11 +165,11 @@ VALUES 	('Iphone XS Max', 100, 26990000, 1, '2019-10-12', 'IPhone XS Max 128GB.j
         ('Oppo A7', 50, 7000000, 3, '2019-10-08', 'oppo-r17-pro-14-600x600.jpg', 'Oppo China', FALSE);
         
 INSERT INTO `order` (`account_id`, `order_time`, `finish_time`, `status`)
-VALUES	(4, NULL, NULL, 'pre-order'),
-		(4, '2026-01-15 09:00:00', NULL, 'new'),
-		(4, '2026-02-01 10:15:00', NULL, 'in progress'),
-		(5, '2026-02-20 14:00:00', '2026-02-22 16:00:00', 'completed'),
-		(5, '2026-03-05 11:30:00', '2026-03-06 09:00:00', 'failed');
+VALUES	(4, NULL, NULL, 'PRE_ORDER'),
+		(4, '2026-01-15 09:00:00', NULL, 'NEW'),
+		(4, '2026-02-01 10:15:00', NULL, 'IN_PROGRESS'),
+		(5, '2026-02-20 14:00:00', '2026-02-22 16:00:00', 'COMPLETED'),
+		(5, '2026-03-05 11:30:00', '2026-03-06 09:00:00', 'FAILED');
 
 INSERT INTO `order_detail` (`order_id`, `product_id`, `quantity`, `sale_price`)
 VALUES
@@ -195,5 +195,14 @@ VALUES
 */
 
 -- SELECT to check;
--- SELECT * FROM `product`;
--- SELECT * FROM `product` WHERE `is_deleted` = FALSE AND product_name LIKE '%Iphone%';
+/*
+SELECT * FROM `account`;
+SELECT * FROM `brand`;
+SELECT * FROM `product`;
+SELECT * FROM `order`;
+SELECT * FROM `order_detail`;
+SELECT * FROM `product` WHERE `is_deleted` = FALSE AND product_name LIKE '%Iphone%';
+*/
+
+-- DROP TABLE `order_detail`;
+-- DROP TABLE `order`;
