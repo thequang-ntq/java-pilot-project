@@ -174,7 +174,6 @@ export default function BrandFormPage() {
   };
 
   return (
-<<<<<<< HEAD
     <MainLayout
       pageClassName="brand-form-page"
       title={isEdit ? "Edit Brand" : "Add New Brand"}
@@ -183,19 +182,6 @@ export default function BrandFormPage() {
       <section className="brand-form-section">
         <div className="brand-form-container">
           <div className="brand-form-wrapper">
-=======
-    <MainLayout pageClassName="brand-form-page" isLoading={isLoading}>
-      <section className="brand-form-section">
-        <div className="brand-form-container">
-          <div className="brand-form-wrapper">
-            {/* Header */}
-            <div className="form-header">
-              <h1 className="title">
-                {isEdit ? "Edit Brand" : "Add New Brand"}
-              </h1>
-            </div>
-
->>>>>>> main
             {/* Form */}
             <div className="form">
               <div className="form-fields">
@@ -207,10 +193,7 @@ export default function BrandFormPage() {
                   <div className="field-input-group">
                     <input
                       id="brand-name"
-<<<<<<< HEAD
                       name="brandName"
-=======
->>>>>>> main
                       className={`field-input ${errors.name ? "field-input-error" : ""}`}
                       type="text"
                       placeholder="Enter brand name"
@@ -222,11 +205,7 @@ export default function BrandFormPage() {
                         clearError("name");
                       }}
                       maxLength={50}
-<<<<<<< HEAD
                       autoComplete="on"
-=======
-                      autoComplete="off"
->>>>>>> main
                     />
                     {errors.name && (
                       <span className="field-error">{errors.name}</span>
@@ -313,10 +292,7 @@ export default function BrandFormPage() {
                   <div className="field-input-group">
                     <textarea
                       id="brand-description"
-<<<<<<< HEAD
                       name="brandDescription"
-=======
->>>>>>> main
                       className="field-textarea"
                       placeholder="Enter brand description"
                       value={description}
@@ -325,10 +301,7 @@ export default function BrandFormPage() {
                       }}
                       maxLength={255}
                       rows={4}
-<<<<<<< HEAD
                       autoComplete="on"
-=======
->>>>>>> main
                     />
                   </div>
                 </div>

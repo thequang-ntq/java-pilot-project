@@ -188,11 +188,8 @@ export default function ProductFormPage() {
     else if (parseFloat(price) < 0) errs.price = "Price must be at least 0.";
     if (!brandId) errs.brandId = "Brand is required.";
     if (!saleDate) errs.saleDate = "Sale date is required.";
-<<<<<<< HEAD
     else if (saleDate > new Date().toLocaleDateString("en-CA"))
       errs.saleDate = "Sale date cannot be in the future";
-=======
->>>>>>> main
     return errs;
   };
 
@@ -296,7 +293,6 @@ export default function ProductFormPage() {
   };
 
   return (
-<<<<<<< HEAD
     <MainLayout
       pageClassName="product-form-page"
       title={isEdit ? "Edit Product" : "Add New Product"}
@@ -305,19 +301,6 @@ export default function ProductFormPage() {
       <section className="product-form-section">
         <div className="product-form-container">
           <div className="product-form-wrapper">
-=======
-    <MainLayout pageClassName="product-form-page" isLoading={isLoading}>
-      <section className="product-form-section">
-        <div className="product-form-container">
-          <div className="product-form-wrapper">
-            {/* Header */}
-            <div className="form-header">
-              <h1 className="title">
-                {isEdit ? "Edit Product" : "Add New Product"}
-              </h1>
-            </div>
-
->>>>>>> main
             {/* Form */}
             <div className="form">
               <div className="form-fields">
@@ -330,10 +313,7 @@ export default function ProductFormPage() {
                     <div className="field-input-group">
                       <input
                         id="product-name"
-<<<<<<< HEAD
                         name="productName"
-=======
->>>>>>> main
                         className={`field-input ${errors.name ? "field-input-error" : ""}`}
                         type="text"
                         placeholder="Enter product name"
@@ -345,11 +325,7 @@ export default function ProductFormPage() {
                           clearError("name");
                         }}
                         maxLength={50}
-<<<<<<< HEAD
                         autoComplete="on"
-=======
-                        autoComplete="off"
->>>>>>> main
                       />
                       {errors.name && (
                         <span className="field-error">{errors.name}</span>
@@ -365,10 +341,7 @@ export default function ProductFormPage() {
                     <div className="field-input-group">
                       <input
                         id="product-quantity"
-<<<<<<< HEAD
                         name="productQuantity"
-=======
->>>>>>> main
                         className={`field-input ${errors.quantity ? "field-input-error" : ""}`}
                         type="number"
                         min="0"
@@ -380,10 +353,7 @@ export default function ProductFormPage() {
                         onFocus={() => {
                           clearError("quantity");
                         }}
-<<<<<<< HEAD
                         autoComplete="on"
-=======
->>>>>>> main
                       />
                       {errors.quantity && (
                         <span className="field-error">{errors.quantity}</span>
@@ -400,10 +370,7 @@ export default function ProductFormPage() {
                       <input
                         id="product-price"
                         className={`field-input ${errors.price ? "field-input-error" : ""}`}
-<<<<<<< HEAD
                         name="productPrice"
-=======
->>>>>>> main
                         type="number"
                         min="0"
                         step="1000"
@@ -415,10 +382,7 @@ export default function ProductFormPage() {
                         onFocus={() => {
                           clearError("price");
                         }}
-<<<<<<< HEAD
                         autoComplete="on"
-=======
->>>>>>> main
                       />
                       {errors.price && (
                         <span className="field-error">{errors.price}</span>
@@ -436,10 +400,7 @@ export default function ProductFormPage() {
                         {/* Search and select a brand name, but value is brand id */}
                         <input
                           id="product-brand"
-<<<<<<< HEAD
                           name="productBrand"
-=======
->>>>>>> main
                           className={`field-input ${errors.brandId ? "field-input-error" : ""}`}
                           type="text"
                           placeholder="Search and select a brand"
@@ -450,11 +411,7 @@ export default function ProductFormPage() {
                             clearError("brandId");
                           }}
                           maxLength={50}
-<<<<<<< HEAD
                           autoComplete="on"
-=======
-                          autoComplete="off"
->>>>>>> main
                         />
                         {/* Selection arrow */}
                         <button
@@ -502,10 +459,7 @@ export default function ProductFormPage() {
                           ${!saleDate ? "field-date-placeholder" : ""}
                           ${errors.saleDate ? "field-input-error" : ""}
                         `}
-<<<<<<< HEAD
                         name="productSaleDate"
-=======
->>>>>>> main
                         type="date"
                         value={saleDate}
                         onChange={(e) => {
@@ -514,10 +468,7 @@ export default function ProductFormPage() {
                         onFocus={() => {
                           clearError("saleDate");
                         }}
-<<<<<<< HEAD
                         autoComplete="on"
-=======
->>>>>>> main
                       />
                       {errors.saleDate && (
                         <span className="field-error">{errors.saleDate}</span>
@@ -613,10 +564,7 @@ export default function ProductFormPage() {
                     <div className="field-input-group">
                       <textarea
                         id="product-description"
-<<<<<<< HEAD
                         name="productDescription"
-=======
->>>>>>> main
                         className="field-textarea"
                         placeholder="Enter product description"
                         value={description}
@@ -625,10 +573,7 @@ export default function ProductFormPage() {
                         }}
                         maxLength={255}
                         rows={4}
-<<<<<<< HEAD
                         autoComplete="on"
-=======
->>>>>>> main
                       />
                     </div>
                   </div>

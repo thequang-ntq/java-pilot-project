@@ -11,6 +11,7 @@
 - [Java Pilot Project](#java-pilot-project)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
+  - [UI Screenshots](#ui-screenshots)
     - [Database](#database)
     - [Backend](#backend)
     - [Frontend](#frontend)
@@ -65,6 +66,7 @@
     - [2026-05-30](#2026-05-30)
     - [2026-06-01](#2026-06-01)
     - [2026-06-02](#2026-06-02)
+    - [2026-06-05](#2026-06-05)
   - [Fix Bugs](#fix-bugs)
     - [2026-05-02](#2026-05-02-1)
     - [2026-05-04](#2026-05-04-1)
@@ -75,7 +77,23 @@
 
 ## Features
 
-Fullstack Website
+- Fullstack web application, using MySQL, Java Spring Boot and React.
+- The purpose of this web app is to manage Brands & Products (CRUD Brands & Products), like a management web app.
+- Keyword: Backend pagination, JWT token, Responsive web, Image handling.
+
+## UI Screenshots
+
+| Dashboard                                  |     | Brands                                    |
+| ------------------------------------------ | --- | ----------------------------------------- |
+| ![Dashboard UI](screenshots/dashboard.png) |     | ![Brands UI](screenshots/brands-page.png) |
+
+| Brand Form                                        |     | Products                                      |
+| ------------------------------------------------- | --- | --------------------------------------------- |
+| ![Brand Form UI](screenshots/brand-form-page.png) |     | ![Products UI](screenshots/products-page.png) |
+
+| Product Form                                          |
+| ----------------------------------------------------- |
+| ![Product Form UI](screenshots/product-form-page.png) |
 
 ### Database
 
@@ -103,61 +121,65 @@ MySql: pilot_project_db (CHARSET utf8mb4, COLLATE utf8mb4_0900_ai_ci, (accent-in
 
 Java Spring Boot (IDE: Intellij): pilot-project-backend (Spring Web, Spring Data JPA, MySQL Driver, Spring Security, Spring Boot DevTools, Lombok, Validation, Maven, JWT with refresh token, Bcrypt). Use:
 
-- entity/: Map DB tables to java object
-  - UserEntity
-  - BrandEntity
-  - ProductEntity
-  - RefreshTokenEntity
-- repository/: communicate/react with DB (CRUD, query)
-  - UserRepository
-  - BrandRepository
-  - ProductRepository
-  - RefreshTokenRepository
-- common/: constants variables and common functions
-  - constants/Constants
-  - util/:
-    - CommonUtil
-    - FileHelper
-- dto/: object transmit data between Controller and Service
-  - request/: DTO object to server from client (login, register, add/update brand, product)
-    - LoginRequest
-    - BrandRequest
-    - ProductRequest
-    - RefreshTokenRequest
-  - response/: DTO object from server to client-side
-    - LoginResponse
-    - BrandResponse
-    - ProductResponse
-- mapper/: Map between entity and DTO
-  - BrandMapper
-  - ProductMapper
-- model/: Models for pagination, JSON response, enums
-  - PageResponse
-  - ResponseDataModel
-  - Role
-- security/: JWT Token auth
-  - JwtTokenProvider
-  - JWTAuthenticationFilter
-- config/: Authentication/authorization config, CORS
-  - SecurityConfig
-  - WebConfig
-- service/: Handle business logic, method related redirect to controller / client, Spring Security users
-  - impl/: implements methods
-    - UserServiceImpl
-    - BrandServiceImpl
-    - ProductServiceImpl
-    - UserDetailsServiceImpl
-  - UserService
-  - BrandService
-  - ProductService
-- controller/: get request from React, return Response
-  - AuthController
-  - BrandController
-  - ProductController
-- exception/: Handle exception at Controller
-  - GlobalExceptionHandler: exception handler for error when mapping request <-> object in Controller, after Spring Security (Validation,...)
-  - InvalidFileException: RunTimeException for invalid file
-- PilotProjectBackendApplication: Main file
+- main/java:
+  - entity/: Map DB tables to java object
+    - UserEntity
+    - BrandEntity
+    - ProductEntity
+    - RefreshTokenEntity
+  - repository/: communicate/react with DB (CRUD, query)
+    - UserRepository
+    - BrandRepository
+    - ProductRepository
+    - RefreshTokenRepository
+  - common/: constants variables and common functions
+    - constants/Constants
+    - util/:
+      - CommonUtil
+      - FileHelper
+  - dto/: object transmit data between Controller and Service
+    - request/: DTO object to server from client (login, register, add/update brand, product)
+      - LoginRequest
+      - BrandRequest
+      - ProductRequest
+      - RefreshTokenRequest
+    - response/: DTO object from server to client-side
+      - LoginResponse
+      - BrandResponse
+      - ProductResponse
+  - mapper/: Map between entity and DTO
+    - BrandMapper
+    - ProductMapper
+  - model/: Models for pagination, JSON response, enums
+    - PageResponse
+    - ResponseDataModel
+    - Role (enum)
+  - security/: JWT Token auth
+    - JwtTokenProvider
+    - JWTAuthenticationFilter
+  - config/: Authentication/authorization config, CORS
+    - SecurityConfig
+    - WebConfig
+  - service/: Handle business logic, method related redirect to controller / client, Spring Security users
+    - impl/: implements methods
+      - UserServiceImpl
+      - BrandServiceImpl
+      - ProductServiceImpl
+      - UserDetailsServiceImpl
+    - UserService
+    - BrandService
+    - ProductService
+  - controller/: get request from React, return Response
+    - AuthController
+    - BrandController
+    - ProductController
+  - exception/: Handle exception at Controller
+    - GlobalExceptionHandler: exception handler for error when mapping request <-> object in Controller, after Spring Security (Validation,...)
+    - InvalidFileException: RunTimeException for invalid file
+  - PilotProjectBackendApplication: Main file
+- main/resources:
+  - application.properties: common properties: images folder, logging, multipart files, database, JPA/Hibernate
+  - application-local.properties: security variable: jwt secret, FE URL, Database url / username/ password (VM Options)
 
 ### Frontend
 
@@ -169,19 +191,21 @@ React (IDE: VS Code): pilot-project-frontend
 - main.jsx
   - assets/
   - components/
-    - context/
-      - auth-context.js: createContext
-      - AuthContext.jsx: shared auth state across app, every components can get current user of app
-      - use-auth.js: useContext for AuthContext
     - common/
-      - Pagination.css
-      - Pagination.jsx
+      - Pagination/
+        - Pagination.css
+        - Pagination.jsx
+      - Toast:
+        - Toast.jsx
+        - Toast.css
     - layout/
       - MainLayout/
         - MainLayout.jsx
         - MainLayout.css
-    - routes/
-      - RouteGuard.jsx: authentication and authorization for going to the routes
+  - context/
+    - auth-context.js: createContext
+    - AuthContext.jsx: shared auth state across app, every components can get current user of app
+    - use-auth.js: useContext for AuthContext
   - pages/:
     - brands/
       - BrandsPage
@@ -192,13 +216,15 @@ React (IDE: VS Code): pilot-project-frontend
     - products/
       - ProductsPage
       - ProductFormPage
+  - routes/
+    - RouteGuard.jsx: authentication and authorization for going to the routes
   - services/:
     - auth-api
-    - auth_storage
-    - axios-instance
     - brands-api
     - products-api
   - utils/:
+    - auth_storage
+    - axios-instance
     - constants.js
     - utils.js
 - .env
@@ -207,24 +233,62 @@ React (IDE: VS Code): pilot-project-frontend
 ## Technology & Knowledge
 
 - Database:
-  - Primary key, Foreign key
+  - Create database, create table
+  - Constraint, Primary key, Foreign key, Unique, Check
   - Index
   - DDL, SQL Constraint, DML, DQL, 3NF
   - ACID
   - Transactions
 
 - Frontend:
-  - JS: Named/Default export, Function, OOP, Array, Destructuring, Spread Operator, Array map() method
-  - React: JSX, Component, Fragment, Props, Props.children, Truthy/Falsy values, useState, useEffect, Forwarding Props, Default Props, One-Way Binding / Two-Way Binding, Import CSS, CSS Module, Styled Components, useRef, Axios (axios instance, interceptors, handling error, loading), Routing (Routes, Route, Link, NavLink, Nested Routing), useMemo, useContext...
+  - AuthProvider to manage login status for users
+  - Local Storage (contains access token, refresh token, get/set/remove item in local storage)
+  - RouteGuard (Check Auth state - authenticate & authorize to access route in FE)
+  - Navigation (Routes)
+  - When to split a component into components/ -> Reuse
+  - Use React Toast to notify
+  - Use MainLayout to set Layout for all Pages
+  - Create axios instance, use axios instance to call requests to API, interceptors for requests (Header authorization, FormData) and responses (refresh error handling, change business error from response to error, set error message)
+  - Constants, utils (common functions)
+  - useEffect, fetch data by Promise.all or call functions in services in useEffect, useState / setState, show/hide component by a && b
+  - function handle, setIsLoading(true) at first, after response success done then setIsLoading(false)
+  - useEffect to handle location.state, use location.state to pass page, search, type, message, id from List page to Form page and vice versa
+  - setTimeout, ...
+  - Add: to last page where having the added record, to previous page where having the updated record, current page or previous page if not having any records left where having the deleted record
+  - Important: UX
+    - Light color, should not use black color in web app
+    - Responsive
+    - Show as much data as possible on one screen. Users must not scrolling too much.
+    - Synchronize components with the same interface style across pages (Like search bar, pagination, add/update/delete button).
+    - Note when users input not right when searching
+    - Mobile should not have outside padding (100% width)
+    - Search has clear, must have words to search
+    - Presentation: Show web app (FE), introduce yourself, introduce the purpose of web app, technologies used in web app (Database, BE, FE and what libraries used in them), show each page in web app and what technologies used in them.
+
 - Backend:
-  - CORS Policy (urlPattern: URL API that FE can connect, for example: /a --> all child URL after /a can access - /a/b, /a/c...)
+  - Split into packages
   - MVC
-  - Pagination, LIMIT A OFFSET B.
-  - Spring Boot
-  - RESTful API, Spring Framework
-  - BCrypt for Hash password
-  - JWT Token for authorization with refresh token
-  - OAuth2 (Not added yet, just learning)
+  - Entity: mapping to database table
+  - Repository: extend JPARepository (already has CRUD functions for interact with database), auto implements class function according to implement function name
+  - Constants: Constants like jwt access expiration time, default page size, result http code, allowed image type, char regex, token cookie (reuse, not change)
+  - CommonUtil: common functions like sanitize, encode pass, match pass
+  - FileHelper: functions related to files (check file type using Apache Tika, file size using MultiPartException)
+  - dto: request and response class models that send from FE to BE Controller and BE to FE
+  - mapper: change entity -> response, request -> entity
+  - RunTimeException -> Just throw 1 time for @Transactional in Service, other exception -> throw multiple times
+  - @Transactional need throw exception or error for RuntimeException to trigger rollback
+  - model: PageResponse for page pagination, ResponseDataModel for response JSON data to FE
+  - JWT Token: structure, how to create, validate, get subject and claims from payload
+  - Refresh token: how to create, rotate and refresh for new access token and refresh token
+  - JwtAuthenticationFilter: How to get JWT Token from FE, extract JWT Token to fetch username & role to UserDetails - account for Spring Security
+  - SecurityConfig: CORS, CSRF, Stateless, 401 & 403 exception on Spring Security Layer, endpoint permission, JWT filter before UsernamePasswordAuthenticationFilter
+  - WebConfig: CORS configuration, allow Credentials for Cookie, add access to images
+  - Service: business logic handling, return ResponseDataModel in response for business error and throw exception to ExceptionHandler. Delete image: Get url strings, delete in tables, then delete files according to url strings
+  - Controller: @Valid, @RestController, @Mapping methods
+  - GlobalExceptionHandler: InvalidFileException extends RuntimeException (file type, create folder...), MultipartException (File size), ValidationErrors (@Valid in Controller), HttpMessageNotReadable (Invalid request body format), general exception (Exception throw from ServiceImpl)
+  - Resources: using application.properties for common property config, application-local.properties for security property config: FE URL, DB url/username/password, jwt secret key
+  - PilotProjectBackendApplication outside packages
+
 - Naming Convention:
   - project name: kebab-case
   - MySQL:
@@ -874,6 +938,8 @@ Login with an admin account first and get admin token.
    -> When on small device, use grid-template-rows to adjust by row (flex-column)
    -> Price from, price to >= 0 (in ProductsPage): Add check negative in useEffect setDisabled search button. And for 2 invalid conditions: invalidRange & hasNegative -> Note for the reason to disabled search: search-validation below action-groups / actions (with validation messages) & add event listeners for window resize to check isDesktop or not
    -> gap: 0 for actions-wrapper; gap change according to media queries for action-groups/actions
+   2.4. In Backend:
+   -> application-prod, application-dev
 
 ### 2026-05-28
 
@@ -942,8 +1008,6 @@ Login with an admin account first and get admin token.
    -> Update GlobalExceptionHandler: Add handleMultipartException() to handle file size exceeded 5MB, because application.properties: File > 5MB → Spring reject → MultipartException
 3. ProductsPage & BrandsPage: Toast in useEffect location state handled
 
-<<<<<<< HEAD
-
 ### 2026-06-01
 
 1. Unit test for BE
@@ -974,9 +1038,16 @@ Login with an admin account first and get admin token.
 4. Move axios-instance and auth-storage to utils
 5. Remember account
 
-=======
+### 2026-06-05
 
-> > > > > > > main
+1. Update README.md
+   1.1. Update time tracking, backend, frontend, technology & knowledge in README.md
+   1.2. Throw exception in UserServiceImpl
+   1.3. Add access token cookie and refresh token cookie in Constants
+
+2. Change from local storage to HTTP-Only Cookies (for saving access token and refresh token)
+   2.1. Lifecycle: Login success -> BE response access token & refresh token to FE, FE set in LocalStorage. When requests need access token, refresh in interceptors if access token expired, then set access token in Header.Authorization `Bearer {token}` and request to BE. BE check real user has permit for that request to API in SecurityConfig (If need authenticated or hasRole -> check JWT token), then get and check valid JWT token in JwtAuthenticationFilter -> go to serviceImpl (check valid)
+   - In BE:
 
 ## Fix Bugs
 
@@ -1004,14 +1075,19 @@ Login with an admin account first and get admin token.
 
 ## Time Tracking
 
-| Date                     | Task                  | Notes                  |
-| ------------------------ | --------------------- | ---------------------- |
-| 2026-04-24               | Database              | MySQL                  |
-| 2026-04-25               | Database, Backend     | MySQL, Spring Boot     |
-| 2026-04-27 -> 2026-05-04 | Backend               | Spring Boot            |
-| 2026-05-05 -> 2026-05-06 | Backend, Frontend     | Spring Boot, React     |
-| 2026-05-07 -> 2026-05-18 | DB, Backend, Frontend | DB, Spring Boot, React |
-| 2026-05-19               | Frontend              | React                  |
+| Date                     | Task                                                                                               | Notes              |
+| ------------------------ | -------------------------------------------------------------------------------------------------- | ------------------ |
+| 2026-04-24 -> 2026-04-25 | Add database for project                                                                           | MySQL              |
+| 2026-04-25 -> 2026-05-04 | Implement Spring Boot Backend (entity, repo, common, model, security, config, service, controller) | Spring Boot        |
+| 2026-05-05 -> 2026-05-07 | Initialize React Frontend, implement refresh token (rotate) in Backend                             | Spring Boot, React |
+| 2026-05-08 -> 2026-05-21 | Implement React Frontend (components, pages, services, utils)                                      | React              |
+| 2026-05-22 -> 2026-05-26 | Restructure Backend and Database architecture, UX improvements Frontend                            | Spring Boot, React |
+| 2026-05-27               | Refactor environment config Backend (application-dev, application-prod), UX improvements Frontend  | Spring Boot, React |
+| 2026-05-28 -> 2026-05-30 | UX improvements, image validation, react toastify Frontend                                         | React              |
+| 2026-05-31               | handling image error Backend & Frontend (size, type), trigger rollback for transaction Backend     | Spring Boot, React |
+| 2026-06-01               | sanitize Backend & Frontend (size, type), UX improvements Frontend                                 | Spring Boot, React |
+| 2026-06-02               | Restructure architecture Backend & Frontend, UX improvements Frontend                              | Spring Boot, React |
+| 2026-06-05 -> 2026-05-08 | Update README, merge conflict resolve.md                                                           | Track              |
 
 ## Future Work
 

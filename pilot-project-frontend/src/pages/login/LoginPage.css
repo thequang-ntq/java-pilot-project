@@ -57,11 +57,7 @@
   .login-card-header
   .sub {
   font-size: var(--text-sm);
-<<<<<<< HEAD
   color: var(--clr-not-found);
-=======
-  color: var(--clr-muted);
->>>>>>> main
 }
 
 /* ========================================
