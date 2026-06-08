@@ -21,22 +21,23 @@ export default function LogoutModal({ onClose }) {
 
   return (
     <div className="logout-overlay" onClick={onClose}>
-      <div className="logout-modal" onClick={(e) => e.stopPropagation()}>
-        <h2 className="logout-modal-title">Log out?</h2>
-        <p className="logout-modal-desc">
-          Are you sure you want to log out of your account?
-        </p>
-        <div className="logout-modal-actions">
-          <button
-            className="logout-modal-btn logout-modal-btn-cancel"
-            onClick={onClose}
-          >
+      <div className="modal logout-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h3 className="modal-title">Log out</h3>
+          <button className="modal-close" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+
+        <div className="modal-body">
+          <p>Are you sure you want to log out of your account?</p>
+        </div>
+
+        <div className="modal-footer">
+          <button className="btn btn-secondary" onClick={onClose}>
             Cancel
           </button>
-          <button
-            className="logout-modal-btn logout-modal-btn-confirm"
-            onClick={handleConfirm}
-          >
+          <button className="btn btn-danger" onClick={handleConfirm}>
             Log out
           </button>
         </div>

@@ -27,8 +27,9 @@ public class BrandController {
 	@GetMapping("/brands")
 	public ResponseDataModel<?> getList(
 			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "") String keyword) {
-		return brandService.getList(page, keyword);
+			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "false") boolean isSortByName) {
+		return brandService.getList(page, keyword, isSortByName);
 	}
 
 	/**

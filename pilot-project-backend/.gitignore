@@ -50,4 +50,7 @@ build/
 
 ### Custom ###
 images
-logs/pilot-project-backend.log
+logs
+application-dev.properties
+application-prod.properties
+.env

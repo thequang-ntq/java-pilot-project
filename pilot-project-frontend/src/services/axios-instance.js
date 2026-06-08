@@ -1,9 +1,10 @@
 import axios from "axios";
 import { clearAuth, getToken, getRefreshToken, setAuth } from "./auth-storage";
+import { BASE_URL } from "../utils/constants";
 
 // Axios instance for API call, base url is prefix, timeout -> request after 10s is fail, default JSON type for request
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: `${BASE_URL}/api`,
   timeout: 10000,
   headers: { "Content-Type": "application/json" },
 });
@@ -116,10 +117,9 @@ axiosInstance.interceptors.response.use(
 
           try {
             // Call refresh API, if using axios instance -> loop
-            const response = await axios.post(
-              "http://localhost:8080/api/auth/refresh",
-              { refreshToken },
-            );
+            const response = await axios.post(`${BASE_URL}/api/auth/refresh`, {
+              refreshToken,
+            });
 
             if (response.data.responseCode === 200) {
               // Save new tokens and set local storage

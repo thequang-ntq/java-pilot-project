@@ -1,402 +1,685 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import MainLayout from "../../components/layout/MainLayout/MainLayout";
 import "./ProductsPage.css";
-import NoProductImage from "../../assets/no-product-image.jpeg";
 import Pagination from "../../components/common/Pagination/Pagination";
-import { formatPrice, formatDate } from "../../utils/utils";
-
-// Products template data
-const SAMPLE_PRODUCTS = [
-  {
-    id: 1,
-    name: "iPhone XS Max",
-    price: 26990000,
-    brand: "Apple",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-12",
-    description: "Made in USA",
-  },
-  {
-    id: 2,
-    name: "iPhone X",
-    price: 21090000,
-    brand: "Apple",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-09",
-    description: "Apple's aim with the iPhone X was to create an iPhone.",
-  },
-  {
-    id: 3,
-    name: "iPhone 8 Plus",
-    price: 17980000,
-    brand: "Apple",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-09",
-    description: "The iPhone 8 includes a 4.7-inch display.",
-  },
-  {
-    id: 4,
-    name: "iPhone 7 Plus",
-    price: 16500000,
-    brand: "Apple",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-10",
-    description: "The iPhone 7 measures in at 138.3mm tall.",
-  },
-  {
-    id: 5,
-    name: "Samsung Galaxy Note 10 Plus",
-    price: 22390000,
-    brand: "Samsung",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "It runs on the Samsung Exynos 9 Octa 9825 Chipset.",
-  },
-  {
-    id: 6,
-    name: "Samsung Galaxy S10",
-    price: 21500000,
-    brand: "Samsung",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "The Galaxy S10 isn't all that small, of course.",
-  },
-  {
-    id: 7,
-    name: "Samsung Galaxy S10 Plus",
-    price: 21990000,
-    brand: "Samsung",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "The Galaxy S10+ is Samsung latest flagship for 2019.",
-  },
-  {
-    id: 8,
-    name: "Samsung Galaxy A70",
-    price: 7990000,
-    brand: "Samsung",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "It is powered by 2GHz octa-core Qualcomm Snapdragon 675.",
-  },
-  {
-    id: 9,
-    name: "Samsung Galaxy Note 9",
-    price: 20490000,
-    brand: "Samsung",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "Samsung Note version",
-  },
-  {
-    id: 10,
-    name: "iPhone 11 Pro Max",
-    price: 42990000,
-    brand: "Apple",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "New IPhone",
-  },
-  {
-    id: 11,
-    name: "iPhone 11",
-    price: 21990000,
-    brand: "Apple",
-    qty: 80,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "New version",
-  },
-  {
-    id: 12,
-    name: "iPhone 6S Plus",
-    price: 8990000,
-    brand: "Apple",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-12",
-    description: "Made in USA",
-  },
-  {
-    id: 13,
-    name: "Xiaomi Note 7",
-    price: 4500000,
-    brand: "Sony",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "description",
-  },
-  {
-    id: 14,
-    name: "Huawei P30 Pro",
-    price: 20690000,
-    brand: "Huawei",
-    qty: 120,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "Huawei made in China",
-  },
-  {
-    id: 15,
-    name: "Huawei P30",
-    price: 15290000,
-    brand: "Huawei",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "Huawei made in China",
-  },
-  {
-    id: 16,
-    name: "Oppo Reno 10X",
-    price: 19990000,
-    brand: "Oppo",
-    qty: 70,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "Oppo made in China",
-  },
-  {
-    id: 17,
-    name: "Oppo A9",
-    price: 7890000,
-    brand: "Oppo",
-    qty: 100,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "Oppo China",
-  },
-  {
-    id: 18,
-    name: "Oppo A7",
-    price: 7000000,
-    brand: "Oppo",
-    qty: 50,
-    image: NoProductImage,
-    saleDate: "2019-10-08",
-    description: "Oppo China",
-  },
-  {
-    id: 21,
-    name: "Levono Laptop HP-16",
-    price: 21000000,
-    brand: "Asus",
-    qty: 65,
-    image: NoProductImage,
-    saleDate: "2026-04-30",
-    description: null,
-  },
-];
-
-const PAGE_SIZE = 10;
+import { getProducts, deleteProduct } from "../../services/products-api";
+import useAuth from "../../components/context/use-auth";
+import NoProductImage from "../../assets/no-product-image.jpeg";
+import { BASE_URL } from "../../utils/constants";
+import { formatPrice, formatDate, filterInput } from "../../utils/utils";
+import { toast, Bounce } from "react-toastify";
 
 export default function ProductsPage() {
-  const [search, setSearch] = useState(""); // Search keyword
-  const [priceFrom, setPriceFrom] = useState(""); // Price from
-  const [priceTo, setPriceTo] = useState(""); // Price to
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { auth } = useAuth();
+  const isAdmin = auth?.role === "ADMIN";
 
-  // Search keyword, price from, price to that applied and begin search function
+  const [search, setSearch] = useState("");
+  const [priceFrom, setPriceFrom] = useState("");
+  const [priceTo, setPriceTo] = useState("");
   const [appliedFilters, setAppliedFilters] = useState({
     search: "",
     priceFrom: "",
     priceTo: "",
   });
-  const [page, setPage] = useState(1); // Current page
-  const [selectedProduct, setSelectedProduct] = useState(null); //selected product
+  const [page, setPage] = useState(1);
+  const [deleteModal, setDeleteModal] = useState(null);
+  const [detailModal, setDetailModal] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalElements, setTotalElements] = useState(0);
+  const [pageSize, setPageSize] = useState(0);
+  const [isSearching, setIsSearching] = useState(false); // Check if is searching
+  const [isLoading, setIsLoading] = useState(false); // Loading for fetch products
+  const [error, setError] = useState(null); // Error response (get, add, edit, delete, get id)
+  const [success, setSuccess] = useState(null); // Success response (get, add, edit, delete, get id)
+  const [isErrorList, setIsErrorList] = useState(false); // Check if error list (error while fetch products)
+  const [disabled, setDisabled] = useState(false); // Set if disable (price from > price to)
+  const [highlightedId, setHighlightedId] = useState(null); // Highlight data add/edit
 
-  // Set applied search filter = search keyword + priceFrom + priceTo, and currentPage = 1
+  // Set status true when handling location state
+  const locationStateHandled = useRef(false);
+
+  // Validation message
+  const validationMessage =
+    priceFrom !== "" && priceTo !== "" && Number(priceFrom) > Number(priceTo)
+      ? '"From price" cannot be greater than "To price".'
+      : (priceFrom !== "" && Number(priceFrom) < 0) ||
+          (priceTo !== "" && Number(priceTo) < 0)
+        ? "Price cannot be negative."
+        : "";
+
+  // List & Search
+  const fetchProducts = (currentPage, keyword, priceFromVal, priceToVal) => {
+    setIsLoading(true);
+    setError(null);
+
+    // Return so that can .then() ... in handle state
+    return getProducts({
+      page: currentPage,
+      keyword: keyword || "",
+      priceFrom: priceFromVal || null,
+      priceTo: priceToVal || null,
+    })
+      .then((response) => {
+        setIsErrorList(false);
+        const { content, totalPages, totalElements, pageSize } =
+          response.data.data;
+        setProducts(content);
+        setTotalPages(totalPages);
+        setTotalElements(totalElements);
+        setPageSize(pageSize);
+        // If 1 of 3 is not empty --> searching
+        setIsSearching(
+          appliedFilters.search !== "" ||
+            appliedFilters.priceFrom !== "" ||
+            appliedFilters.priceTo !== "",
+        );
+        // Promise chain know response
+        return response;
+      })
+      .catch((err) => {
+        setError(err.userMessage || "An error occurred");
+        setIsErrorList(true);
+        setProducts([]);
+        setTotalPages(1);
+        setTotalElements(0);
+        setPageSize(0);
+        throw err;
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  // Check if  price from > price to
+  // setState
+  useEffect(() => {
+    const fromNum = Number(priceFrom);
+    const toNum = Number(priceTo);
+
+    const invalidRange = priceFrom !== "" && priceTo !== "" && fromNum > toNum;
+
+    const hasNegative =
+      (priceFrom !== "" && fromNum < 0) || (priceTo !== "" && toNum < 0);
+
+    const isEmpty = search === "" && priceFrom === "" && priceTo === "";
+
+    setDisabled(invalidRange || hasNegative || isEmpty);
+  }, [priceFrom, priceTo, search]);
+
+  // Load for first time, or when list changes (by change page / search)
+  // setPage or setAppliedSearch -> fetch products again
+  useEffect(() => {
+    fetchProducts(
+      page,
+      appliedFilters.search,
+      appliedFilters.priceFrom,
+      appliedFilters.priceTo,
+    );
+  }, [page, appliedFilters]);
+
+  // Handle state from navigation, after add/edit and Toast
+  // Change location state, setAppliedSearch, but state.current make sure to run just 1 time
+  useEffect(() => {
+    if (locationStateHandled.current) return;
+
+    locationStateHandled.current = true;
+    const {
+      goToLastPage,
+      goToPage,
+      appliedFilters: returnedFilters,
+      type,
+      message,
+      productId,
+    } = location.state || {};
+    window.history.replaceState({}, "");
+
+    // Show error / success with toast by message from location.state
+    if (type === "error" && message) {
+      toast.error(message, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } else if (type === "success" && message) {
+      toast.success(message, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+
+    // Set highlight turnoff after 3s
+    if (type === "success" && productId) {
+      setHighlightedId(productId);
+      setTimeout(() => setHighlightedId(null), 3000);
+    }
+
+    const filters =
+      returnedFilters !== undefined ? returnedFilters : appliedFilters;
+
+    if (goToLastPage) {
+      // Add - fetch to get new total pages, then change to last page
+      fetchProducts(1, filters.search, filters.priceFrom, filters.priceTo)
+        .then((response) => {
+          const newTotalPages = response.data.data.totalPages;
+          // Set search & page
+          setAppliedFilters(filters);
+          setSearch(filters.search);
+          setPriceFrom(filters.priceFrom);
+          setPriceTo(filters.priceTo);
+
+          if (newTotalPages !== page) {
+            setPage(newTotalPages);
+          } else {
+            // If newTotalPages === page, useEffect not trigger
+            // Fetch again
+            fetchProducts(
+              newTotalPages,
+              filters.search,
+              filters.priceFrom,
+              filters.priceTo,
+            );
+          }
+        })
+        .catch(() => {});
+    } else if (goToPage) {
+      // Edit - fetch then change to page
+      fetchProducts(1, filters.search, filters.priceFrom, filters.priceTo)
+        .then(() => {
+          setAppliedFilters(filters);
+          setSearch(filters.search);
+          setPriceFrom(filters.priceFrom);
+          setPriceTo(filters.priceTo);
+
+          if (goToPage !== page) {
+            setPage(goToPage);
+          } else {
+            fetchProducts(
+              goToPage,
+              filters.search,
+              filters.priceFrom,
+              filters.priceTo,
+            );
+          }
+        })
+        .catch(() => {});
+    } else if (returnedFilters !== undefined) {
+      // Just has returnedFilters, but no goToLastPage/goToPage
+      setAppliedFilters(filters);
+      setSearch(filters.search);
+      setPriceFrom(filters.priceFrom);
+      setPriceTo(filters.priceTo);
+    }
+  }, [location.state]);
+
+  // Show error / success with toast from others (delete, etc..)
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      setError(null);
+    } else if (success) {
+      toast.success(success, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      setSuccess(null);
+    }
+  }, [error, success]);
+
+  // Search -> apply search keyword, page = 1
   const handleSearch = () => {
     setAppliedFilters({ search, priceFrom, priceTo });
     setPage(1);
   };
 
-  // Enter when input search fields will call the search function
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") handleSearch();
+  // Clear search
+  const handleClearSearch = () => {
+    setSearch("");
+    setPriceFrom("");
+    setPriceTo("");
+    setAppliedFilters({
+      search: "",
+      priceFrom: "",
+      priceTo: "",
+    });
+    setPage(1);
   };
 
-  // List all products according to search filter (has brand name, product name, price from empty or >= price
-  // from, price to empty or <= price to)
-  const filtered = SAMPLE_PRODUCTS.filter((p) => {
-    const q = appliedFilters.search.toLowerCase();
-    const matchSearch =
-      p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q);
-    const matchFrom =
-      appliedFilters.priceFrom === "" ||
-      p.price >= Number(appliedFilters.priceFrom);
-    const matchTo =
-      appliedFilters.priceTo === "" ||
-      p.price <= Number(appliedFilters.priceTo);
-    return matchSearch && matchFrom && matchTo;
-  });
+  // Enter key, not disabled
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !disabled) handleSearch();
+  };
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE)); // total pages
-  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE); // List products show in current page
+  // Set product to be delete
+  const handleDelete = (product) => {
+    setDeleteModal(product);
+  };
+
+  // Delete product, modal null, page not change or go to previous page
+  const confirmDelete = () => {
+    if (!deleteModal) return;
+
+    deleteProduct(deleteModal.productId)
+      .then((response) => {
+        const { responseMsg } = response.data;
+        setDeleteModal(null);
+        setSuccess(responseMsg);
+
+        // If this page just have 1 element and not the first page
+        if (products.length === 1 && page > 1) {
+          // page changes -> fetch products
+          setPage(page - 1);
+        } else {
+          fetchProducts(
+            page,
+            appliedFilters.search,
+            appliedFilters.priceFrom,
+            appliedFilters.priceTo,
+          );
+        }
+      })
+      .catch((err) => {
+        setError(err.userMessage || "An error occurred while deleting");
+      });
+  };
+
+  // Product to be show detail
+  const handleShowDetail = (product) => {
+    setDetailModal(product);
+  };
+
+  // Get image url, if null then set default image
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return NoProductImage;
+    return `${BASE_URL}/${imagePath}`;
+  };
 
   return (
-    <MainLayout pageClassName="products-page">
-      {/* Page header */}
+    <MainLayout pageClassName="products-page" isLoading={isLoading}>
+      {/* Page headers */}
       <section className="products-header">
         <div className="products-header-container">
           <div className="products-header-wrapper">
-            <h1 className="title">Our Products</h1>
-            <p className="sub">
-              Browse our full lineup of premium smartphones and devices.
-            </p>
+            <h1 className="title">Products Management</h1>
           </div>
         </div>
       </section>
 
-      {/* Search & filter */}
-      <section className="products-search">
-        <div className="products-search-container">
-          <div className="products-search-wrapper">
-            {/* Row 1: single search input */}
-            <div className="row">
-              <input
-                className="input input-full"
-                type="text"
-                placeholder="Search by product name or brand name…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
-            </div>
-
-            {/* Row 2: price text inputs + button */}
-            <div className="row">
-              <div className="input-group">
-                <label className="input-label">Price From</label>
-                <input
-                  className="input"
-                  type="number"
-                  min="0"
-                  placeholder="e.g. 5000000"
-                  value={priceFrom}
-                  onChange={(e) => setPriceFrom(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-
-              <div className="input-group">
-                <label className="input-label">Price To</label>
-                <input
-                  className="input"
-                  type="number"
-                  min="0"
-                  placeholder="e.g. 30000000"
-                  value={priceTo}
-                  onChange={(e) => setPriceTo(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-
-              <button className="btn" onClick={handleSearch}>
-                Search
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Product list */}
-      <section className="products-list">
-        <div className="products-list-container">
-          <div className="products-list-wrapper">
-            {paged.length === 0 ? (
-              <p className="not-found">No products found.</p>
-            ) : (
-              <div className="grid">
-                {paged.map((product) => (
-                  <div
-                    key={product.id}
-                    className="card"
-                    onClick={() => setSelectedProduct(product)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) =>
-                      e.key === "Enter" && setSelectedProduct(product)
-                    }
-                  >
-                    <div className="card-image">
-                      <img src={product.image} alt={product.name} />
+      {/* Actions bar */}
+      <section className="products-actions">
+        <div className="products-actions-container">
+          <div className="products-actions-wrapper">
+            {!isLoading && !isErrorList && (
+              <>
+                <div className="action-groups">
+                  {/* Search brand name & product name + Filter: price from, price to */}
+                  <div className="search-group">
+                    <div className="search-input">
+                      <input
+                        className="input input-search"
+                        type="text"
+                        placeholder="Search by product name or brand name…"
+                        value={search}
+                        onChange={(e) => setSearch(filterInput(e.target.value))}
+                        onKeyDown={handleKeyDown}
+                      />
+                      <i className="bi bi-search search-icon"></i>
                     </div>
-                    <div className="card-body">
-                      <span className="card-brand">{product.brand}</span>
-                      <h3 className="card-name">{product.name}</h3>
-                      <p className="card-price">{formatPrice(product.price)}</p>
-                      <div className="card-meta">
-                        <span className="card-qty">
-                          In stock: {product.qty}
-                        </span>
-                        <span className="card-date">
-                          {formatDate(product.saleDate)}
-                        </span>
+
+                    <div className="price-note-group">
+                      {/* Price from */}
+                      <div className="price-group">
+                        <div className="price-title">From</div>
+                        <div className="input-group">
+                          <input
+                            className="input"
+                            type="number"
+                            min="0"
+                            step="1000"
+                            placeholder="From price..."
+                            value={priceFrom}
+                            onChange={(e) => setPriceFrom(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            autoComplete="off"
+                          />
+                        </div>
                       </div>
+
+                      {/* Price to */}
+
+                      <div className="price-group">
+                        <div className="price-title">To</div>
+                        <div className="input-group">
+                          <input
+                            className="input"
+                            type="number"
+                            min="0"
+                            step="1000"
+                            placeholder="To price..."
+                            value={priceTo}
+                            onChange={(e) => setPriceTo(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            autoComplete="off"
+                          />
+                        </div>
+                      </div>
+                      {validationMessage && (
+                        <div className="search-validation">
+                          {validationMessage}
+                        </div>
+                      )}
+                    </div>
+                    <div className="button-group">
+                      <button
+                        className="btn btn-search"
+                        disabled={disabled}
+                        onClick={handleSearch}
+                      >
+                        Search
+                      </button>
+                      <button
+                        className={`btn btn-clear ${
+                          appliedFilters.search === "" &&
+                          appliedFilters.priceFrom === "" &&
+                          appliedFilters.priceTo === ""
+                            ? "disabled"
+                            : ""
+                        }`}
+                        onClick={handleClearSearch}
+                      >
+                        <i className="bi bi-x"></i> Clear
+                      </button>
                     </div>
                   </div>
-                ))}
+                  {isAdmin && (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() =>
+                        navigate("/products/add", {
+                          state: {
+                            page: page,
+                            appliedFilters: appliedFilters,
+                          },
+                        })
+                      }
+                    >
+                      Add Product
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+            {!isLoading && !isErrorList && products.length > 0 && (
+              <div className="show-records">
+                Showing {pageSize * (page - 1) + 1} to{" "}
+                {Math.min(pageSize * page, totalElements)} of {totalElements}{" "}
+                {isSearching ? "search " : ""}
+                records
               </div>
             )}
-
-            {/* Pagination */}
-            <Pagination totalPages={totalPages} page={page} setPage={setPage} />
           </div>
         </div>
       </section>
 
-      {/* Detail Modal */}
-      {selectedProduct && (
+      {/* Not found / Table */}
+      <section className="products-table">
+        <div className="products-table-container">
+          <div className="products-table-wrapper">
+            {!isLoading && isErrorList ? (
+              <p className="not-found">Cannot load products.</p>
+            ) : !isLoading && !isErrorList && products.length === 0 ? (
+              <p className="not-found">No products found.</p>
+            ) : (
+              !isLoading &&
+              !isErrorList && (
+                <>
+                  <div className="table-responsive">
+                    <table className="table table-striped table-hover">
+                      <thead className="table-dark">
+                        <tr>
+                          <th id="table-header-id">ID</th>
+                          <th id="table-header-name">Product Name</th>
+                          <th id="table-header-quantity">Quantity</th>
+                          <th id="table-header-price">Price</th>
+                          <th id="table-header-brand">Brand Name</th>
+                          <th id="table-header-image">Image</th>
+                          <th id="table-header-description">Description</th>
+                          {isAdmin && (
+                            <th id="table-header-actions">Actions</th>
+                          )}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {products.map((product) => (
+                          <tr
+                            key={product.productId}
+                            className={
+                              highlightedId === product.productId
+                                ? "row-highlighted"
+                                : ""
+                            }
+                          >
+                            <td>
+                              <button
+                                className="id-link"
+                                onClick={() => handleShowDetail(product)}
+                              >
+                                {product.productId}
+                              </button>
+                            </td>
+                            <td id="table-data-name" className="table-name">
+                              <div className="table-clamp">
+                                {product.productName}
+                              </div>
+                            </td>
+                            <td id="table-data-quantity">{product.quantity}</td>
+                            <td id="table-data-price">
+                              {formatPrice(product.price)}
+                            </td>
+                            <td id="table-data-brand">
+                              <div className="table-clamp">
+                                {product.brandName}
+                              </div>
+                            </td>
+                            <td id="table-data-image">
+                              <div className="table-image">
+                                <img
+                                  src={getImageUrl(product.image)}
+                                  onError={(e) => {
+                                    e.target.src = NoProductImage;
+                                  }}
+                                  alt={product.productName}
+                                />
+                              </div>
+                            </td>
+                            <td id="table-data-description">
+                              <div className="table-clamp">
+                                {product.description}
+                              </div>
+                            </td>
+                            {isAdmin && (
+                              <td>
+                                <div className="table-actions">
+                                  <button
+                                    className="btn-action btn-edit"
+                                    onClick={() =>
+                                      navigate(
+                                        `/products/${product.productId}/edit`,
+                                        {
+                                          state: {
+                                            page: page,
+                                            appliedFilters: appliedFilters,
+                                          },
+                                        },
+                                      )
+                                    }
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    className="btn-action btn-delete"
+                                    onClick={() => handleDelete(product)}
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </td>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <Pagination
+                    totalPages={totalPages}
+                    page={page}
+                    totalElements={totalElements}
+                    pageSize={pageSize}
+                    setPage={setPage}
+                    isSearching={isSearching}
+                  />
+                </>
+              )
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Detail model */}
+      {detailModal && (
         <div
-          className="products-modal-overlay"
-          onClick={() => setSelectedProduct(null)}
+          className="product-modal-overlay"
+          onClick={() => setDetailModal(null)}
         >
-          <div className="products-modal" onClick={(e) => e.stopPropagation()}>
-            <button
-              className="products-modal-close"
-              onClick={() => setSelectedProduct(null)}
-            >
-              &times;
-            </button>
-            <div className="products-modal-image">
-              <img src={selectedProduct.image} alt={selectedProduct.name} />
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 className="modal-title">Product Details</h3>
+              <button
+                className="modal-close"
+                onClick={() => setDetailModal(null)}
+              >
+                &times;
+              </button>
             </div>
-            <div className="products-modal-body">
-              <span className="products-modal-brand">
-                {selectedProduct.brand}
-              </span>
-              <h2 className="products-modal-name">{selectedProduct.name}</h2>
-              <p className="products-modal-price">
-                {formatPrice(selectedProduct.price)}
+            <div className="modal-body">
+              <div className="detail-row">
+                <span className="detail-label">ID:</span>
+                <span className="detail-value">{detailModal.productId}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Product Name:</span>
+                <span className="detail-value">{detailModal.productName}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Quantity:</span>
+                <span className="detail-value">{detailModal.quantity}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Price:</span>
+                <span className="detail-value">
+                  {formatPrice(detailModal.price)}
+                </span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Brand Name:</span>
+                <span className="detail-value">{detailModal.brandName}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Sale Date:</span>
+                <span className="detail-value">
+                  {formatDate(detailModal.saleDate)}
+                </span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Image:</span>
+                <div className="detail-image">
+                  <img
+                    src={getImageUrl(detailModal.image)}
+                    onError={(e) => {
+                      e.target.src = NoProductImage;
+                    }}
+                    alt={detailModal.productName}
+                  />
+                </div>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Description:</span>
+                <span className="detail-value">
+                  {detailModal.description || "—"}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete confirmation model */}
+      {deleteModal && (
+        <div
+          className="product-modal-overlay"
+          onClick={() => setDeleteModal(null)}
+        >
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 className="modal-title">Confirm Delete</h3>
+              <button
+                className="modal-close"
+                onClick={() => setDeleteModal(null)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="modal-body modal-body-delete">
+              <p>
+                Are you sure you want to delete product{" "}
+                <strong>{deleteModal.productName}</strong>?
               </p>
-              <div className="products-modal-row">
-                <span className="products-modal-row-label">In Stock</span>
-                <span className="products-modal-row-value">
-                  {selectedProduct.qty}
-                </span>
-              </div>
-              <div className="products-modal-row">
-                <span className="products-modal-row-label">Sale Date</span>
-                <span className="products-modal-row-value">
-                  {formatDate(selectedProduct.saleDate)}
-                </span>
-              </div>
-              {selectedProduct.description && (
-                <p className="products-modal-desc">
-                  {selectedProduct.description}
-                </p>
-              )}
+              <p className="modal-warning">This action cannot be undone.</p>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setDeleteModal(null)}
+              >
+                Cancel
+              </button>
+              <button className="btn btn-danger" onClick={confirmDelete}>
+                Delete
+              </button>
             </div>
           </div>
         </div>

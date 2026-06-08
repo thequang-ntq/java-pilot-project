@@ -10,7 +10,7 @@ import com.ntq.demo.model.ResponseDataModel;
  * @since 2026-04-29
  */
 public interface BrandService {
-	ResponseDataModel<?> getList(int page, String keyword);
+	ResponseDataModel<?> getList(int page, String keyword, boolean isSortByName);
 
 	ResponseDataModel<?> getById(int brandId);
 

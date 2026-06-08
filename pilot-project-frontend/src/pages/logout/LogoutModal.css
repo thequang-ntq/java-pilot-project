@@ -6,80 +6,107 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-md);
 }
 
 .logout-modal {
+  position: relative;
   background: var(--clr-bg);
   border-radius: var(--radius-lg);
-  padding: var(--space-lg);
-  max-width: 22rem;
-  width: 100%;
+  width: min(600px, 70dvw);
+  height: min(600px, 70dvh);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-md);
-  text-align: center;
   box-shadow: var(--box-shadow);
   animation: logoutModalIn 0.2s ease;
+  overflow: hidden;
 }
 
-.logout-modal .logout-modal-title {
-  font-size: var(--text-xl);
-  font-weight: 800;
+/* Header */
+.logout-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  border-top: 4px solid var(--clr-body-text);
+  border-bottom: 1px solid var(--clr-body-border);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  z-index: 5;
+  background: var(--clr-body-bg);
+}
+
+.logout-modal .modal-header .modal-title {
+  font-size: var(--text-lg);
+  font-weight: 700;
   color: var(--clr-body-text);
 }
 
-.logout-modal .logout-modal-desc {
-  font-size: var(--text-sm);
-  color: var(--clr-muted);
-  line-height: 1.6;
+.logout-modal .modal-header .modal-close {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  font-size: var(--text-xl);
+  cursor: pointer;
+  color: var(--clr-body-text);
+  transition: color 0.2s ease;
 }
 
-.logout-modal .logout-modal-actions {
+.logout-modal .modal-header .modal-close:hover {
+  color: var(--clr-danger);
+}
+
+/* Body */
+.logout-modal .modal-body {
   display: flex;
-  flex-direction: row;
-  gap: var(--space-md);
-  width: 100%;
+  flex-direction: column;
+  flex: 1;
+  overflow: auto;
 }
 
-.logout-modal .logout-modal-actions .logout-modal-btn {
-  flex: 1;
-  padding: var(--space-sm) var(--space-md);
+.logout-modal .modal-body p {
+  font-size: var(--text-base);
+  color: var(--clr-body-text);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Footer */
+.logout-modal .modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-sm);
+  border-top: 1px solid var(--clr-body-border);
+}
+
+.logout-modal .modal-footer .btn {
+  border: none;
   border-radius: var(--radius-sm);
   font-size: var(--text-sm);
   font-weight: 600;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
+  transition: filter 0.2s ease;
 }
 
-.logout-modal .logout-modal-actions .logout-modal-btn-cancel {
-  background: transparent;
-  color: var(--clr-body-text);
-  border: 1.5px solid var(--clr-body-border);
+.logout-modal .modal-footer .btn:hover {
+  filter: brightness(0.9);
 }
 
-.logout-modal .logout-modal-actions .logout-modal-btn-cancel:hover {
-  background: var(--clr-dropdown-bg);
+.logout-modal .modal-footer .btn-secondary {
+  background: var(--clr-muted);
+  color: var(--clr-header-footer-text);
 }
 
-.logout-modal .logout-modal-actions .logout-modal-btn-confirm {
+.logout-modal .modal-footer .btn-danger {
   background: var(--clr-danger);
-  color: var(-clr-bg);
-  border: 1.5px solid var(--clr-danger);
-}
-
-.logout-modal .logout-modal-actions .logout-modal-btn-confirm:hover {
-  filter: brightness(1.1);
+  color: var(--clr-header-footer-text);
 }
 
 @keyframes logoutModalIn {
   from {
     opacity: 0;
-    transform: translateY(10px) scale(0.97);
+    transform: translateY(12px) scale(0.95);
   }
   to {
     opacity: 1;

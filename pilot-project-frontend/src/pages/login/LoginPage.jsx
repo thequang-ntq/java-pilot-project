@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import MainLayout from "../../components/layout/MainLayout/MainLayout";
 import useAuth from "../../components/context/use-auth";
 import "./LoginPage.css";
 import { sanitize, filterInput } from "../../utils/utils";
 import { login } from "../../services/auth-api";
+import { toast, Bounce } from "react-toastify";
 
 export default function LoginPage() {
   const { loginContext } = useAuth();
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false); // Show password by eye toggle
   const [errors, setErrors] = useState({}); // Input fields error
   const [loginError, setLoginError] = useState(""); // Login error to notify
+  const [isLoading, setIsLoading] = useState(false);
 
   // Validate not empty at input fields frontend
   const validate = () => {
@@ -42,6 +44,8 @@ export default function LoginPage() {
       password: sanitize(password),
     };
 
+    setIsLoading(true);
+
     // Check account
     login(formatted)
       .then((res) => {
@@ -53,6 +57,9 @@ export default function LoginPage() {
       .catch((err) => {
         setPassword("");
         setLoginError(err.userMessage || "An error occurred during login");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -61,14 +68,35 @@ export default function LoginPage() {
     if (e.key === "Enter") handleSubmit();
   };
 
-  // Delete old error when user begin to input again, delete submit error
+  // Show error with toast
+  useEffect(() => {
+    if (loginError) {
+      toast.error(loginError, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      setLoginError(null);
+    }
+  }, [loginError]);
+
+  // Delete old error in error fields
   const clearError = (field) => {
     setErrors((prev) => ({ ...prev, [field]: "" }));
-    setLoginError("");
   };
 
   return (
-    <MainLayout pageClassName="login-page" isAuthenticationPage>
+    <MainLayout
+      pageClassName="login-page"
+      isAuthenticationPage
+      isLoading={isLoading}
+    >
       {/* Card */}
       <section className="login-card">
         <div className="login-card-container">
@@ -78,11 +106,6 @@ export default function LoginPage() {
               <h1 className="title">Welcome back</h1>
               <p className="sub">Sign in to your account to continue.</p>
             </div>
-
-            {/* Login error */}
-            {loginError && (
-              <div className="login-alert login-alert-error">{loginError}</div>
-            )}
 
             {/* Form */}
             <div className="login-form">
@@ -99,6 +122,8 @@ export default function LoginPage() {
                   value={username}
                   onChange={(e) => {
                     setUsername(filterInput(e.target.value));
+                  }}
+                  onFocus={() => {
                     clearError("username");
                   }}
                   onKeyDown={handleKeyDown}
@@ -123,6 +148,8 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => {
                       setPassword(filterInput(e.target.value));
+                    }}
+                    onFocus={() => {
                       clearError("password");
                     }}
                     onKeyDown={handleKeyDown}
@@ -147,7 +174,11 @@ export default function LoginPage() {
               </div>
 
               {/* Submit */}
-              <button className="login-btn" onClick={handleSubmit}>
+              <button
+                type="submit"
+                className="login-btn"
+                onClick={handleSubmit}
+              >
                 Log in
               </button>
             </div>

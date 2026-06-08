@@ -13,7 +13,7 @@
     0.7
   ); /* Header & Footer Border */
   --clr-body-accent: rgb(53, 53, 255); /* Body: link, highlight text */
-  --clr-header-footer-accent: #ffd166; /* Header & Footer: active link */
+  --clr-header-footer-accent: #efac10; /* Header & Footer: active link */
   --clr-body-text: #000; /* Main body text */
   --clr-header-footer-text: #fff; /* Main header & Footer text */
   --clr-muted: #898991; /* Sub text */
@@ -27,12 +27,19 @@
   --clr-error-border: #fecaca;
   --clr-dropdown-bg: #d8d8d8;
   --clr-auth-bg: linear-gradient(135deg, #f8f8f8 0%, #fff 60%, #fdf6e3 100%);
+  --clr-danger-light: #fef2f2;
+  --clr-no-image-bg: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
 
   /* FLUID SPACING - CLAMP() */
   --space-xs: clamp(
-    0.25rem,
-    0.5vw,
-    0.5rem
+    0.2rem,
+    0.3vw,
+    0.4rem
   ); /* Very small gap: icon & text, padding badge (Status), 4px->8px */
   --space-sm: clamp(
     0.5rem,
@@ -78,8 +85,8 @@
   ); /* Big font size: intro paragraph, small subheading, 18px->22px */
   --text-xl: clamp(
     1.4rem,
-    2.5vw + 0.5rem,
-    2rem
+    2vw + 0.5rem,
+    1.7rem
   ); /* Card heading, widget, 22px->32px */
   --text-2xl: clamp(
     1.8rem,
@@ -114,11 +121,11 @@
   /* IMAGE SIZE */
   --logo-size: clamp(3rem, 4vw, 5rem);
   --image-size: clamp(8rem, 10vw, 16rem);
-  --avatar-size: clamp(2.5rem, 4vw, 5rem);
+  --avatar-size: clamp(2rem, 3vw, 4rem);
 
   /* OTHERS */
   --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
-  --no-image-background: #f3f3f3;
+  --no-image-background: transparent;
   --bg-modal: rgba(0, 0, 0, 0.45);
 }
 

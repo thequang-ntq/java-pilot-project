@@ -2,6 +2,7 @@ package com.ntq.demo.service.impl;
 
 import com.ntq.demo.common.constant.Constants;
 import com.ntq.demo.common.util.FileHelper;
+import com.ntq.demo.exception.InvalidFileException;
 import com.ntq.demo.mapper.ProductMapper;
 import com.ntq.demo.repository.BrandRepository;
 import com.ntq.demo.repository.ProductRepository;
@@ -16,12 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -35,9 +35,6 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-	@Value("${parent.folder.images.product}")
-	private String productImageFolderPath;
-
 	@Autowired
 	private ProductRepository ProductRepository;
 
@@ -49,10 +46,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ResponseDataModel<PageResponse<ProductResponse>> getList(int page, String keyword, BigDecimal priceFrom, BigDecimal priceTo) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
+			/**
+			 * Add LIMIT, OFFSET, ORDER BY in Repository method (SQL query)
+			 */
 			Pageable pageable = PageRequest.of(
 				page - 1,
 				Constants.DEFAULT_PAGE_SIZE,
@@ -62,6 +59,7 @@ public class ProductServiceImpl implements ProductService {
 			/**
 			 * JPA page object that is database query result
 			 * Get all products / Search products by keyword (product name / brand name) and price range
+			 * pagination by pageable
 			 */
 			Page<ProductEntity> productPage = ProductRepository.searchProducts(
 				keyword == null ? "" : keyword,
@@ -88,17 +86,16 @@ public class ProductServiceImpl implements ProductService {
 			);
 			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
 		} catch (Exception e) {
-			responseMsg = "Error when getting product list";
 			LOGGER.error("Error when getting product list: {}", e.getMessage(), e);
+			/**
+			 * DB/server error, not invalid file/IOException/InvalidFileException
+			 */
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
 	public ResponseDataModel<ProductResponse> getById(int productId) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			ProductEntity product = ProductRepository.findById(productId).orElse(null);
 
@@ -119,17 +116,13 @@ public class ProductServiceImpl implements ProductService {
 			);
 			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
 		} catch (Exception e) {
-			responseMsg = "Error when getting product";
 			LOGGER.error("Error when getting product {}: {}", productId, e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
-	public ResponseDataModel<Void> add(ProductRequest request) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
+	public ResponseDataModel<ProductResponse> add(ProductRequest request) {
 		try {
 			/**
 			 * Check if product name exists
@@ -146,33 +139,29 @@ public class ProductServiceImpl implements ProductService {
 				return new ResponseDataModel<>(Constants.RESULT_CD_NOT_FOUND, "Brand not found");
 			}
 
-			ProductEntity product = productMapper.toEntity(request, brand);
-
 			/**
-			 * Product image handling
+			 * Sale date cannot in the future
 			 */
-			MultipartFile[] imageFiles = request.getImageFiles();
-			if (imageFiles != null && imageFiles[0].getSize() > 0) {
-				String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, null);
-				product.setImage(imagePath);
+			if (request.getSaleDate().isAfter(LocalDate.now())) {
+				return new ResponseDataModel<>(
+					Constants.RESULT_CD_INVALID,
+					"Sale date cannot be in the future"
+				);
 			}
 
-			ProductRepository.saveAndFlush(product);
-
-			responseMsg = "Product is added successfully";
-			responseCode = Constants.RESULT_CD_SUCCESS;
+			ProductEntity product = productMapper.toEntity(request, brand);
+			ProductEntity savedProduct = ProductRepository.saveAndFlush(product);
+			ProductResponse data = productMapper.toResponse(savedProduct);
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS,
+				"Product is added successfully", data);
 		} catch (Exception e) {
-			responseMsg = "Error when adding product";
 			LOGGER.error("Error when adding product: {}", e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
-	public ResponseDataModel<Void> update(int productId, ProductRequest request) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
+	public ResponseDataModel<ProductResponse> update(int productId, ProductRequest request) {
 		try {
 			ProductEntity product = ProductRepository.findById(productId).orElse(null);
 
@@ -197,34 +186,29 @@ public class ProductServiceImpl implements ProductService {
 				return new ResponseDataModel<>(Constants.RESULT_CD_NOT_FOUND, "Brand not found");
 			}
 
-			productMapper.updateEntity(request, product, brand);
-
 			/**
-			 * Product image handling
-			 * Edit File auto delete old image if product has new image
+			 * Sale date cannot in the future
 			 */
-			MultipartFile[] imageFiles = request.getImageFiles();
-			if (imageFiles != null && imageFiles[0].getSize() > 0) {
-				String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, product.getImage());
-				product.setImage(imagePath);
+			if (request.getSaleDate().isAfter(LocalDate.now())) {
+				return new ResponseDataModel<>(
+					Constants.RESULT_CD_INVALID,
+					"Sale date cannot be in the future"
+				);
 			}
 
-			ProductRepository.saveAndFlush(product);
-
-			responseMsg = "Product is updated successfully";
-			responseCode = Constants.RESULT_CD_SUCCESS;
+			productMapper.updateEntity(request, product, brand);
+			ProductEntity updatedProduct = ProductRepository.saveAndFlush(product);
+			ProductResponse data = productMapper.toResponse(updatedProduct);
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS,
+				"Product is updated successfully", data);
 		} catch (Exception e) {
-			responseMsg = "Error when updating product";
 			LOGGER.error("Error when updating product {}: {}", productId, e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
 	public ResponseDataModel<Void> delete(int productId) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			ProductEntity product = ProductRepository.findById(productId).orElse(null);
 
@@ -241,13 +225,11 @@ public class ProductServiceImpl implements ProductService {
 			ProductRepository.flush();
 
 			FileHelper.deleteFile(image);
-
-			responseMsg = "Product is deleted successfully";
-			responseCode = Constants.RESULT_CD_SUCCESS;
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS,
+				"Product is deleted successfully");
 		} catch (Exception e) {
-			responseMsg = "Error when deleting product";
 			LOGGER.error("Error when deleting product {}: {}", productId, e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 }
