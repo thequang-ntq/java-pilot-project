@@ -1,10 +1,6 @@
 import axios from "axios";
 import { clearAuth, getToken, getRefreshToken, setAuth } from "./auth-storage";
-<<<<<<< HEAD:pilot-project-frontend/src/utils/axios-instance.js
 import { BASE_URL } from "./constants";
-=======
-import { BASE_URL } from "../utils/constants";
->>>>>>> main:pilot-project-frontend/src/services/axios-instance.js
 
 // Axios instance for API call, base url is prefix, timeout -> request after 10s is fail, default JSON type for request
 const axiosInstance = axios.create({

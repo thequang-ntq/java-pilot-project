@@ -13,11 +13,7 @@
     0.7
   ); /* Header & Footer Border */
   --clr-body-accent: rgb(53, 53, 255); /* Body: link, highlight text */
-<<<<<<< HEAD
   --clr-header-footer-accent: #22d3ee; /* Header & Footer: active link */
-=======
-  --clr-header-footer-accent: #efac10; /* Header & Footer: active link */
->>>>>>> main
   --clr-body-text: #000; /* Main body text */
   --clr-header-footer-text: #fff; /* Main header & Footer text */
   --clr-muted: #cbd5e1; /* Sub text */
@@ -39,11 +35,8 @@
     #e0e0e0 50%,
     #f0f0f0 75%
   );
-<<<<<<< HEAD
   --clr-logout-button: #64748b;
   --clr-pagination-button: #60a5fa;
-=======
->>>>>>> main
 
   /* FLUID SPACING - CLAMP() */
   --space-xs: clamp(

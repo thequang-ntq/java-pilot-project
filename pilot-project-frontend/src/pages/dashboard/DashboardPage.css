@@ -1,20 +1,4 @@
 /* ========================================
-<<<<<<< HEAD
-=======
-  Dashboard header
-======================================== */
-.dashboard-page
-  .dashboard-header
-  .dashboard-header-container
-  .dashboard-header-wrapper
-  .title {
-  font-size: var(--text-xl);
-  font-weight: 700;
-  margin-bottom: var(--space-xs);
-}
-
-/* ========================================
->>>>>>> main
   Dashboard content
 ======================================== */
 .dashboard-page
@@ -43,16 +27,10 @@
   .dashboard-content-container
   .dashboard-content-wrapper
   .stats-grid {
-<<<<<<< HEAD
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-xl);
-=======
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-lg);
->>>>>>> main
 }
 
 .dashboard-page
@@ -108,7 +86,6 @@
   .dashboard-content-wrapper
   .stats-grid
   .stat-card
-<<<<<<< HEAD
   .danger-icon {
   background: var(--clr-notice-icon);
 }
@@ -119,8 +96,6 @@
   .dashboard-content-wrapper
   .stats-grid
   .stat-card
-=======
->>>>>>> main
   .stat-info {
   flex: 1;
   min-width: 0;
@@ -150,11 +125,7 @@
   .stat-info
   .stat-label {
   font-size: var(--text-sm);
-<<<<<<< HEAD
   color: var(--clr-not-found);
-=======
-  color: var(--clr-muted);
->>>>>>> main
   margin: 0;
 }
 
@@ -193,11 +164,7 @@
     .dashboard-content-container
     .dashboard-content-wrapper
     .stats-grid {
-<<<<<<< HEAD
     grid-template-columns: 1fr;
-=======
-    grid-template-columns: repeat(2, 1fr);
->>>>>>> main
   }
 }
 
