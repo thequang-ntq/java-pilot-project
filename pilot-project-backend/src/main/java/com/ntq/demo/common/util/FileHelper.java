@@ -1,0 +1,103 @@
+package com.ntq.demo.common.util;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.UUID;
+
+/**
+ * This class is used to implement common functions that related to Files
+ *
+ * @author Quang
+ * @since 2026-4-28
+ */
+public class FileHelper {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
+
+	/**
+	 * Save new file, delete old file if exists
+	 *
+	 * @param folderPath
+	 * @param files
+	 * @param oldPath = path to image of record in DB, for example: brand.getLogo()
+	 * @return new file path, null if fail
+	 */
+	public static String editFile(String folderPath, MultipartFile[] files, String oldPath) {
+		/**
+		 * Not has new file -> Keep the old file path
+		 */
+		if (files == null || files.length == 0 || files[0].getSize() == 0) {
+			return oldPath;
+		}
+
+		MultipartFile file = files[0];
+
+		try {
+			/**
+			 * Create new folder if not exists
+			 */
+			Path folder = Paths.get(folderPath);
+			if (!Files.exists(folder)) {
+				Files.createDirectories(folder);
+				LOGGER.info("Created folder: {}", folderPath);
+			}
+
+			/**
+			 * Create unique file name
+			 */
+			String originalName = file.getOriginalFilename();
+			String extension = getExtension(originalName);
+			String newFileName = UUID.randomUUID() + extension;
+			Path savePath = folder.resolve(newFileName);
+
+			/**
+			 * Save new file, replace the old file if exists
+			 */
+			Files.copy(file.getInputStream(), savePath, StandardCopyOption.REPLACE_EXISTING);
+			LOGGER.info("Saved file: {}", savePath);
+
+			/**
+			 * Delete old file (if exists)
+			 */
+			deleteFile(oldPath);
+
+			return folderPath + newFileName;
+
+		} catch (IOException e) {
+			LOGGER.error("Failed to save file: {}", e.getMessage(), e);
+			return null;
+		}
+	}
+
+	/**
+	 * Delete the file according to file path
+	 *
+	 * @param filePath
+	 */
+	public static void deleteFile(String filePath) {
+		if (filePath == null || filePath.isBlank()) return;
+		try {
+			Path path = Paths.get(filePath);
+			if (Files.exists(path)) {
+				Files.delete(path);
+				LOGGER.info("Deleted file: {}", filePath);
+			}
+		} catch (IOException e) {
+			LOGGER.error("Failed to delete file {}: {}", filePath, e.getMessage(), e);
+		}
+	}
+
+	/**
+	 *  Get file extension name
+	 *
+	 * @param fileName
+	 * @return File extension name (.jpg, .png,...)
+	 */
+	private static String getExtension(String fileName) {
+		if (fileName == null || !fileName.contains(".")) return "";
+		return fileName.substring(fileName.lastIndexOf("."));
+	}
+}

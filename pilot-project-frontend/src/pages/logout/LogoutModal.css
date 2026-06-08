@@ -1,0 +1,112 @@
+.logout-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-modal);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.logout-modal {
+  background: var(--clr-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  max-width: 22rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+  box-shadow: var(--box-shadow);
+  animation: logoutModalIn 0.2s ease;
+}
+
+.logout-modal .logout-modal-title {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--clr-body-text);
+}
+
+.logout-modal .logout-modal-desc {
+  font-size: var(--text-sm);
+  color: var(--clr-muted);
+  line-height: 1.6;
+}
+
+.logout-modal .logout-modal-actions {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.logout-modal .logout-modal-actions .logout-modal-btn {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.logout-modal .logout-modal-actions .logout-modal-btn-cancel {
+  background: transparent;
+  color: var(--clr-body-text);
+  border: 1.5px solid var(--clr-body-border);
+}
+
+.logout-modal .logout-modal-actions .logout-modal-btn-cancel:hover {
+  background: var(--clr-dropdown-bg);
+}
+
+.logout-modal .logout-modal-actions .logout-modal-btn-confirm {
+  background: var(--clr-danger);
+  color: var(-clr-bg);
+  border: 1.5px solid var(--clr-danger);
+}
+
+.logout-modal .logout-modal-actions .logout-modal-btn-confirm:hover {
+  filter: brightness(1.1);
+}
+
+@keyframes logoutModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ========================================
+  Mobile: 0px - 479.98px
+======================================== */
+@media screen and (max-width: 479.98px) {
+}
+
+/* ========================================
+  Small Tablet: 480px - 767.98px
+======================================== */
+@media screen and (min-width: 480px) and (max-width: 767.98px) {
+}
+
+/* ========================================
+  Tablet: 768px - 1023.98px
+======================================== */
+@media screen and (min-width: 768px) and (max-width: 1023.98px) {
+}
+
+/* ========================================
+  Desktop: >= 1024px
+======================================== */
+@media screen and (min-width: 1024px) {
+}
