@@ -51,6 +51,7 @@ public class ProductMapper {
 	 *
 	 * @param request
 	 * @return ProductEntity for Add
+	 * @throws InvalidFileException: already throw in FileHelper (RuntimeException just throw 1 time)
 	 */
 	public ProductEntity toEntity(ProductRequest request, BrandEntity brand) {
 		if (request == null || brand == null) return null;
@@ -65,16 +66,8 @@ public class ProductMapper {
 		 * Product image handling
 		 */
 		MultipartFile[] imageFiles = request.getImageFiles();
-		if (imageFiles != null && imageFiles[0].getSize() > 0) {
-			/**
-			 * Check if file is image and right type, throw upto ServiceImpl layer to catch
-			 */
-			if (!FileHelper.isImageFile(imageFiles[0])) {
-				throw new InvalidFileException("Invalid image file type");
-			}
-			String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, null);
-			product.setImage(imagePath);
-		}
+		String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, null);
+		product.setImage(imagePath);
 		product.setDescription(request.getDescription());
 		return product;
 	}
@@ -85,6 +78,7 @@ public class ProductMapper {
 	 * @param request
 	 * @param product
 	 * @param brand
+	 * @throws InvalidFileException: already throw in FileHelper (RuntimeException just throw 1 time)
 	 */
 	public void updateEntity(ProductRequest request, ProductEntity product, BrandEntity brand) {
 		if (request == null || product == null || brand == null) return;
@@ -109,15 +103,9 @@ public class ProductMapper {
 		}
 
 		/**
-		 * Has new file
+		 * Has new file, check imageFiles conditions because must have new file, cannot get set oldPath
 		 */
 		if (imageFiles != null && imageFiles.length > 0 && imageFiles[0].getSize() > 0) {
-			/**
-			 * Check if file is image and right type, throw upto ServiceImpl layer to catch
-			 */
-			if (!FileHelper.isImageFile(imageFiles[0])) {
-				throw new InvalidFileException("Invalid image file type");
-			}
 			String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, product.getImage());
 			product.setImage(imagePath);
 		}

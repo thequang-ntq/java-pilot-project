@@ -1,6 +1,7 @@
 package com.ntq.demo.common.util;
 import com.ntq.demo.common.constant.Constants;
 
+import com.ntq.demo.exception.InvalidFileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,11 +44,13 @@ public class FileHelper {
 
 	/**
 	 * Save new file, delete old file if exists
+	 * Throw InvalidFileException if: cannot create folder/save file fail
 	 *
 	 * @param folderPath
 	 * @param files
 	 * @param oldPath = path to image of record in DB, for example: brand.getLogo()
-	 * @return new file path, null if fail
+	 * @return new file path
+	 * @throws InvalidFileException if file operations fail
 	 */
 	public static String editFile(String folderPath, MultipartFile[] files, String oldPath) {
 		/**
@@ -60,21 +63,27 @@ public class FileHelper {
 		MultipartFile file = files[0];
 
 		/**
-		 * Check if image file or not
+		 * Check if image file or not, throw InvalidFileException
 		 */
 		if (!isImageFile(file)) {
 			LOGGER.warn("Rejected non-image file: {}", file.getOriginalFilename());
-			return null;
+			throw new InvalidFileException("File must be a valid image (png, jpg, jpeg, webp, gif)");
 		}
 
 		try {
 			/**
 			 * Create new folder if not exists
+			 * Throw InvalidFileException with root cause IOException if IOException
 			 */
 			Path folder = Paths.get(folderPath);
 			if (!Files.exists(folder)) {
-				Files.createDirectories(folder);
-				LOGGER.info("Created folder: {}", folderPath);
+				try {
+					Files.createDirectories(folder);
+					LOGGER.info("Created folder: {}", folderPath);
+				} catch (IOException e) {
+					throw new InvalidFileException(
+						"Failed to create upload folder. Please check file permissions", e);
+				}
 			}
 
 			/**
@@ -87,25 +96,35 @@ public class FileHelper {
 
 			/**
 			 * Save new file, replace the old file if exists
+			 * Throw InvalidFileException with root cause IOException if IOException
 			 */
-			Files.copy(file.getInputStream(), savePath, StandardCopyOption.REPLACE_EXISTING);
-			LOGGER.info("Saved file: {}", savePath);
+			try {
+				Files.copy(file.getInputStream(), savePath, StandardCopyOption.REPLACE_EXISTING);
+				LOGGER.info("Saved file: {}", savePath);
+			} catch (IOException e) {
+				throw new InvalidFileException(
+						"Failed to save file to disk. Please check disk space and file permissions", e);
+			}
 
 			/**
 			 * Delete old file (if exists)
 			 */
 			deleteFile(oldPath);
-
 			return folderPath + newFileName;
-
-		} catch (IOException e) {
-			LOGGER.error("Failed to save file: {}", e.getMessage(), e);
-			return null;
+		} catch (InvalidFileException e) {
+			throw e;
+		} catch (Exception e) {
+			/**
+			 * Wrap unexpected exception into InvalidFileException
+			 */
+			LOGGER.error("Error while saving file: {}", e.getMessage(), e);
+			throw new InvalidFileException("Error while saving file", e);
 		}
 	}
 
 	/**
 	 * Delete the file according to file path
+	 * Log, no throw because delete file is not critical (database was updated)
 	 *
 	 * @param filePath
 	 */
@@ -119,6 +138,7 @@ public class FileHelper {
 			}
 		} catch (IOException e) {
 			LOGGER.error("Failed to delete file {}: {}", filePath, e.getMessage(), e);
+			throw new InvalidFileException("Failed to delete old file: " + filePath, e);
 		}
 	}
 

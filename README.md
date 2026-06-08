@@ -101,8 +101,6 @@ MySql: pilot_project_db (CHARSET utf8mb4, COLLATE utf8mb4_0900_ai_ci, (accent-in
 
 Java Spring Boot (IDE: Intellij): pilot-project-backend (Spring Web, Spring Data JPA, MySQL Driver, Spring Security, Spring Boot DevTools, Lombok, Validation, Maven, JWT with refresh token, Bcrypt). Use:
 
-- enums/: Enum for entity field
-  - Role
 - entity/: Map DB tables to java object
   - UserEntity
   - BrandEntity
@@ -131,23 +129,22 @@ Java Spring Boot (IDE: Intellij): pilot-project-backend (Spring Web, Spring Data
 - mapper/: Map between entity and DTO
   - BrandMapper
   - ProductMapper
-- model/:
+- model/: Models for pagination, JSON response, enums
   - PageResponse
   - ResponseDataModel
-- security/: JWT Token auth, ADMIN/USER role, Custom User Detail
-  - CustomUserDetailsService
+  - Role
+- security/: JWT Token auth
   - JwtTokenProvider
   - JWTAuthenticationFilter
+- config/: Authentication/authorization config, CORS
   - SecurityConfig
-- config/: CORS, MainApplication, ServletInitializer, ExceptionHandler
-  - ServletInitializer
   - WebConfig
-  - PilotProjectBackendApplication
-- service/: Handle business logic, method related redirect to controller / client
+- service/: Handle business logic, method related redirect to controller / client, Spring Security users
   - impl/: implements methods
     - UserServiceImpl
     - BrandServiceImpl
     - ProductServiceImpl
+    - UserDetailsServiceImpl
   - UserService
   - BrandService
   - ProductService
@@ -156,7 +153,9 @@ Java Spring Boot (IDE: Intellij): pilot-project-backend (Spring Web, Spring Data
   - BrandController
   - ProductController
 - exception/: Handle exception at Controller
-  - GlobalExceptionHandler: exception handler for error when mapping request <-> object in Controller, after Spring Security
+  - GlobalExceptionHandler: exception handler for error when mapping request <-> object in Controller, after Spring Security (Validation,...)
+  - InvalidFileException: RunTimeException for invalid file
+- PilotProjectBackendApplication: Main file
 
 ### Frontend
 
@@ -924,6 +923,22 @@ Login with an admin account first and get admin token.
 4. Add ReactToast instead of alert in DashboardPage
 
 ### 2026-05-30
+
+1. Add more business rule
+   1.1. SaleDate cannot in the future for ProductServiceImpl (add, update)
+
+2. Handle exception for trigger rollback in ServiceImpl to have Transactional, delete/add image only after service methods success (add/update/delete success).
+   1.1. In catch Exception in ServiceImpl, trigger rollback to have Transaction
+   1.2. Add/delete image fail in add/update/delete Brand & Product -> rollback to have transaction
+   1.3. Things to do:
+   -> Update InvalidFileException: constructor 2 (Message + Cause)
+   -> Update GlobalExceptionHandler: Add handleInvalidFileException() to invalid file/save or delete file error
+   -> Update FileHelper: Throw InvalidFileException if: cannot create folder/save file fail (editFile()), catch exception.
+   -> Update ProductMapper & BrandMapper: remove check isImageFile in mapper (already check in editFile() in FileHelper)
+   -> Update ProductServiceImpl & BrandServiceImpl: no responseCode/responseMsg before try, no return after catch, just have catch exception e: logger & throw e in that (GlobalExceptionHandler with @RestControllerAdvice will handle it).
+   -> Update FileHelper: deleteFile() throw InvalidFileException
+   -> Update GlobalExceptionHandler: Add handleMultipartException() to handle file size exceeded 5MB, because application.properties: File > 5MB → Spring reject → MultipartException
+3. ProductsPage & BrandsPage: Toast in useEffect location state handled
 
 ## Fix Bugs
 

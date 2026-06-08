@@ -42,6 +42,7 @@ public class BrandMapper {
 	 *
 	 * @param request
 	 * @return BrandEntity for Add
+	 * @throws InvalidFileException: already throw in FileHelper (RuntimeException just throw 1 time)
 	 */
 	public BrandEntity toEntity(BrandRequest request) {
 		if (request == null) return null;
@@ -52,16 +53,8 @@ public class BrandMapper {
 		 * Logo image handling
 		 */
 		MultipartFile[] logoFiles = request.getLogoFiles();
-		if (logoFiles != null && logoFiles[0].getSize() > 0) {
-			/**
-			 * Check if file is image and right type, throw upto ServiceImpl layer to catch
-			 */
-			if (!FileHelper.isImageFile(logoFiles[0])) {
-				throw new InvalidFileException("Invalid image file type");
-			}
-			String imagePath = FileHelper.editFile(brandLogoFolderPath, logoFiles, null);
-			brand.setLogo(imagePath);
-		}
+		String imagePath = FileHelper.editFile(brandLogoFolderPath, logoFiles, null);
+		brand.setLogo(imagePath);
 		brand.setDescription(request.getDescription());
 		return brand;
 	}
@@ -71,6 +64,7 @@ public class BrandMapper {
 	 *
 	 * @param request
 	 * @param brand
+	 * @throws InvalidFileException: already throw in FileHelper (RuntimeException just throw 1 time)
 	 */
 	public void updateEntity(BrandRequest request, BrandEntity brand) {
 		if (request == null || brand == null) return;
@@ -91,15 +85,9 @@ public class BrandMapper {
 		}
 
 		/**
-		 * Has new file
+		 * Has new file, check logoFiles conditions because must have new file, cannot get set oldPath
 		 */
 		if (logoFiles != null && logoFiles.length > 0 && logoFiles[0].getSize() > 0) {
-			/**
-			 * Check if file is image and right type, throw upto ServiceImpl layer to catch
-			 */
-			if (!FileHelper.isImageFile(logoFiles[0])) {
-				throw new InvalidFileException("Invalid image file type");
-			}
 			String imagePath = FileHelper.editFile(brandLogoFolderPath, logoFiles, brand.getLogo());
 			brand.setLogo(imagePath);
 		}

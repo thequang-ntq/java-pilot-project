@@ -43,9 +43,6 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public ResponseDataModel<PageResponse<BrandResponse>> getList(int page, String keyword, boolean isSortByName) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			/**
 			 * Add LIMIT, OFFSET, ORDER BY in Repository method (SQL query)
@@ -86,17 +83,13 @@ public class BrandServiceImpl implements BrandService {
 			);
 			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
 		} catch (Exception e) {
-			responseMsg = "Error when getting brand list";
 			LOGGER.error("Error when getting brand list: {}", e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
 	public ResponseDataModel<BrandResponse> getById(int brandId) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			BrandEntity brand = BrandRepository.findById(brandId).orElse(null);
 
@@ -112,17 +105,13 @@ public class BrandServiceImpl implements BrandService {
 			);
 			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
 		} catch (Exception e) {
-			responseMsg = "Error when getting brand";
 			LOGGER.error("Error when getting brand {}: {}", brandId, e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
 	public ResponseDataModel<BrandResponse> add(BrandRequest request) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			/**
 			 * Check if brand name exists
@@ -134,24 +123,16 @@ public class BrandServiceImpl implements BrandService {
 			BrandEntity brand = brandMapper.toEntity(request);
 			BrandEntity savedBrand = BrandRepository.saveAndFlush(brand);
 			BrandResponse data = brandMapper.toResponse(savedBrand);
-
-			responseMsg = "Brand is added successfully";
-			responseCode = Constants.RESULT_CD_SUCCESS;
-			return new ResponseDataModel<>(responseCode, responseMsg, data);
-		} catch (InvalidFileException e) {
-			return new ResponseDataModel<>(Constants.RESULT_CD_FAIL, e.getMessage());
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS,
+				"Brand is added successfully", data);
 		} catch (Exception e) {
-			responseMsg = "Error when adding brand";
 			LOGGER.error("Error when adding brand: {}", e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
 	public ResponseDataModel<BrandResponse> update(int brandId, BrandRequest request) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			BrandEntity brand = BrandRepository.findById(brandId).orElse(null);
 
@@ -171,24 +152,16 @@ public class BrandServiceImpl implements BrandService {
 			brandMapper.updateEntity(request, brand);
 			BrandEntity updatedBrand = BrandRepository.saveAndFlush(brand);
 			BrandResponse data = brandMapper.toResponse(updatedBrand);
-
-			responseMsg = "Brand is updated successfully";
-			responseCode = Constants.RESULT_CD_SUCCESS;
-			return new ResponseDataModel<>(responseCode, responseMsg, data);
-		} catch (InvalidFileException e) {
-			return new ResponseDataModel<>(Constants.RESULT_CD_FAIL, e.getMessage());
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS,
+				"Brand is updated successfully", data);
 		} catch (Exception e) {
-			responseMsg = "Error when updating brand";
 			LOGGER.error("Error when updating brand {}: {}", brandId, e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
 	public ResponseDataModel<Void> delete(int brandId) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			BrandEntity brand = BrandRepository.findById(brandId).orElse(null);
 
@@ -218,12 +191,11 @@ public class BrandServiceImpl implements BrandService {
 			FileHelper.deleteFile(logo);
 			productImages.forEach(FileHelper::deleteFile);
 
-			responseMsg = "Brand and products in brand is deleted successfully";
-			responseCode = Constants.RESULT_CD_SUCCESS;
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS,
+				"Brand and products in brand is deleted successfully");
 		} catch (Exception e) {
-			responseMsg = "Error when deleting brand";
 			LOGGER.error("Error when deleting brand {}: {}", brandId, e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 }

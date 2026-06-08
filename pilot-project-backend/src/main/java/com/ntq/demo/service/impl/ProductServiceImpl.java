@@ -21,6 +21,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -45,9 +46,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ResponseDataModel<PageResponse<ProductResponse>> getList(int page, String keyword, BigDecimal priceFrom, BigDecimal priceTo) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			/**
 			 * Add LIMIT, OFFSET, ORDER BY in Repository method (SQL query)
@@ -88,17 +86,16 @@ public class ProductServiceImpl implements ProductService {
 			);
 			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
 		} catch (Exception e) {
-			responseMsg = "Error when getting product list";
 			LOGGER.error("Error when getting product list: {}", e.getMessage(), e);
+			/**
+			 * DB/server error, not invalid file/IOException/InvalidFileException
+			 */
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
 	public ResponseDataModel<ProductResponse> getById(int productId) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			ProductEntity product = ProductRepository.findById(productId).orElse(null);
 
@@ -119,17 +116,13 @@ public class ProductServiceImpl implements ProductService {
 			);
 			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
 		} catch (Exception e) {
-			responseMsg = "Error when getting product";
 			LOGGER.error("Error when getting product {}: {}", productId, e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
 	public ResponseDataModel<ProductResponse> add(ProductRequest request) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			/**
 			 * Check if product name exists
@@ -146,27 +139,29 @@ public class ProductServiceImpl implements ProductService {
 				return new ResponseDataModel<>(Constants.RESULT_CD_NOT_FOUND, "Brand not found");
 			}
 
+			/**
+			 * Sale date cannot in the future
+			 */
+			if (request.getSaleDate().isAfter(LocalDate.now())) {
+				return new ResponseDataModel<>(
+					Constants.RESULT_CD_INVALID,
+					"Sale date cannot be in the future"
+				);
+			}
+
 			ProductEntity product = productMapper.toEntity(request, brand);
 			ProductEntity savedProduct = ProductRepository.saveAndFlush(product);
 			ProductResponse data = productMapper.toResponse(savedProduct);
-
-			responseMsg = "Product is added successfully";
-			responseCode = Constants.RESULT_CD_SUCCESS;
-			return new ResponseDataModel<>(responseCode, responseMsg, data);
-		} catch (InvalidFileException e) {
-			return new ResponseDataModel<>(Constants.RESULT_CD_FAIL, e.getMessage());
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS,
+				"Product is added successfully", data);
 		} catch (Exception e) {
-			responseMsg = "Error when adding product";
 			LOGGER.error("Error when adding product: {}", e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
 	public ResponseDataModel<ProductResponse> update(int productId, ProductRequest request) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			ProductEntity product = ProductRepository.findById(productId).orElse(null);
 
@@ -191,27 +186,29 @@ public class ProductServiceImpl implements ProductService {
 				return new ResponseDataModel<>(Constants.RESULT_CD_NOT_FOUND, "Brand not found");
 			}
 
+			/**
+			 * Sale date cannot in the future
+			 */
+			if (request.getSaleDate().isAfter(LocalDate.now())) {
+				return new ResponseDataModel<>(
+					Constants.RESULT_CD_INVALID,
+					"Sale date cannot be in the future"
+				);
+			}
+
 			productMapper.updateEntity(request, product, brand);
 			ProductEntity updatedProduct = ProductRepository.saveAndFlush(product);
 			ProductResponse data = productMapper.toResponse(updatedProduct);
-
-			responseMsg = "Product is updated successfully";
-			responseCode = Constants.RESULT_CD_SUCCESS;
-			return new ResponseDataModel<>(responseCode, responseMsg, data);
-		} catch (InvalidFileException e) {
-			return new ResponseDataModel<>(Constants.RESULT_CD_FAIL, e.getMessage());
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS,
+				"Product is updated successfully", data);
 		} catch (Exception e) {
-			responseMsg = "Error when updating product";
 			LOGGER.error("Error when updating product {}: {}", productId, e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 
 	@Override
 	public ResponseDataModel<Void> delete(int productId) {
-		int responseCode = Constants.RESULT_CD_FAIL;
-		String responseMsg = "";
-
 		try {
 			ProductEntity product = ProductRepository.findById(productId).orElse(null);
 
@@ -228,13 +225,11 @@ public class ProductServiceImpl implements ProductService {
 			ProductRepository.flush();
 
 			FileHelper.deleteFile(image);
-
-			responseMsg = "Product is deleted successfully";
-			responseCode = Constants.RESULT_CD_SUCCESS;
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS,
+				"Product is deleted successfully");
 		} catch (Exception e) {
-			responseMsg = "Error when deleting product";
 			LOGGER.error("Error when deleting product {}: {}", productId, e.getMessage(), e);
+			throw e;
 		}
-		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
 }

@@ -121,7 +121,7 @@ export default function ProductsPage() {
     );
   }, [page, appliedFilters]);
 
-  // Handle state from navigation, after add/edit
+  // Handle state from navigation, after add/edit and Toast
   // Change location state, setAppliedSearch, but state.current make sure to run just 1 time
   useEffect(() => {
     if (locationStateHandled.current) return;
@@ -137,8 +137,32 @@ export default function ProductsPage() {
     } = location.state || {};
     window.history.replaceState({}, "");
 
-    if (type === "error") setError(message);
-    else if (type === "success") setSuccess(message);
+    // Show error / success with toast by message from location.state
+    if (type === "error" && message) {
+      toast.error(message, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } else if (type === "success" && message) {
+      toast.success(message, {
+        position: "top-center",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
 
     // Set highlight turnoff after 3s
     if (type === "success" && productId) {
@@ -204,7 +228,7 @@ export default function ProductsPage() {
     }
   }, [location.state]);
 
-  // Show error / success with toast
+  // Show error / success with toast from others (delete, etc..)
   useEffect(() => {
     if (error) {
       toast.error(error, {
