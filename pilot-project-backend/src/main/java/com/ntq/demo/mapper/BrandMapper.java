@@ -1,5 +1,6 @@
 package com.ntq.demo.mapper;
 
+import com.ntq.demo.common.util.CommonUtil;
 import com.ntq.demo.common.util.FileHelper;
 import com.ntq.demo.dto.request.BrandRequest;
 import com.ntq.demo.dto.response.BrandResponse;
@@ -38,7 +39,7 @@ public class BrandMapper {
 	}
 
 	/**
-	 * BrandRequest -> BrandEntity (add)
+	 * BrandRequest -> BrandEntity (add) with sanitize
 	 *
 	 * @param request
 	 * @return BrandEntity for Add
@@ -48,19 +49,19 @@ public class BrandMapper {
 		if (request == null) return null;
 
 		BrandEntity brand = new BrandEntity();
-		brand.setBrandName(request.getBrandName());
+		brand.setBrandName(CommonUtil.sanitize(request.getBrandName()));
 		/**
 		 * Logo image handling
 		 */
 		MultipartFile[] logoFiles = request.getLogoFiles();
 		String imagePath = FileHelper.editFile(brandLogoFolderPath, logoFiles, null);
 		brand.setLogo(imagePath);
-		brand.setDescription(request.getDescription());
+		brand.setDescription(CommonUtil.sanitize(request.getDescription()));
 		return brand;
 	}
 
 	/**
-	 * Update BrandEntity: get data from BrandRequest
+	 * Update BrandEntity: get data from BrandRequest, with sanitize
 	 *
 	 * @param request
 	 * @param brand
@@ -69,7 +70,7 @@ public class BrandMapper {
 	public void updateEntity(BrandRequest request, BrandEntity brand) {
 		if (request == null || brand == null) return;
 
-		brand.setBrandName(request.getBrandName());
+		brand.setBrandName(CommonUtil.sanitize(request.getBrandName()));
 		/**
 		 * Logo image handling
 		 * Edit File auto delete old image if brand has new image
@@ -91,6 +92,6 @@ public class BrandMapper {
 			String imagePath = FileHelper.editFile(brandLogoFolderPath, logoFiles, brand.getLogo());
 			brand.setLogo(imagePath);
 		}
-		brand.setDescription(request.getDescription());
+		brand.setDescription(CommonUtil.sanitize(request.getDescription()));
 	}
 }

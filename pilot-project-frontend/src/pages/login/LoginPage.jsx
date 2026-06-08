@@ -41,7 +41,7 @@ export default function LoginPage() {
     // Formatted input to check
     const formatted = {
       username: sanitize(username),
-      password: sanitize(password),
+      password: password,
     };
 
     setIsLoading(true);
@@ -147,7 +147,7 @@ export default function LoginPage() {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => {
-                      setPassword(filterInput(e.target.value));
+                      setPassword(e.target.value);
                     }}
                     onFocus={() => {
                       clearError("password");

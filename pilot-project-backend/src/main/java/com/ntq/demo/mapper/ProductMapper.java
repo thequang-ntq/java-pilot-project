@@ -1,5 +1,6 @@
 package com.ntq.demo.mapper;
 
+import com.ntq.demo.common.util.CommonUtil;
 import com.ntq.demo.common.util.FileHelper;
 import com.ntq.demo.dto.request.ProductRequest;
 import com.ntq.demo.dto.response.ProductResponse;
@@ -47,7 +48,7 @@ public class ProductMapper {
 	}
 
 	/**
-	 * ProductRequest -> ProductEntity (add)
+	 * ProductRequest -> ProductEntity (add) with sanitize
 	 *
 	 * @param request
 	 * @return ProductEntity for Add
@@ -57,7 +58,7 @@ public class ProductMapper {
 		if (request == null || brand == null) return null;
 
 		ProductEntity product = new ProductEntity();
-		product.setProductName(request.getProductName());
+		product.setProductName(CommonUtil.sanitize(request.getProductName()));
 		product.setQuantity(request.getQuantity());
 		product.setPrice(request.getPrice());
 		product.setBrand(brand);
@@ -68,7 +69,7 @@ public class ProductMapper {
 		MultipartFile[] imageFiles = request.getImageFiles();
 		String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, null);
 		product.setImage(imagePath);
-		product.setDescription(request.getDescription());
+		product.setDescription(CommonUtil.sanitize(request.getDescription()));
 		return product;
 	}
 
@@ -83,7 +84,7 @@ public class ProductMapper {
 	public void updateEntity(ProductRequest request, ProductEntity product, BrandEntity brand) {
 		if (request == null || product == null || brand == null) return;
 
-		product.setProductName(request.getProductName());
+		product.setProductName(CommonUtil.sanitize(request.getProductName()));
 		product.setQuantity(request.getQuantity());
 		product.setPrice(request.getPrice());
 		product.setBrand(brand);
@@ -109,6 +110,6 @@ public class ProductMapper {
 			String imagePath = FileHelper.editFile(productImageFolderPath, imageFiles, product.getImage());
 			product.setImage(imagePath);
 		}
-		product.setDescription(request.getDescription());
+		product.setDescription(CommonUtil.sanitize(request.getDescription()));
 	}
 }

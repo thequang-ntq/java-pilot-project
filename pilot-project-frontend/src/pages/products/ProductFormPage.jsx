@@ -188,6 +188,8 @@ export default function ProductFormPage() {
     else if (parseFloat(price) < 0) errs.price = "Price must be at least 0.";
     if (!brandId) errs.brandId = "Brand is required.";
     if (!saleDate) errs.saleDate = "Sale date is required.";
+    else if (saleDate > new Date().toISOString().split("T")[0])
+      errs.saleDate = "Sale date cannot be in the future";
     return errs;
   };
 

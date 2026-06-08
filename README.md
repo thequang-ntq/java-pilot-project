@@ -944,6 +944,11 @@ Login with an admin account first and get admin token.
 ### 2026-06-01
 
 1. Unit test for BE
+2. Add sanitize for BE
+   2.1. Constants, CommonUtil
+   2.2. Sanitize in BrandMapper, ProductMapper, UserServiceImpl
+   2.3. Password no filterInput, no sanitize.
+3. LogoutModal with loading spinner
 
 ## Fix Bugs
 

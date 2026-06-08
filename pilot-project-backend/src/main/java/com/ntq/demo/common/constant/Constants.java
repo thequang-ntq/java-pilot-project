@@ -43,4 +43,9 @@ public class Constants {
 		"image/webp",
 		"image/gif"
 	);
+
+	/**
+	 * Dangerous characters
+	 */
+	public static final String DANGEROUS_CHARS_REGEX = "[<>\"'`;/**/{}]";
 }
