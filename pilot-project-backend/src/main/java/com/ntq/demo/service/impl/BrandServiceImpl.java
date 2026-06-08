@@ -43,7 +43,7 @@ public class BrandServiceImpl implements BrandService {
 	private BrandMapper brandMapper;
 
 	@Override
-	public ResponseDataModel<PageResponse<BrandResponse>> getList(int page, String keyword) {
+	public ResponseDataModel<PageResponse<BrandResponse>> getList(int page, String keyword, boolean isSortByName) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
 
@@ -57,7 +57,7 @@ public class BrandServiceImpl implements BrandService {
 				 */
 				page - 1,
 				Constants.DEFAULT_PAGE_SIZE,
-				Sort.by("brandId").ascending()
+				isSortByName ? Sort.by("brandName").ascending() : Sort.by("brandId").ascending()
 			);
 
 			/**

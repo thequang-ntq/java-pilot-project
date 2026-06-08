@@ -535,11 +535,10 @@
   position: relative;
   background: var(--clr-bg);
   border-radius: var(--radius-lg);
-  width: min(40rem, 70dvw);
+  width: fit-content;
+  height: fit-content;
+  max-width: 60dvw;
   max-height: 60dvh;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  text-overflow: ellipsis;
   display: flex;
   flex-direction: column;
 
@@ -578,8 +577,7 @@
 .brand-modal-overlay .modal .modal-body {
   display: flex;
   flex-direction: column;
-  overflow-x: auto;
-  overflow-y: auto;
+  overflow: auto;
   gap: var(--space-md);
 }
 
@@ -600,19 +598,20 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .brand-modal-overlay .modal .modal-body .detail-row .detail-label {
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--clr-muted);
-  text-transform: uppercase;
 }
 
 .brand-modal-overlay .modal .modal-body .detail-row .detail-value {
   font-size: var(--text-sm);
   color: var(--clr-body-text);
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
 }
 
 .brand-modal-overlay .modal .modal-body .detail-row .detail-logo {
@@ -641,7 +640,6 @@
 }
 
 .brand-modal-overlay .modal .modal-footer .btn {
-  padding: var(--space-sm) var(--space-md);
   border: none;
   border-radius: var(--radius-sm);
   font-size: var(--text-sm);
@@ -754,6 +752,11 @@
     #table-data-logo {
     display: none;
   }
+
+  .brand-modal-overlay .modal .modal-body {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 /* ========================================
@@ -832,6 +835,11 @@
     #table-data-logo {
     display: none;
   }
+
+  .brand-modal-overlay .modal .modal-body {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 /* ========================================
@@ -891,6 +899,11 @@
     thead
     #table-header-actions {
     width: 20%;
+  }
+
+  .brand-modal-overlay .modal .modal-body {
+    display: flex;
+    flex-direction: column;
   }
 }
 

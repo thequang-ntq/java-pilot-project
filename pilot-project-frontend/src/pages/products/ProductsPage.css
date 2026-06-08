@@ -642,11 +642,10 @@
   position: relative;
   background: var(--clr-bg);
   border-radius: var(--radius-lg);
-  width: min(40rem, 70dvw);
-  max-height: 70dvh;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  text-overflow: ellipsis;
+  width: fit-content;
+  height: fit-content;
+  max-width: 60dvw;
+  max-height: 60dvh;
   display: flex;
   flex-direction: column;
 
@@ -686,9 +685,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-  overflow-y: auto;
-  overflow-x: auto;
-  max-height: calc(90vh - 8rem);
+  overflow: auto;
 }
 
 .product-modal-overlay .modal .modal-body p {
@@ -699,7 +696,7 @@
 }
 
 .product-modal-overlay .modal .modal-body .modal-warning {
-  font-size: var(--text-sm);
+  font-size: var(--text-md);
   color: var(--clr-danger);
   font-weight: 600;
 }
@@ -715,12 +712,13 @@
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--clr-muted);
-  text-transform: uppercase;
 }
 
 .product-modal-overlay .modal .modal-body .detail-row .detail-value {
   font-size: var(--text-base);
   color: var(--clr-body-text);
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
 }
 
 .product-modal-overlay .modal .modal-body .detail-row .detail-image {
@@ -738,7 +736,7 @@
 .product-modal-overlay .modal .modal-body .detail-row .detail-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .product-modal-overlay .modal .modal-footer {
@@ -749,7 +747,6 @@
 }
 
 .product-modal-overlay .modal .modal-footer .btn {
-  padding: var(--space-sm) var(--space-md);
   border: none;
   border-radius: var(--radius-sm);
   font-size: var(--text-sm);

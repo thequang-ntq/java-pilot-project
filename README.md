@@ -59,6 +59,7 @@
     - [2026-05-24](#2026-05-24)
     - [2026-05-25](#2026-05-25)
     - [2026-05-26](#2026-05-26)
+    - [2026-05-27](#2026-05-27)
   - [Fix Bugs](#fix-bugs)
     - [2026-05-02](#2026-05-02-1)
     - [2026-05-04](#2026-05-04-1)
@@ -840,6 +841,24 @@ Login with an admin account first and get admin token.
 ### 2026-05-26
 
 1. Squash commits
+2. 2 columns in Desktop of ProductFormPage & BrandFormPage
+   2.1. form-fields: Display: grid; + grid-template-columns: repeat(2, 1fr). Left-column for first 5 rows, Right-column for the last 2 rows.
+   2.2. form: gap -sm, form-fields: gap -md, field: gap -xs
+   2.3. field-input-group: remove flex: 1
+   2.4. Other devices: form-fields: display: flex + flex-direction: column
+3. Sort by name in choose brand for product, isSortByName - a new field in getList of BrandService, BrandServiceImpl, BrandController (default false). Then fetch isSortByName = true in getBrands of ProductFormPage
+4. 1 columns in Desktop of modal in BrandsPage & ProductsPage
+   4.1. modal-body: display: flex; flex-direction: column.
+   4.2. width: fit-content;
+   height: fit-content;
+   max-width: 60dvw;
+   max-height: 60dvh;
+5. Name max 50 char; description max 255 chars (input maxLength = ...)
+6. application-dev/-prod.properties, delete environment variables, write in -dev/-prod.properties (Not commit these files)
+
+### 2026-05-27
+
+1.
 
 ## Fix Bugs
 

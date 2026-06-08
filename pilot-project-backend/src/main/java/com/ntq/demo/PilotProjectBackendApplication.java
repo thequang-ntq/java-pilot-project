@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @since 2026-04-29
  */
 @SpringBootApplication
-@PropertySource({"classpath:datasource.properties"})
-@EnableTransactionManagement
 public class PilotProjectBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PilotProjectBackendApplication.class, args);

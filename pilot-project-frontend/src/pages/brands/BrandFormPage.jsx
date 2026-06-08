@@ -176,97 +176,103 @@ export default function BrandFormPage() {
             {/* Form */}
             <div className="form">
               <div className="form-fields">
-                {/* Name */}
-                <div className="field">
-                  <label className="field-label" htmlFor="brand-name">
-                    Brand Name <span className="required">*</span>
-                  </label>
-                  <div className="field-input-group">
-                    <input
-                      id="brand-name"
-                      className={`field-input ${errors.name ? "field-input-error" : ""}`}
-                      type="text"
-                      placeholder="Enter brand name"
-                      value={name}
-                      onChange={(e) => {
-                        setName(filterInput(e.target.value));
-                        clearError("name");
-                      }}
-                      autoComplete="off"
-                    />
-                    {errors.name && (
-                      <span className="field-error">{errors.name}</span>
-                    )}
+                <div className="left-column">
+                  {/* Name */}
+                  <div className="field">
+                    <label className="field-label" htmlFor="brand-name">
+                      Brand Name <span className="required">*</span>
+                    </label>
+                    <div className="field-input-group">
+                      <input
+                        id="brand-name"
+                        className={`field-input ${errors.name ? "field-input-error" : ""}`}
+                        type="text"
+                        placeholder="Enter brand name"
+                        value={name}
+                        onChange={(e) => {
+                          setName(filterInput(e.target.value));
+                          clearError("name");
+                        }}
+                        maxLength={50}
+                        autoComplete="off"
+                      />
+                      {errors.name && (
+                        <span className="field-error">{errors.name}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                {/* Logo */}
-                <div className="field">
-                  <label className="field-label" htmlFor="brand-logo">
-                    Logo
-                  </label>
-                  <div className="field-input-group">
-                    <input
-                      id="brand-logo"
-                      className="field-file"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleLogoChange}
-                    />
-                    {/* Show file name */}
-                    {logoFileName && (
-                      <div className="file-name">{logoFileName}</div>
-                    )}
-                    {/* Show error */}
-                    {errors.logo && (
-                      <span className="field-error">{errors.logo}</span>
-                    )}
-                    {/* Preview logo */}
-                    {logoPreview && (
-                      <div className="field-preview">
-                        <img
-                          src={logoPreview}
-                          onError={(e) => {
-                            e.target.src = NoBrandImage;
-                          }}
-                          alt="Logo preview"
-                        />
-                        <button
-                          type="button"
-                          className="field-preview-remove"
-                          onClick={() => {
-                            setLogoPreview("");
-                            setLogoFile(null);
-                            setLogoFileName("");
-                            setIsLogoDeleted(true);
-                            // Reset input file
-                            document.getElementById("brand-logo").value = "";
-                          }}
-                          title="Remove logo"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    )}
+                <div className="right-column">
+                  {/* Logo */}
+                  <div className="field">
+                    <label className="field-label" htmlFor="brand-logo">
+                      Logo
+                    </label>
+                    <div className="field-input-group">
+                      <input
+                        id="brand-logo"
+                        className="field-file"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleLogoChange}
+                      />
+                      {/* Show file name */}
+                      {logoFileName && (
+                        <div className="file-name">{logoFileName}</div>
+                      )}
+                      {/* Show error */}
+                      {errors.logo && (
+                        <span className="field-error">{errors.logo}</span>
+                      )}
+                      {/* Preview logo */}
+                      {logoPreview && (
+                        <div className="field-preview">
+                          <img
+                            src={logoPreview}
+                            onError={(e) => {
+                              e.target.src = NoBrandImage;
+                            }}
+                            alt="Logo preview"
+                          />
+                          <button
+                            type="button"
+                            className="field-preview-remove"
+                            onClick={() => {
+                              setLogoPreview("");
+                              setLogoFile(null);
+                              setLogoFileName("");
+                              setIsLogoDeleted(true);
+                              // Reset input file
+                              document.getElementById("brand-logo").value = "";
+                            }}
+                            title="Remove logo"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                {/* Description */}
-                <div className="field">
-                  <label className="field-label" htmlFor="brand-description">
-                    Description
-                  </label>
-                  <div className="field-input-group">
-                    <textarea
-                      id="brand-description"
-                      className="field-textarea"
-                      placeholder="Enter brand description"
-                      value={description}
-                      onChange={(e) => {
-                        setDescription(filterInput(e.target.value));
-                      }}
-                      rows={4}
-                    />
+                  {/* Description */}
+                  <div className="field">
+                    <label className="field-label" htmlFor="brand-description">
+                      Description
+                    </label>
+                    <div className="field-input-group">
+                      <textarea
+                        id="brand-description"
+                        className="field-textarea"
+                        placeholder="Enter brand description"
+                        value={description}
+                        onChange={(e) => {
+                          setDescription(filterInput(e.target.value));
+                        }}
+                        maxLength={255}
+                        rows={4}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

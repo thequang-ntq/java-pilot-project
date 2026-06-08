@@ -73,12 +73,13 @@ export default function ProductFormPage() {
         const totalPages = response.data.data.totalPages;
 
         // Call API for each page, fetchPromises contains Promises wait for API to complete
+        // Sort by brand name
         // Ex: [Promise<[10 brands from page i]>, ...]
         // TODO: Fetch all brands from DB -> Dangerous
         const fetchPromises = [];
         for (let i = 1; i <= totalPages; i++) {
           fetchPromises.push(
-            getBrands({ page: i, keyword: "" }).then(
+            getBrands({ page: i, keyword: "", isSortByName: true }).then(
               (res) => res.data.data.content,
             ),
           );
@@ -292,209 +293,219 @@ export default function ProductFormPage() {
             {/* Form */}
             <div className="form">
               <div className="form-fields">
-                {/* Name */}
-                <div className="field">
-                  <label className="field-label" htmlFor="product-name">
-                    Product Name <span className="required">*</span>
-                  </label>
-                  <div className="field-input-group">
-                    <input
-                      id="product-name"
-                      className={`field-input ${errors.name ? "field-input-error" : ""}`}
-                      type="text"
-                      placeholder="Enter product name"
-                      value={name}
-                      onChange={(e) => {
-                        setName(filterInput(e.target.value));
-                        clearError("name");
-                      }}
-                      autoComplete="off"
-                    />
-                    {errors.name && (
-                      <span className="field-error">{errors.name}</span>
-                    )}
+                <div className="left-column">
+                  {/* Name */}
+                  <div className="field">
+                    <label className="field-label" htmlFor="product-name">
+                      Product Name <span className="required">*</span>
+                    </label>
+                    <div className="field-input-group">
+                      <input
+                        id="product-name"
+                        className={`field-input ${errors.name ? "field-input-error" : ""}`}
+                        type="text"
+                        placeholder="Enter product name"
+                        value={name}
+                        onChange={(e) => {
+                          setName(filterInput(e.target.value));
+                          clearError("name");
+                        }}
+                        maxLength={50}
+                        autoComplete="off"
+                      />
+                      {errors.name && (
+                        <span className="field-error">{errors.name}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Quantity */}
+                  <div className="field">
+                    <label className="field-label" htmlFor="product-quantity">
+                      Quantity <span className="required">*</span>
+                    </label>
+                    <div className="field-input-group">
+                      <input
+                        id="product-quantity"
+                        className={`field-input ${errors.quantity ? "field-input-error" : ""}`}
+                        type="number"
+                        min="0"
+                        placeholder="Enter quantity"
+                        value={quantity}
+                        onChange={(e) => {
+                          setQuantity(e.target.value);
+                          clearError("quantity");
+                        }}
+                      />
+                      {errors.quantity && (
+                        <span className="field-error">{errors.quantity}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Price */}
+                  <div className="field">
+                    <label className="field-label" htmlFor="product-price">
+                      Price <span className="required">*</span>
+                    </label>
+                    <div className="field-input-group">
+                      <input
+                        id="product-price"
+                        className={`field-input ${errors.price ? "field-input-error" : ""}`}
+                        type="number"
+                        min="0"
+                        step="1000"
+                        placeholder="Enter price"
+                        value={price}
+                        onChange={(e) => {
+                          setPrice(e.target.value);
+                          clearError("price");
+                        }}
+                      />
+                      {errors.price && (
+                        <span className="field-error">{errors.price}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* List brands */}
+                  <div className="field" ref={brandDropdownRef}>
+                    <label className="field-label" htmlFor="product-brand">
+                      Brand <span className="required">*</span>
+                    </label>
+                    <div className="field-input-group">
+                      {/* Search and select a brand name, but value is brand id */}
+                      <input
+                        id="product-brand"
+                        className={`field-input ${errors.brandId ? "field-input-error" : ""}`}
+                        type="text"
+                        placeholder="Search and select a brand"
+                        value={brandSearch}
+                        onChange={handleBrandSearchChange}
+                        onFocus={() => setShowBrandDropdown(true)}
+                        maxLength={50}
+                        autoComplete="off"
+                      />
+                      {/* Error of field */}
+                      {errors.brandId && (
+                        <span className="field-error">{errors.brandId}</span>
+                      )}
+                      {/* Brand dropdown */}
+                      {showBrandDropdown && brands.length > 0 && (
+                        <div className="brand-dropdown">
+                          {brands.map((brand) => (
+                            <div
+                              key={brand.brandId}
+                              className="brand-dropdown-item"
+                              onClick={() => handleSelectBrand(brand)}
+                            >
+                              {brand.brandName}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Sale date */}
+                  <div className="field">
+                    <label className="field-label" htmlFor="product-sale-date">
+                      Sale Date <span className="required">*</span>
+                    </label>
+                    <div className="field-input-group">
+                      <input
+                        id="product-sale-date"
+                        className={`
+                          field-input
+                          ${!saleDate ? "field-date-placeholder" : ""}
+                          ${errors.saleDate ? "field-input-error" : ""}
+                        `}
+                        type="date"
+                        value={saleDate}
+                        onChange={(e) => {
+                          setSaleDate(e.target.value);
+                          clearError("saleDate");
+                        }}
+                      />
+                      {errors.saleDate && (
+                        <span className="field-error">{errors.saleDate}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
-
-                {/* Quantity */}
-                <div className="field">
-                  <label className="field-label" htmlFor="product-quantity">
-                    Quantity <span className="required">*</span>
-                  </label>
-                  <div className="field-input-group">
-                    <input
-                      id="product-quantity"
-                      className={`field-input ${errors.quantity ? "field-input-error" : ""}`}
-                      type="number"
-                      min="0"
-                      placeholder="Enter quantity"
-                      value={quantity}
-                      onChange={(e) => {
-                        setQuantity(e.target.value);
-                        clearError("quantity");
-                      }}
-                    />
-                    {errors.quantity && (
-                      <span className="field-error">{errors.quantity}</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Price */}
-                <div className="field">
-                  <label className="field-label" htmlFor="product-price">
-                    Price <span className="required">*</span>
-                  </label>
-                  <div className="field-input-group">
-                    <input
-                      id="product-price"
-                      className={`field-input ${errors.price ? "field-input-error" : ""}`}
-                      type="number"
-                      min="0"
-                      step="1000"
-                      placeholder="Enter price"
-                      value={price}
-                      onChange={(e) => {
-                        setPrice(e.target.value);
-                        clearError("price");
-                      }}
-                    />
-                    {errors.price && (
-                      <span className="field-error">{errors.price}</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* List brands */}
-                <div className="field" ref={brandDropdownRef}>
-                  <label className="field-label" htmlFor="product-brand">
-                    Brand <span className="required">*</span>
-                  </label>
-                  <div className="field-input-group">
-                    {/* Search and select a brand name, but value is brand id */}
-                    <input
-                      id="product-brand"
-                      className={`field-input ${errors.brandId ? "field-input-error" : ""}`}
-                      type="text"
-                      placeholder="Search and select a brand"
-                      value={brandSearch}
-                      onChange={handleBrandSearchChange}
-                      onFocus={() => setShowBrandDropdown(true)}
-                      autoComplete="off"
-                    />
-                    {/* Error of field */}
-                    {errors.brandId && (
-                      <span className="field-error">{errors.brandId}</span>
-                    )}
-                    {/* Brand dropdown */}
-                    {showBrandDropdown && brands.length > 0 && (
-                      <div className="brand-dropdown">
-                        {brands.map((brand) => (
-                          <div
-                            key={brand.brandId}
-                            className="brand-dropdown-item"
-                            onClick={() => handleSelectBrand(brand)}
+                <div className="right-column">
+                  {/* Image */}
+                  <div className="field">
+                    <label className="field-label" htmlFor="product-image">
+                      Image
+                    </label>
+                    <div className="field-input-group">
+                      <input
+                        id="product-image"
+                        className="field-file"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
+                      {/* Show file name */}
+                      {imageFileName && (
+                        <div className="file-name">{imageFileName}</div>
+                      )}
+                      {/* Show error */}
+                      {errors.image && (
+                        <span className="field-error">{errors.image}</span>
+                      )}
+                      {imagePreview && (
+                        <div className="field-preview">
+                          <img
+                            src={imagePreview}
+                            onError={(e) => {
+                              e.target.src = NoProductImage;
+                            }}
+                            alt="Product preview"
+                          />
+                          <button
+                            type="button"
+                            className="field-preview-remove"
+                            onClick={() => {
+                              setImagePreview("");
+                              setImageFile(null);
+                              setImageFileName("");
+                              setIsImageDeleted(true);
+                              // Reset input file
+                              document.getElementById("product-image").value =
+                                "";
+                            }}
+                            title="Remove logo"
                           >
-                            {brand.brandName}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                            ✕
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                {/* Sale date */}
-                <div className="field">
-                  <label className="field-label" htmlFor="product-sale-date">
-                    Sale Date <span className="required">*</span>
-                  </label>
-                  <div className="field-input-group">
-                    <input
-                      id="product-sale-date"
-                      className={`
-                        field-input
-                        ${!saleDate ? "field-date-placeholder" : ""}
-                        ${errors.saleDate ? "field-input-error" : ""}
-                      `}
-                      type="date"
-                      value={saleDate}
-                      onChange={(e) => {
-                        setSaleDate(e.target.value);
-                        clearError("saleDate");
-                      }}
-                    />
-                    {errors.saleDate && (
-                      <span className="field-error">{errors.saleDate}</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Image */}
-                <div className="field">
-                  <label className="field-label" htmlFor="product-image">
-                    Image
-                  </label>
-                  <div className="field-input-group">
-                    <input
-                      id="product-image"
-                      className="field-file"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                    />
-                    {/* Show file name */}
-                    {imageFileName && (
-                      <div className="file-name">{imageFileName}</div>
-                    )}
-                    {/* Show error */}
-                    {errors.image && (
-                      <span className="field-error">{errors.image}</span>
-                    )}
-                    {imagePreview && (
-                      <div className="field-preview">
-                        <img
-                          src={imagePreview}
-                          onError={(e) => {
-                            e.target.src = NoProductImage;
-                          }}
-                          alt="Product preview"
-                        />
-                        <button
-                          type="button"
-                          className="field-preview-remove"
-                          onClick={() => {
-                            setImagePreview("");
-                            setImageFile(null);
-                            setImageFileName("");
-                            setIsImageDeleted(true);
-                            // Reset input file
-                            document.getElementById("product-image").value = "";
-                          }}
-                          title="Remove logo"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Description  */}
-                <div className="field">
-                  <label className="field-label" htmlFor="product-description">
-                    Description
-                  </label>
-                  <div className="field-input-group">
-                    <textarea
-                      id="product-description"
-                      className="field-textarea"
-                      placeholder="Enter product description"
-                      value={description}
-                      onChange={(e) => {
-                        setDescription(filterInput(e.target.value));
-                      }}
-                      rows={4}
-                    />
+                  {/* Description  */}
+                  <div className="field">
+                    <label
+                      className="field-label"
+                      htmlFor="product-description"
+                    >
+                      Description
+                    </label>
+                    <div className="field-input-group">
+                      <textarea
+                        id="product-description"
+                        className="field-textarea"
+                        placeholder="Enter product description"
+                        value={description}
+                        onChange={(e) => {
+                          setDescription(filterInput(e.target.value));
+                        }}
+                        maxLength={255}
+                        rows={4}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
