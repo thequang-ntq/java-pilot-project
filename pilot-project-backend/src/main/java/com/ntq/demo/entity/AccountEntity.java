@@ -34,7 +34,20 @@ public class AccountEntity {
 	@Column(name = "email", unique = true)
 	private String email;
 
+	@Column(name = "google_id", unique = true)
+	private String googleId;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "auth_type", nullable = false)
+	private AuthType authType = AuthType.LOCAL;
+
 	public enum Role {
-		ADMIN, USER
+		ADMIN,
+		USER
+	}
+
+	public enum AuthType {
+		LOCAL,
+		GOOGLE
 	}
 }

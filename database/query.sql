@@ -87,6 +87,25 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
     CONSTRAINT chk_order_detail_sale_price_value CHECK(`sale_price` >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- refresh token table: refresh token information for new JWT access token
+CREATE TABLE IF NOT EXISTS `refresh_token` (
+	`token_id` INT NOT NULL AUTO_INCREMENT,
+	`account_id` INT NOT NULL,
+    `token` VARCHAR(50) NOT NULL,
+    `expired_at` DATETIME NOT NULL,
+    CONSTRAINT pk_refresh_token PRIMARY KEY(`token_id`),
+    CONSTRAINT fk_refresh_token_account FOREIGN KEY(`account_id`) REFERENCES `account`(`account_id`),
+    CONSTRAINT uq_refresh_token_token UNIQUE(`token`)
+);
+
+-- =============================================
+-- ALTER
+-- =============================================
+ALTER TABLE `account`
+ADD COLUMN `google_id` VARCHAR(255) DEFAULT NULL,
+ADD COLUMN `auth_type` ENUM('LOCAL', 'GOOGLE') NOT NULL DEFAULT 'LOCAL',
+ADD CONSTRAINT uq_account_google_id UNIQUE(`google_id`);
+
 -- =============================================
 -- INDEX
 -- =============================================
@@ -119,6 +138,12 @@ CREATE INDEX idx_order_status ON `order`(`status`);
 -- search by order_time, finish_time
 CREATE INDEX idx_order_order_time ON `order`(`order_time`);
 CREATE INDEX idx_order_finish_time ON `order`(`finish_time`);
+
+-- Index for refresh_token table
+-- foreign key with account table
+CREATE INDEX idx_refresh_token_account_id ON `refresh_token`(`account_id`);
+-- get token
+CREATE INDEX idx_refresh_token_token ON `refresh_token`(`token`);
 
 -- =============================================
 -- INSERT data
@@ -201,6 +226,7 @@ SELECT * FROM `brand`;
 SELECT * FROM `product`;
 SELECT * FROM `order`;
 SELECT * FROM `order_detail`;
+SELECT * FROM `refresh_token`;
 SELECT * FROM `product` WHERE `is_deleted` = FALSE AND product_name LIKE '%Iphone%';
 */
 

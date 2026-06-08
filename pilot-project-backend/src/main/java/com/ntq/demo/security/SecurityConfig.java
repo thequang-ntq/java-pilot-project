@@ -27,6 +27,12 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+	@Autowired
+	private OAuth2SuccessHandler oAuth2SuccessHandler;
+
+	@Autowired
+	private OAuth2FailureHandler oAuth2FailureHandler;
+
 	/**
 	 * AuthenticationManager bean
 	 * Required to suppress auto-generated password warning
@@ -42,7 +48,9 @@ public class SecurityConfig {
 		http
 			// Disable CSRF because already has JWT (stateless, no need CSRF token)
 			.csrf(AbstractHttpConfigurer::disable)
-				// Stateless — no session, each request must have JWT Token
+				/**
+				 * STATELESS
+				 */
 				.sessionManagement(session ->
 					session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				/**
@@ -60,10 +68,9 @@ public class SecurityConfig {
 						response.setCharacterEncoding("UTF-8");
 						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 						response.getWriter().write(
-							"{\"responseCode\":401,\"responseMsg\":\"Unauthorized - Please login first\"}"
+							"{\"responseCode\":401,\"responseMsg\":\"Unauthorized - Please login first\",\"data\":null}"
 						);
 					})
-
 					/**
 					 * AccessDeniedHandler — triggered when has token but wrong role
 					 * Return 403
@@ -73,14 +80,18 @@ public class SecurityConfig {
 						response.setCharacterEncoding("UTF-8");
 						response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 						response.getWriter().write(
-							"{\"responseCode\":403,\"responseMsg\":\"Forbidden - You do not have permission\"}"
+							"{\"responseCode\":403,\"responseMsg\":\"Forbidden - You do not have permission\",\"data\":null}"
 						);
 					})
 				)
 				// endpoint permission
 				.authorizeHttpRequests(auth -> auth
 					// Public - everyone can access
-					.requestMatchers("/api/auth/**").permitAll()
+					.requestMatchers("/api/auth/login").permitAll()
+					.requestMatchers("/api/auth/register").permitAll()
+					.requestMatchers("/api/auth/refresh").permitAll()
+					// OAuth2 endpoints — permit for redirect
+					.requestMatchers("/api/auth/oauth2/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/brands/**").permitAll()
 					.requestMatchers("/images/**").permitAll()
@@ -89,8 +100,17 @@ public class SecurityConfig {
 					// only USER
 					.requestMatchers("/api/cart/**").hasRole("USER")
 					.requestMatchers("/api/orders/**").hasRole("USER")
-					// remains require login
+					// remains require login (include /logout)
 					.anyRequest().authenticated()
+				)
+				//Config OAuth2 Login
+				.oauth2Login(oauth2 -> oauth2
+					.authorizationEndpoint(endpoint -> endpoint
+						.baseUri("/api/auth/oauth2/authorize"))
+					.redirectionEndpoint(endpoint -> endpoint
+						.baseUri("/api/auth/oauth2/callback/*"))
+					.successHandler(oAuth2SuccessHandler)
+					.failureHandler(oAuth2FailureHandler)
 				)
 				// Add JWT filter run before UsernamePasswordAuthenticationFilter (Filter Login)
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -32,6 +32,17 @@ public class BrandController {
 	}
 
 	/**
+	 * GET /api/admin/brands?page=1&keyword=apple
+	 * Admin
+	 */
+	@GetMapping("/admin/brands")
+	public ResponseDataModel<?> getListForAdmin(
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "") String keyword) {
+		return brandService.getListForAdmin(page, keyword);
+	}
+
+	/**
 	 * GET /api/brands/1
 	 * Public
 	 */
@@ -50,12 +61,12 @@ public class BrandController {
 	}
 
 	/**
-	 * PUT /api/admin/brands
+	 * PUT /api/admin/brands/1
 	 * Admin only - update brand
 	 */
-	@PutMapping("/admin/brands")
-	public ResponseDataModel<?> update(@Valid @ModelAttribute BrandRequest request) {
-		return brandService.update(request);
+	@PutMapping("/admin/brands/{id}")
+	public ResponseDataModel<?> update(@PathVariable int id, @Valid @ModelAttribute BrandRequest request) {
+		return brandService.update(id, request);
 	}
 
 	/**

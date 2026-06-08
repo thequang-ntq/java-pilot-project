@@ -79,7 +79,8 @@ public class ProductServiceImpl implements ProductService {
 					p.getBrand().getBrandName(),
 					p.getSaleDate(),
 					p.getImage(),
-					p.getDescription()
+					p.getDescription(),
+					p.getIsDeleted()
 				))
 				.toList();
 
@@ -97,6 +98,65 @@ public class ProductServiceImpl implements ProductService {
 		} catch (Exception e) {
 			responseMsg = "Error when getting product list";
 			LOGGER.error("Error when getting product list: {}", e.getMessage(), e);
+		}
+		return new ResponseDataModel<>(responseCode, responseMsg);
+	}
+
+	@Override
+	public ResponseDataModel<PageResponse<ProductResponse>> getListForAdmin(int page, String keyword, BigDecimal priceFrom, BigDecimal priceTo) {
+		int responseCode = Constants.RESULT_CD_FAIL;
+		String responseMsg = "";
+
+		try {
+			Pageable pageable = PageRequest.of(
+				page - 1,
+				Constants.DEFAULT_PAGE_SIZE,
+				Sort.by("productId").ascending()
+			);
+
+			/**
+			 * JPA page object that is database query result
+			 * Get all products / Search products by keyword (product name / brand name) and price range
+			 */
+			Page<ProductEntity> productPage = ProductDao.searchProductsForAdmin(
+				keyword == null ? "" : keyword,
+				priceFrom,
+				priceTo,
+				pageable
+			);
+
+			/**
+			 * Map Entity -> Response DTO
+			 */
+			List<ProductResponse> content = productPage.getContent().stream()
+				.map(p -> new ProductResponse(
+					p.getProductId(),
+					p.getProductName(),
+					p.getQuantity(),
+					p.getPrice(),
+					p.getBrand().getBrandId(),
+					p.getBrand().getBrandName(),
+					p.getSaleDate(),
+					p.getImage(),
+					p.getDescription(),
+					p.getIsDeleted()
+				))
+				.toList();
+
+			/**
+			 * Page Response
+			 */
+			PageResponse<ProductResponse> data = new PageResponse<>(
+				content,
+				page,
+				productPage.getTotalPages(),
+				productPage.getTotalElements(),
+				Constants.DEFAULT_PAGE_SIZE
+			);
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
+		} catch (Exception e) {
+			responseMsg = "Error when getting product list for admin";
+			LOGGER.error("Error when getting product list for admin: {}", e.getMessage(), e);
 		}
 		return new ResponseDataModel<>(responseCode, responseMsg);
 	}
@@ -122,7 +182,8 @@ public class ProductServiceImpl implements ProductService {
 				product.getBrand().getBrandName(),
 				product.getSaleDate(),
 				product.getImage(),
-				product.getDescription()
+				product.getDescription(),
+				product.getIsDeleted()
 			);
 			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
 		} catch (Exception e) {
@@ -183,12 +244,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ResponseDataModel<Void> update(ProductRequest request) {
+	public ResponseDataModel<Void> update(int productId, ProductRequest request) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
 
 		try {
-			ProductEntity product = ProductDao.findById(request.getProductId()).orElse(null);
+			ProductEntity product = ProductDao.findById(productId).orElse(null);
 
 			if (product == null || product.getIsDeleted()) {
 				return new ResponseDataModel<>(Constants.RESULT_CD_INVALID, "Product not found");
@@ -234,7 +295,7 @@ public class ProductServiceImpl implements ProductService {
 			responseCode = Constants.RESULT_CD_SUCCESS;
 		} catch (Exception e) {
 			responseMsg = "Error when updating product";
-			LOGGER.error("Error when updating product {}: {}", request.getProductId(), e.getMessage(), e);
+			LOGGER.error("Error when updating product {}: {}", productId, e.getMessage(), e);
 		}
 		return new ResponseDataModel<>(responseCode, responseMsg);
 	}

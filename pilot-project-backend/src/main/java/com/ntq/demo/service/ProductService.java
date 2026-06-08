@@ -14,11 +14,13 @@ import java.math.BigDecimal;
 public interface ProductService {
 	ResponseDataModel<?> getList(int page, String keyword, BigDecimal priceFrom, BigDecimal priceTo);
 
+	ResponseDataModel<?> getListForAdmin(int page, String keyword, BigDecimal priceFrom, BigDecimal priceTo);
+
 	ResponseDataModel<?> getById(int productId);
 
 	ResponseDataModel<?> add(ProductRequest request);
 
-	ResponseDataModel<?> update(ProductRequest request);
+	ResponseDataModel<?> update(int productId, ProductRequest request);
 
 	ResponseDataModel<?> delete(int productId);
 }

@@ -16,11 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BrandRequest {
-	/**
-	 * Add -> Null, Edit -> Not null
-	 */
-	private Integer brandId;
-
 	@NotBlank(message = "Brand name is required")
 	@Size(max = 50, message = "Brand name must be at most 50 characters")
 	private String brandName;

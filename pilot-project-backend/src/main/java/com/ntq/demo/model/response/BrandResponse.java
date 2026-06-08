@@ -17,4 +17,5 @@ public class BrandResponse {
 	private String brandName;
 	private String logo;
 	private String description;
+	private Boolean isDeleted;
 }

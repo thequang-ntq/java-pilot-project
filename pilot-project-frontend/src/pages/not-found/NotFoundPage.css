@@ -1,0 +1,33 @@
+.not-found-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.not-found-page .error {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(109, 109, 109);
+}
+
+.not-found-page .title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.not-found-page .content {
+  font-size: 17px;
+  font-weight: 500;
+  color: rgb(109, 109, 109);
+}
+
+.not-found-page button {
+  font-size: 18px;
+}
+
+.not-found-page .image {
+  width: 15%;
+}

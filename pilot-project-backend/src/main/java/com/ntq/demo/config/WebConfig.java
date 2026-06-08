@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.*;
 public class WebConfig implements WebMvcConfigurer {
 
 	/**
-	 * Allow React: localhost:3000 for calling API
+	 * Allow React: localhost:5173 for calling API
 	 *
 	 * @param registry
 	 */

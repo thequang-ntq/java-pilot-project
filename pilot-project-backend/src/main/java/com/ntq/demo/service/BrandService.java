@@ -12,11 +12,13 @@ import com.ntq.demo.model.response.ResponseDataModel;
 public interface BrandService {
 	ResponseDataModel<?> getList(int page, String keyword);
 
+	ResponseDataModel<?> getListForAdmin(int page, String keyword);
+
 	ResponseDataModel<?> getById(int brandId);
 
 	ResponseDataModel<?> add(BrandRequest request);
 
-	ResponseDataModel<?> update(BrandRequest request);
+	ResponseDataModel<?> update(int brandId, BrandRequest request);
 
 	ResponseDataModel<?> delete(int brandId);
 }

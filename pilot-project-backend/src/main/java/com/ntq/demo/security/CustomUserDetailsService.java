@@ -53,7 +53,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		 */
 		return new User(
 			account.getAccountName(),
-			account.getPassword(),
+			null,
 			List.of(new SimpleGrantedAuthority("ROLE_" + account.getRole().name()))
 		);
 	}

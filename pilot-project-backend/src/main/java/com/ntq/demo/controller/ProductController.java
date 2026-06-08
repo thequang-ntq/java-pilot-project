@@ -35,6 +35,19 @@ public class ProductController {
 	}
 
 	/**
+	 * GET /api/admin/products?page=1&keyword=iphone&priceFrom=1000000&priceTo=5000000
+	 *
+	 */
+	@GetMapping("/admin/products")
+	public ResponseDataModel<?> getListForAdmin(
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(required = false) BigDecimal priceFrom,
+			@RequestParam(required = false) BigDecimal priceTo) {
+		return productService.getListForAdmin(page, keyword, priceFrom, priceTo);
+	}
+
+	/**
 	 * GET /api/products/1
 	 * Public
 	 */
@@ -53,12 +66,12 @@ public class ProductController {
 	}
 
 	/**
-	 * PUT /api/admin/products
+	 * PUT /api/admin/products/1
 	 * Admin only - update
 	 */
-	@PutMapping("/admin/products")
-	public ResponseDataModel<?> update(@Valid @ModelAttribute ProductRequest request) {
-		return productService.update(request);
+	@PutMapping("/admin/products/{id}")
+	public ResponseDataModel<?> update(@PathVariable int id, @Valid @ModelAttribute ProductRequest request) {
+		return productService.update(id, request);
 	}
 
 	/**

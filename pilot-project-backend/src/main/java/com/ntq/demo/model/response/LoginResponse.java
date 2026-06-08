@@ -14,9 +14,10 @@ import lombok.*;
 @AllArgsConstructor
 public class LoginResponse {
 	/**
-	 * JWT Token
+	 * JWT Access Token and refresh token
 	 */
-	private String token;
+	private String accessToken;
+	private String refreshToken;
 	private String accountName;
 	private String role;
 }

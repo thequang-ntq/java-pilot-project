@@ -29,4 +29,12 @@ public interface AccountDao extends JpaRepository<AccountEntity, Integer> {
 	 * @return true if exists, false if not
 	 */
 	boolean existsByAccountName(String accountName);
+
+	/**
+	 * Find account by google id
+	 *
+	 * @param googleId
+	 * @return AccountEntity
+	 */
+	Optional<AccountEntity> findByGoogleId(String googleId);
 }

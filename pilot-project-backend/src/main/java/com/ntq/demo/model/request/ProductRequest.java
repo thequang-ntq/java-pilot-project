@@ -18,11 +18,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductRequest {
-	/**
-	 * Add -> Null, Edit -> Not null
-	 */
-	private Integer productId;
-
 	@NotBlank(message = "Product name is required")
 	@Size(max = 50, message = "Product name must be at most 50 characters")
 	private String productName;

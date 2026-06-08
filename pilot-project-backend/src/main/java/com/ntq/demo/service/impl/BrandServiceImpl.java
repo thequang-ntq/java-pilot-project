@@ -70,7 +70,8 @@ public class BrandServiceImpl implements BrandService {
 					b.getBrandId(),
 					b.getBrandName(),
 					b.getLogo(),
-					b.getDescription()
+					b.getDescription(),
+					b.getIsDeleted()
 				))
 				.toList();
 
@@ -93,6 +94,59 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	@Override
+	public ResponseDataModel<PageResponse<BrandResponse>> getListForAdmin(int page, String keyword) {
+		int responseCode = Constants.RESULT_CD_FAIL;
+		String responseMsg = "";
+
+		try {
+			Pageable pageable = PageRequest.of(
+				//JPA index start at 0, but FE start at 1
+				page - 1,
+				Constants.DEFAULT_PAGE_SIZE,
+				Sort.by("brandId").ascending()
+			);
+
+			/**
+			 * JPA page object that is database query result
+			 * Get all brands that not been deleted / Search brands by keyword (brand name) and not been deleted
+			 */
+			Page<BrandEntity> brandPage = BrandDao.findByBrandNameContainingIgnoreCase(
+				keyword == null ? "" : keyword,
+				pageable
+			);
+
+			/**
+			 * Map Entity -> Response DTO
+			 */
+			List<BrandResponse> content = brandPage.getContent().stream()
+				.map(b -> new BrandResponse(
+					b.getBrandId(),
+					b.getBrandName(),
+					b.getLogo(),
+					b.getDescription(),
+					b.getIsDeleted()
+				))
+				.toList();
+
+			/**
+			 * Page Response
+			 */
+			PageResponse<BrandResponse> data = new PageResponse<>(
+				content,
+				page,
+				brandPage.getTotalPages(),
+				brandPage.getTotalElements(),
+				Constants.DEFAULT_PAGE_SIZE
+			);
+			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
+		} catch (Exception e) {
+			responseMsg = "Error when getting brand list for admin";
+			LOGGER.error("Error when getting brand list for admin: {}", e.getMessage(), e);
+		}
+		return new ResponseDataModel<>(responseCode, responseMsg);
+	}
+
+	@Override
 	public ResponseDataModel<BrandResponse> getById(int brandId) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
@@ -108,7 +162,8 @@ public class BrandServiceImpl implements BrandService {
 				brand.getBrandId(),
 				brand.getBrandName(),
 				brand.getLogo(),
-				brand.getDescription()
+				brand.getDescription(),
+				brand.getIsDeleted()
 			);
 			return new ResponseDataModel<>(Constants.RESULT_CD_SUCCESS, "Success", data);
 		} catch (Exception e) {
@@ -157,12 +212,12 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	@Override
-	public ResponseDataModel<Void> update(BrandRequest request) {
+	public ResponseDataModel<Void> update(int brandId, BrandRequest request) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
 
 		try {
-			BrandEntity brand = BrandDao.findById(request.getBrandId()).orElse(null);
+			BrandEntity brand = BrandDao.findById(brandId).orElse(null);
 
 			if (brand == null || brand.getIsDeleted()) {
 				return new ResponseDataModel<>(Constants.RESULT_CD_INVALID, "Brand not found");
@@ -196,7 +251,7 @@ public class BrandServiceImpl implements BrandService {
 			responseCode = Constants.RESULT_CD_SUCCESS;
 		} catch (Exception e) {
 			responseMsg = "Error when updating brand";
-			LOGGER.error("Error when updating brand {}: {}", request.getBrandId(), e.getMessage(), e);
+			LOGGER.error("Error when updating brand {}: {}", brandId, e.getMessage(), e);
 		}
 		return new ResponseDataModel<>(responseCode, responseMsg);
 	}

@@ -1,0 +1,983 @@
+{
+  "info": {
+    "_postman_id": "fc0bd3d0-7590-4799-86d3-d1fb9302eb6f",
+    "name": "JavaPilotProject",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "37850616"
+  },
+  "item": [
+    {
+      "name": "AuthController",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"accountName\": \"user3\",\r\n    \"password\": \"123456\",\r\n    \"confirmPassword\": \"123456\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"accountName\": \"testuser\",\r\n    \"password\": \"123456\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{api_prefix}}auth/login",
+              "host": [
+                "{{api_prefix}}auth"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_user}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/auth/logout",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"refreshToken\": \"2bbdc8d5-61d0-4318-aa87-fcab47402ebf\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{api_prefix}}auth/refresh",
+              "host": [
+                "{{api_prefix}}auth"
+              ],
+              "path": [
+                "refresh"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "BrandController",
+      "item": [
+        {
+          "name": "List&Search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/brands?page=1&keyword=",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "brands"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "keyword",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/brands/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "brands",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_admin}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "brandName",
+                  "value": "Levono 4",
+                  "type": "text",
+                  "uuid": "c1aae0c8-3eef-4d8e-844e-41b0181a7739"
+                },
+                {
+                  "key": "logoFiles",
+                  "type": "file",
+                  "uuid": "f51a3ce4-2d7e-4472-aac7-fead8c4874ad",
+                  "src": "/C:/Users/USER/Downloads/brand-sample.jpg"
+                },
+                {
+                  "key": "description",
+                  "value": "China",
+                  "type": "text",
+                  "uuid": "66650148-116d-4498-a560-33e6b382f4c7"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/admin/brands",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "brands"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_admin}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "brandId",
+                  "value": "14",
+                  "type": "text",
+                  "uuid": "60822fea-08aa-4e57-8cc0-ea43935d097d"
+                },
+                {
+                  "key": "brandName",
+                  "value": "Levono 4",
+                  "type": "text",
+                  "uuid": "87a772c8-cc8f-42b7-80f3-fcdec4d69362"
+                },
+                {
+                  "key": "description",
+                  "value": "China!",
+                  "type": "text",
+                  "uuid": "bd678625-c514-42cd-b09d-f2abbaed1e19"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/admin/brands",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "brands"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_admin}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/brands/14",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "brands",
+                "14"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ProductController",
+      "item": [
+        {
+          "name": "List&Search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/products?page=1&keyword=a&priceFrom=20000000&priceTo=30000000",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "keyword",
+                  "value": "a"
+                },
+                {
+                  "key": "priceFrom",
+                  "value": "20000000"
+                },
+                {
+                  "key": "priceTo",
+                  "value": "30000000"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/products/19",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products",
+                "19"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_admin}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "productName",
+                  "value": "Levono Laptop HP-15",
+                  "type": "text",
+                  "uuid": "6caa5b0c-3619-4125-8a07-f033b87f9697"
+                },
+                {
+                  "key": "quantity",
+                  "value": "90",
+                  "type": "text",
+                  "uuid": "5821638a-91e0-425e-8672-6c00872cb7ed"
+                },
+                {
+                  "key": "price",
+                  "value": "20500000",
+                  "type": "text",
+                  "uuid": "b3c76adc-e94e-4656-8956-f3def7665f87"
+                },
+                {
+                  "key": "brandId",
+                  "value": "10",
+                  "type": "text",
+                  "uuid": "b3bdbfce-06ee-4896-8d83-9c1ba9bd0919"
+                },
+                {
+                  "key": "saleDate",
+                  "value": "2026-04-30",
+                  "type": "text",
+                  "uuid": "f6ffb5a0-b537-4c6b-bb6a-97d38c50a293"
+                },
+                {
+                  "key": "imageFiles",
+                  "type": "file",
+                  "uuid": "d7902d13-ecfe-463e-9c97-1886a3a07093",
+                  "src": "/C:/Users/USER/Downloads/product-sample.jpeg"
+                },
+                {
+                  "key": "description",
+                  "value": "New version",
+                  "type": "text",
+                  "uuid": "61e474a2-5722-42b3-b943-e1fdf7305dc2"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/admin/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_admin}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "productId",
+                  "value": "20",
+                  "type": "text",
+                  "uuid": "1c198ae6-f564-431f-96ff-cc7eaa99cd6a"
+                },
+                {
+                  "key": "productName",
+                  "value": "Levono Laptop HP-15",
+                  "type": "text",
+                  "uuid": "6caa5b0c-3619-4125-8a07-f033b87f9697"
+                },
+                {
+                  "key": "quantity",
+                  "value": "60",
+                  "type": "text",
+                  "uuid": "5821638a-91e0-425e-8672-6c00872cb7ed"
+                },
+                {
+                  "key": "price",
+                  "value": "21000000",
+                  "type": "text",
+                  "uuid": "b3c76adc-e94e-4656-8956-f3def7665f87"
+                },
+                {
+                  "key": "brandId",
+                  "value": "10",
+                  "type": "text",
+                  "uuid": "b3bdbfce-06ee-4896-8d83-9c1ba9bd0919"
+                },
+                {
+                  "key": "saleDate",
+                  "value": "2026-04-30",
+                  "type": "text",
+                  "uuid": "f6ffb5a0-b537-4c6b-bb6a-97d38c50a293"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/admin/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_admin}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/products/20",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "products",
+                "20"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "OrderController",
+      "item": [
+        {
+          "name": "AddToCart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_user}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/cart/products/20",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "cart",
+                "products",
+                "20"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetCart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_user}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/cart?page=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "cart"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateCartItem",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_user}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/cart/products/15?quantity=3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "cart",
+                "products",
+                "15"
+              ],
+              "query": [
+                {
+                  "key": "quantity",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RemoveCartItem",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_user}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/cart/products/15",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "cart",
+                "products",
+                "15"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ClearCart",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_user}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/cart",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "cart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ConfirmOrder",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzc3NzMzMzkyLCJleHAiOjE3Nzc4MTk3OTJ9.y5uDwpN6X26K3yYInMZ3ZaRzqe1I6uJmurFAcl0EqF8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/cart/confirm",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "cart",
+                "confirm"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetOrderHistory",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_user}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/orders?page=1&keyword=&status=",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "keyword",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetOrderDetail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_user}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/orders/8?page=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "orders",
+                "8"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetAllOrders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_admin}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/orders?page=1&keyword=&status=",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "keyword",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetOrderDetailForAdmin",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_admin}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/orders/8?page=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "orders",
+                "8"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateOrderStatus",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_admin}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/orders/8/status?status=IN_PROGRESS",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "orders",
+                "8",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "IN_PROGRESS"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "OAuth2",
+      "item": [
+        {
+          "name": "OAuth2 Google Callback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/auth/oauth2/callback/google",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "oauth2",
+                "callback",
+                "google"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "OAuth2 Google Authorize",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/auth/oauth2/authorize/google",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "oauth2",
+                "authorize",
+                "google"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "token_admin",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "token_user",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "refresh_token_user",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "api_prefix",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "refresh_token_admin",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

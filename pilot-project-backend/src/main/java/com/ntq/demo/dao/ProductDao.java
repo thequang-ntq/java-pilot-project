@@ -34,11 +34,36 @@ public interface ProductDao extends JpaRepository<ProductEntity, Integer> {
 		AND b.isDeleted = false
 		AND (:keyword IS NULL OR
 			LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
-			LOWER(b.brandName)   LIKE LOWER(CONCAT('%', :keyword, '%')))
+			LOWER(b.brandName) LIKE LOWER(CONCAT('%', :keyword, '%')))
 		AND (:priceFrom IS NULL OR p.price >= :priceFrom)
-		AND (:priceTo   IS NULL OR p.price <= :priceTo)
+		AND (:priceTo IS NULL OR p.price <= :priceTo)
 	""")
 	Page<ProductEntity> searchProducts(
+		@Param("keyword") String keyword,
+		@Param("priceFrom") BigDecimal priceFrom,
+		@Param("priceTo") BigDecimal priceTo,
+		Pageable pageable
+	);
+
+	/**
+	 * Search by (product_name or brand_name) + price range
+	 *
+	 * @param keyword
+	 * @param priceFrom
+	 * @param priceTo
+	 * @param pageable
+	 * @return List Products with Pagination
+	 */
+	@Query(""" 
+		SELECT p FROM ProductEntity p
+		JOIN FETCH p.brand b
+		WHERE (:keyword IS NULL OR
+				LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+				LOWER(b.brandName) LIKE LOWER(CONCAT('%', :keyword, '%')))
+		AND (:priceFrom IS NULL OR p.price >= :priceFrom)
+		AND (:priceTo IS NULL OR p.price <= :priceTo)
+	""")
+	Page<ProductEntity> searchProductsForAdmin(
 		@Param("keyword") String keyword,
 		@Param("priceFrom") BigDecimal priceFrom,
 		@Param("priceTo") BigDecimal priceTo,

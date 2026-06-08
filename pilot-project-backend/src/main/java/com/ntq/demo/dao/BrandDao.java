@@ -24,6 +24,14 @@ public interface BrandDao extends JpaRepository<BrandEntity, Integer> {
 	Page<BrandEntity> findByIsDeletedFalseAndBrandNameContainingIgnoreCase(String brandName, Pageable pageable);
 
 	/**
+	 * List Brands search by brand name (ignore case)
+	 * @param brandName
+	 * @param pageable
+	 * @return List Brands with pagination
+	 */
+	Page<BrandEntity> findByBrandNameContainingIgnoreCase(String brandName, Pageable pageable);
+
+	/**
 	 * Check if brand name exists (Create/Update)
 	 *
 	 * @param brandName

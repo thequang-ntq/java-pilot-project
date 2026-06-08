@@ -2,6 +2,8 @@ package com.ntq.demo.service;
 
 import com.ntq.demo.model.response.ResponseDataModel;
 
+import java.time.LocalDate;
+
 /**
  * This interface is used to declare functions to handle logic and business for Order Entities
  *
@@ -22,12 +24,12 @@ public interface OrderService {
 
 	ResponseDataModel<?> confirmOrder(String accountName);
 
-	ResponseDataModel<?> getOrderHistory(String accountName, int page, String keyword, String status);
+	ResponseDataModel<?> getOrderHistory(String accountName, int page, LocalDate dateFrom, LocalDate dateTo, String status);
 
 	ResponseDataModel<?> getOrderDetail(String accountName, int orderId, int page);
 
 	// ===================== ADMIN =====================
-	ResponseDataModel<?> getAllOrders(int page, String keyword, String status);
+	ResponseDataModel<?> getAllOrders(int page, LocalDate dateFrom, LocalDate dateTo, String status);
 
 	ResponseDataModel<?> getOrderDetailForAdmin(int orderId, int page);
 

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * This class is used to provide JWT token utilities: generate, validate, extract claims
@@ -26,22 +27,30 @@ public class JwtTokenProvider {
 	private String jwtSecret;
 
 	/**
-	 * Create JWT Token from account name and role when login success
+	 * Generate JWT Access Token from account name and role when login success (short live - 1 hour)
 	 *
 	 * @param accountName
 	 * @param role
 	 * @return JWT Token
 	 */
-	public String generateToken(String accountName, String role) {
+	public String generateAccessToken(String accountName, String role) {
 		Date now = new Date();
-		Date expiry = new Date(now.getTime() + Constants.JWT_EXPIRATION_MS);
+		Date expiry = new Date(now.getTime() + Constants.JWT_ACCESS_EXPIRATION_MS);
 
 		return Jwts.builder().subject(accountName).claim("role", role).issuedAt(now).expiration(expiry)
 			.signWith(getSecretKey()).compact();
 	}
 
 	/**
-	 * Get account name from JWT Token
+	 * Generate Refresh Token — long live (7 days)
+	 * Random UUID 36 char, no payload needed — DB is source of truth
+	 */
+	public String generateRefreshToken() {
+		return UUID.randomUUID().toString();
+	}
+
+	/**
+	 * Get account name from JWT Access Token
 	 * @param token
 	 * @return Account name
 	 */
@@ -50,7 +59,7 @@ public class JwtTokenProvider {
 	}
 
 	/**
-	 * Get role from JWT Token
+	 * Get role from JWT Access Token
 	 * @param token
 	 * @return Role
 	 */
@@ -59,7 +68,7 @@ public class JwtTokenProvider {
 	}
 
 	/**
-	 * Check JWT Token validate
+	 * Check JWT Access Token validate
 	 * @param token
 	 * @return true if valid, false if not
 	 */

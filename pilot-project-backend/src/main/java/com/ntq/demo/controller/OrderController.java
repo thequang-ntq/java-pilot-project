@@ -3,8 +3,11 @@ package com.ntq.demo.controller;
 import com.ntq.demo.model.response.ResponseDataModel;
 import com.ntq.demo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 /**
  * This class is used to declare controller related to Order management
@@ -93,16 +96,20 @@ public class OrderController {
 	// =====================================================================
 
 	/**
-	 * GET /api/orders?page=1&keyword=&status=NEW
+	 * GET /api/orders?page=1&dateFrom=2026-05-01&dateTo=2026-05-07&status=NEW
 	 * Order history of user
+	 * @ DateTimeFormat(iso = DATE) auto parse String -> LocalDate
 	 */
 	@GetMapping("/orders")
 	public ResponseDataModel<?> getOrderHistory(
 			@AuthenticationPrincipal String accountName,
 			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(required = false)
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+			@RequestParam(required = false)
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
 			@RequestParam(defaultValue = "") String status) {
-		return orderService.getOrderHistory(accountName, page, keyword, status);
+		return orderService.getOrderHistory(accountName, page, dateFrom, dateTo, status);
 	}
 
 	/**
@@ -122,15 +129,18 @@ public class OrderController {
 	// =====================================================================
 
 	/**
-	 * GET /api/admin/orders?page=1&keyword=&status=NEW
+	 * GET /api/admin/orders?page=1&dateFrom=2026-05-01&dateTo=2026-05-07&status=NEW
 	 * All orders
 	 */
 	@GetMapping("/admin/orders")
 	public ResponseDataModel<?> getAllOrders(
 			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(required = false)
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+			@RequestParam(required = false)
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
 			@RequestParam(defaultValue = "") String status) {
-		return orderService.getAllOrders(page, keyword, status);
+		return orderService.getAllOrders(page, dateFrom, dateTo, status);
 	}
 
 	/**

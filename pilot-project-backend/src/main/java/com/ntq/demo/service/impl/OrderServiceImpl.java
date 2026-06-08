@@ -19,6 +19,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -355,7 +356,8 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public ResponseDataModel<PageResponse<OrderResponse>> getOrderHistory(String accountName, int page, String keyword, String status) {
+	public ResponseDataModel<PageResponse<OrderResponse>> getOrderHistory(String accountName, int page,
+			  LocalDate dateFrom, LocalDate dateTo, String status) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
 
@@ -373,6 +375,13 @@ public class OrderServiceImpl implements OrderService {
 				statusEnum = OrderEntity.Status.valueOf(status.toUpperCase());
 			}
 
+			LocalDateTime from = dateFrom != null
+				? dateFrom.atStartOfDay()
+				: null;
+			LocalDateTime to = dateTo != null
+				? dateTo.atTime(23, 59, 59)
+				: null;
+
 			Pageable pageable = PageRequest.of(
 				page - 1,
 				Constants.DEFAULT_PAGE_SIZE,
@@ -386,7 +395,8 @@ public class OrderServiceImpl implements OrderService {
 			Page<OrderEntity> orderPage = OrderDao.searchOrdersByAccount(
 				account,
 				statusEnum,
-				keyword == null ? "" : keyword,
+				from,
+				to,
 				pageable
 			);
 
@@ -450,7 +460,8 @@ public class OrderServiceImpl implements OrderService {
 	// =====================================================================
 
 	@Override
-	public ResponseDataModel<PageResponse<OrderResponse>> getAllOrders(int page, String keyword, String status) {
+	public ResponseDataModel<PageResponse<OrderResponse>> getAllOrders(int page, LocalDate dateFrom,
+			   LocalDate dateTo, String status) {
 		int responseCode = Constants.RESULT_CD_FAIL;
 		String responseMsg = "";
 
@@ -462,6 +473,13 @@ public class OrderServiceImpl implements OrderService {
 			if (status != null && !status.isBlank()) {
 				statusEnum = OrderEntity.Status.valueOf(status.toUpperCase());
 			}
+
+			LocalDateTime from = dateFrom != null
+				? dateFrom.atStartOfDay()
+				: null;
+			LocalDateTime to = dateTo != null
+				? dateTo.atTime(23, 59, 59)
+				: null;
 
 			Pageable pageable = PageRequest.of(
 				page - 1,
@@ -475,7 +493,8 @@ public class OrderServiceImpl implements OrderService {
 			 */
 			Page<OrderEntity> orderPage = OrderDao.searchAllOrders(
 				statusEnum,
-				keyword == null ? "" : keyword,
+				from,
+				to,
 				pageable
 			);
 
