@@ -4,8 +4,8 @@ import "./DashboardPage.css";
 import { getBrands } from "../../services/brands-api";
 import { getProducts } from "../../services/products-api";
 import { formatPrice } from "../../utils/utils";
-import useAuth from "../../components/context/use-auth";
-import { toast, Bounce } from "react-toastify";
+import useAuth from "../../context/use-auth";
+import { errorToast } from "./../../components/common/Toast/Toast";
 
 export default function DashboardPage() {
   const { auth } = useAuth();
@@ -95,31 +95,17 @@ export default function DashboardPage() {
   // Show error with toast
   useEffect(() => {
     if (error) {
-      toast.error(error, {
-        position: "top-center",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      errorToast(error);
       setError(null);
     }
   }, [error]);
 
   return (
-    <MainLayout pageClassName="dashboard-page" isLoading={isLoading}>
-      <section className="dashboard-header">
-        <div className="dashboard-header-container">
-          <div className="dashboard-header-wrapper">
-            <h1 className="title">Dashboard</h1>
-          </div>
-        </div>
-      </section>
-
+    <MainLayout
+      pageClassName="dashboard-page"
+      title="Dashboard"
+      isLoading={isLoading}
+    >
       <section className="dashboard-content">
         <div className="dashboard-content-container">
           <div className="dashboard-content-wrapper">
@@ -165,7 +151,7 @@ export default function DashboardPage() {
 
                 {isAdmin && (
                   <div className="stat-card">
-                    <div className="stat-icon">
+                    <div className="stat-icon danger-icon">
                       <i className="bi bi-info-lg"></i>
                     </div>
                     <div className="stat-info">

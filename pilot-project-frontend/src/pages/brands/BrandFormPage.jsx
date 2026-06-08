@@ -174,17 +174,14 @@ export default function BrandFormPage() {
   };
 
   return (
-    <MainLayout pageClassName="brand-form-page" isLoading={isLoading}>
+    <MainLayout
+      pageClassName="brand-form-page"
+      title={isEdit ? "Edit Brand" : "Add New Brand"}
+      isLoading={isLoading}
+    >
       <section className="brand-form-section">
         <div className="brand-form-container">
           <div className="brand-form-wrapper">
-            {/* Header */}
-            <div className="form-header">
-              <h1 className="title">
-                {isEdit ? "Edit Brand" : "Add New Brand"}
-              </h1>
-            </div>
-
             {/* Form */}
             <div className="form">
               <div className="form-fields">
@@ -196,6 +193,7 @@ export default function BrandFormPage() {
                   <div className="field-input-group">
                     <input
                       id="brand-name"
+                      name="brandName"
                       className={`field-input ${errors.name ? "field-input-error" : ""}`}
                       type="text"
                       placeholder="Enter brand name"
@@ -207,7 +205,7 @@ export default function BrandFormPage() {
                         clearError("name");
                       }}
                       maxLength={50}
-                      autoComplete="off"
+                      autoComplete="on"
                     />
                     {errors.name && (
                       <span className="field-error">{errors.name}</span>
@@ -294,6 +292,7 @@ export default function BrandFormPage() {
                   <div className="field-input-group">
                     <textarea
                       id="brand-description"
+                      name="brandDescription"
                       className="field-textarea"
                       placeholder="Enter brand description"
                       value={description}
@@ -302,6 +301,7 @@ export default function BrandFormPage() {
                       }}
                       maxLength={255}
                       rows={4}
+                      autoComplete="on"
                     />
                   </div>
                 </div>

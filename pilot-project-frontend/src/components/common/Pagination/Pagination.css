@@ -12,6 +12,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .pagination {
@@ -21,6 +22,7 @@
   justify-content: center;
   gap: var(--space-sm);
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .pagination .pagination-btn,
@@ -52,9 +54,9 @@
 .pagination .pagination-btn:hover:not(:disabled),
 .pagination .pagination-dot.active,
 .pagination .pagination-dot:hover {
-  background: var(--clr-body-text);
+  background: #60a5fa;
   color: var(--clr-bg);
-  border-color: var(--clr-body-text);
+  border-color: #60a5fa;
 }
 
 .pagination .pagination-btn:disabled {

@@ -54,9 +54,9 @@ public class GlobalExceptionHandler {
 		 * Check if it's file size exceeded
 		 */
 		if (ex.getCause() instanceof FileSizeLimitExceededException) {
-			message = "File size exceeds maximum allowed size (5MB)";
+			message = "File size exceeds maximum allowed size (25MB)";
 		} else if (ex.getMessage().contains("size")) {
-			message = "File size exceeds maximum allowed size (5MB)";
+			message = "File size exceeds maximum allowed size (25MB)";
 		}
 
 		return new ResponseDataModel<>(Constants.RESULT_CD_FAIL, message);

@@ -373,7 +373,7 @@
   .field
   .field-input-group
   .field-date-placeholder {
-  color: var(--clr-muted);
+  color: var(--clr-not-found);
   padding-right: var(--space-xs);
 }
 
@@ -548,7 +548,7 @@
   img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .product-form-page
@@ -624,7 +624,7 @@
   .form
   .form-actions
   .btn-primary {
-  background: var(--clr-header-footer-bg);
+  background: var(--clr-body-accent);
   color: var(--clr-header-footer-text);
 }
 
@@ -635,8 +635,7 @@
   .form
   .form-actions
   .btn-primary:hover {
-  background: rgba(0, 0, 0, 0.8);
-  filter: brightness(1.2);
+  filter: brightness(1.4);
 }
 
 .product-form-page
@@ -758,6 +757,7 @@
     .form-fields {
     display: flex;
     flex-direction: column;
+    gap: var(--space-md);
   }
 
   .product-form-page

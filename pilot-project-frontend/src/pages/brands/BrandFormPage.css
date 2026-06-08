@@ -8,18 +8,6 @@
   margin-bottom: var(--space-sm);
 }
 
-.brand-form-page
-  .brand-form-section
-  .brand-form-container
-  .brand-form-wrapper
-  .form-header
-  .title {
-  font-size: var(--text-xl);
-  font-weight: 700;
-  color: var(--clr-body-text);
-  margin-bottom: 0;
-}
-
 /* Form */
 .brand-form-page
   .brand-form-section
@@ -372,7 +360,7 @@
   img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .brand-form-page
@@ -448,7 +436,7 @@
   .form
   .form-actions
   .btn-primary {
-  background: var(--clr-header-footer-bg);
+  background: var(--clr-body-accent);
   color: var(--clr-header-footer-text);
 }
 
@@ -459,8 +447,7 @@
   .form
   .form-actions
   .btn-primary:hover {
-  background: rgba(0, 0, 0, 0.8);
-  filter: brightness(1.2);
+  filter: brightness(1.4);
 }
 
 .brand-form-page
@@ -497,6 +484,7 @@
     .form
     .form-fields {
     max-height: 63dvh;
+    gap: var(--space-xl);
   }
 
   .brand-form-page
@@ -567,6 +555,7 @@
     .form
     .form-fields {
     max-height: 65dvh;
+    gap: var(--space-xl);
   }
 }
 

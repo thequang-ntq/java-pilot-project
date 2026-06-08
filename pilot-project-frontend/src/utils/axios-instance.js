@@ -1,6 +1,6 @@
 import axios from "axios";
 import { clearAuth, getToken, getRefreshToken, setAuth } from "./auth-storage";
-import { BASE_URL } from "../utils/constants";
+import { BASE_URL } from "./constants";
 
 // Axios instance for API call, base url is prefix, timeout -> request after 10s is fail, default JSON type for request
 const axiosInstance = axios.create({

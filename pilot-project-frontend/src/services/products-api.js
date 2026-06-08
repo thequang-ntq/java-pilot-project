@@ -1,4 +1,4 @@
-import axiosInstance from "./axios-instance";
+import axiosInstance from "../utils/axios-instance";
 
 export const getProducts = (params) =>
   axiosInstance.get("/products", { params });

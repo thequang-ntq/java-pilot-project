@@ -57,7 +57,7 @@
   .login-card-header
   .sub {
   font-size: var(--text-sm);
-  color: var(--clr-muted);
+  color: var(--clr-not-found);
 }
 
 /* ========================================
@@ -225,7 +225,7 @@
   .login-btn {
   width: 100%;
   padding: var(--space-sm) 0;
-  background: var(--clr-header-footer-bg);
+  background: var(--clr-body-accent);
   color: var(--clr-header-footer-text);
   border: none;
   border-radius: var(--radius-sm);

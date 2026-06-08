@@ -64,6 +64,7 @@
     - [2026-05-29](#2026-05-29)
     - [2026-05-30](#2026-05-30)
     - [2026-06-01](#2026-06-01)
+    - [2026-06-02](#2026-06-02)
   - [Fix Bugs](#fix-bugs)
     - [2026-05-02](#2026-05-02-1)
     - [2026-05-04](#2026-05-04-1)
@@ -949,6 +950,27 @@ Login with an admin account first and get admin token.
    2.2. Sanitize in BrandMapper, ProductMapper, UserServiceImpl
    2.3. Password no filterInput, no sanitize.
 3. LogoutModal with loading spinner
+4. Fix by mentor's note:
+   4.1. Remove social link in footer
+   4.2. Change CSS display for footer
+   4.3. Move context, routes to outside components, same level with components
+   4.4. Delete test/java/com.ntq.demo/service
+   4.5. Center for section in main -> Take title to MainLayout, remains are section
+   4.6. Change color (shiny color)
+   4.7. Search merge to price, in ProductsPage, Not login
+   4.8. Real data sample: Login, Brands, Products, FormBrand, FormProduct -> autoComplete="on" + name="..."
+   4.9. File size max to 25MB
+   4.10. Show more data in iphone responsive: BrandsPage, ProductsPage + Gap & padding
+   4.11. Image overflow in FormPage
+   4.12. Mobile (iphone) not have padding-inline for section
+
+### 2026-06-02
+
+1. Small model notify for mobile
+2. Logout not have model
+3. Toast padding more between X and text, X center
+4. Move axios-instance and auth-storage to utils
+5. Remember account
 
 ## Fix Bugs
 

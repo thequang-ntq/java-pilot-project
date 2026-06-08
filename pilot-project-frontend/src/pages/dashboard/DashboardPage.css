@@ -1,17 +1,4 @@
 /* ========================================
-  Dashboard header
-======================================== */
-.dashboard-page
-  .dashboard-header
-  .dashboard-header-container
-  .dashboard-header-wrapper
-  .title {
-  font-size: var(--text-xl);
-  font-weight: 700;
-  margin-bottom: var(--space-xs);
-}
-
-/* ========================================
   Dashboard content
 ======================================== */
 .dashboard-page
@@ -40,9 +27,10 @@
   .dashboard-content-container
   .dashboard-content-wrapper
   .stats-grid {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-lg);
+  gap: var(--space-xl);
 }
 
 .dashboard-page
@@ -98,6 +86,16 @@
   .dashboard-content-wrapper
   .stats-grid
   .stat-card
+  .danger-icon {
+  background: var(--clr-notice-icon);
+}
+
+.dashboard-page
+  .dashboard-content
+  .dashboard-content-container
+  .dashboard-content-wrapper
+  .stats-grid
+  .stat-card
   .stat-info {
   flex: 1;
   min-width: 0;
@@ -127,7 +125,7 @@
   .stat-info
   .stat-label {
   font-size: var(--text-sm);
-  color: var(--clr-muted);
+  color: var(--clr-not-found);
   margin: 0;
 }
 
@@ -166,7 +164,7 @@
     .dashboard-content-container
     .dashboard-content-wrapper
     .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 

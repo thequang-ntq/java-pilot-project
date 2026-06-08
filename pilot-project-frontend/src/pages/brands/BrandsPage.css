@@ -1,16 +1,4 @@
 /* ========================================
-  Page header
-======================================== */
-.brands-page
-  .brands-header
-  .brands-header-container
-  .brands-header-wrapper
-  .title {
-  font-size: var(--text-xl);
-  font-weight: 700;
-}
-
-/* ========================================
   Actions bar
 ======================================== */
 .brands-page .brands-actions .brands-actions-container .brands-actions-wrapper {
@@ -102,7 +90,7 @@
   .search-group
   .btn-search {
   padding: 0 var(--space-md);
-  background: var(--clr-header-footer-bg);
+  background: var(--clr-body-accent);
   color: var(--clr-header-footer-text);
   border: none;
   border-radius: 0;
@@ -119,8 +107,7 @@
   .brands-actions-wrapper
   .search-group
   .btn-search:hover {
-  background: rgba(0, 0, 0, 0.8);
-  filter: brightness(1.2);
+  filter: brightness(1.6);
 }
 
 .brands-page
@@ -333,7 +320,7 @@
   thead
   th {
   font-weight: 600;
-  color: var(--clr-header-footer-text);
+  color: var(--clr-body-text);
 }
 
 /* Table body */
@@ -565,11 +552,10 @@
   position: relative;
   background: var(--clr-bg);
   border-radius: var(--radius-lg);
-  width: min(700px, 75dvw);
-  height: min(700px, 75dvh);
+  width: min(600px, 70dvw);
+  height: min(600px, 65dvh);
   display: flex;
   flex-direction: column;
-
   box-shadow: var(--box-shadow);
   animation: brandModalIn 0.2s ease;
   overflow: hidden;
@@ -741,7 +727,29 @@
     .table
     thead
     #table-header-id {
-    width: 20%;
+    width: 10%;
+  }
+
+  .brands-page
+    .brands-table
+    .brands-table-container
+    .brands-table-wrapper
+    .table-responsive
+    .table
+    thead
+    #table-header-name {
+    width: 40%;
+  }
+
+  .brands-page
+    .brands-table
+    .brands-table-container
+    .brands-table-wrapper
+    .table-responsive
+    .table
+    thead
+    #table-header-logo {
+    width: 25%;
   }
 
   .brands-page
@@ -752,16 +760,9 @@
     .table
     thead
     #table-header-actions {
-    width: 80%;
+    width: 25%;
   }
 
-  .brands-page
-    .brands-table
-    .brands-table-container
-    .brands-table-wrapper
-    .table-responsive
-    .table
-    #table-header-name,
   .brands-page
     .brands-table
     .brands-table-container
@@ -775,29 +776,13 @@
     .brands-table-wrapper
     .table-responsive
     .table
-    #table-header-logo,
-  .brands-page
-    .brands-table
-    .brands-table-container
-    .brands-table-wrapper
-    .table-responsive
-    .table
-    #table-data-name,
-  .brands-page
-    .brands-table
-    .brands-table-container
-    .brands-table-wrapper
-    .table-responsive
-    .table
-    #table-data-description,
-  .brands-page
-    .brands-table
-    .brands-table-container
-    .brands-table-wrapper
-    .table-responsive
-    .table
-    #table-data-logo {
+    #table-data-description {
     display: none;
+  }
+
+  .brand-modal-overlay .modal {
+    width: min(700px, 75dvw);
+    height: min(400px, 45dvh);
   }
 
   .brand-modal-overlay .modal .modal-body {
@@ -838,7 +823,18 @@
     .table
     thead
     #table-header-name {
-    width: 45%;
+    width: 40%;
+  }
+
+  .brands-page
+    .brands-table
+    .brands-table-container
+    .brands-table-wrapper
+    .table-responsive
+    .table
+    thead
+    #table-header-logo {
+    width: 25%;
   }
 
   .brands-page
@@ -849,7 +845,7 @@
     .table
     thead
     #table-header-actions {
-    width: 45%;
+    width: 25%;
   }
 
   .brands-page
@@ -865,22 +861,13 @@
     .brands-table-wrapper
     .table-responsive
     .table
-    #table-header-logo,
-  .brands-page
-    .brands-table
-    .brands-table-container
-    .brands-table-wrapper
-    .table-responsive
-    .table
-    #table-data-description,
-  .brands-page
-    .brands-table
-    .brands-table-container
-    .brands-table-wrapper
-    .table-responsive
-    .table
-    #table-data-logo {
+    #table-data-description {
     display: none;
+  }
+
+  .brand-modal-overlay .modal {
+    width: min(600px, 60dvw);
+    height: min(500px, 50dvh);
   }
 
   .brand-modal-overlay .modal .modal-body {
@@ -955,6 +942,11 @@
     thead
     #table-header-actions {
     width: 20%;
+  }
+
+  .brand-modal-overlay .modal {
+    width: min(600px, 60dvw);
+    height: min(500px, 50dvh);
   }
 }
 

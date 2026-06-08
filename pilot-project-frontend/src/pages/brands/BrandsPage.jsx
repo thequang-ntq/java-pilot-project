@@ -4,11 +4,14 @@ import MainLayout from "../../components/layout/MainLayout/MainLayout";
 import "./BrandsPage.css";
 import Pagination from "../../components/common/Pagination/Pagination";
 import { getBrands, deleteBrand } from "../../services/brands-api";
-import useAuth from "../../components/context/use-auth";
+import useAuth from "../../context/use-auth";
 import NoBrandImage from "../../assets/no-brand-image.jpg";
 import { BASE_URL } from "../../utils/constants";
 import { filterInput } from "../../utils/utils";
-import { toast, Bounce } from "react-toastify";
+import {
+  errorToast,
+  successToast,
+} from "./../../components/common/Toast/Toast";
 
 export default function BrandsPage() {
   const navigate = useNavigate();
@@ -102,29 +105,9 @@ export default function BrandsPage() {
 
     // Show error / success with toast by message from location.state
     if (type === "error" && message) {
-      toast.error(message, {
-        position: "top-center",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      errorToast(message);
     } else if (type === "success" && message) {
-      toast.success(message, {
-        position: "top-center",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      successToast(message);
     }
 
     // Set highlight turnoff after 3s
@@ -177,30 +160,10 @@ export default function BrandsPage() {
   // Show error / success with toast from others (delete, etc..)
   useEffect(() => {
     if (error) {
-      toast.error(error, {
-        position: "top-center",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      errorToast(error);
       setError(null);
     } else if (success) {
-      toast.success(success, {
-        position: "top-center",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      successToast(success);
       setSuccess(null);
     }
   }, [error, success]);
@@ -262,16 +225,11 @@ export default function BrandsPage() {
   };
 
   return (
-    <MainLayout pageClassName="brands-page" isLoading={isLoading}>
-      {/* Page header */}
-      <section className="brands-header">
-        <div className="brands-header-container">
-          <div className="brands-header-wrapper">
-            <h1 className="title">Brands Management</h1>
-          </div>
-        </div>
-      </section>
-
+    <MainLayout
+      pageClassName="brands-page"
+      title="Brands Management"
+      isLoading={isLoading}
+    >
       {/* Actions bar */}
       <section className="brands-actions">
         <div className="brands-actions-container">
@@ -282,11 +240,13 @@ export default function BrandsPage() {
                   <div className="search-group">
                     <input
                       className="input"
+                      name="brandSearch"
                       type="text"
                       placeholder="Search by brand name…"
                       value={search}
                       onChange={(e) => setSearch(filterInput(e.target.value))}
                       onKeyDown={handleKeyDown}
+                      autoComplete="on"
                     />
                     <i className="bi bi-search search-icon"></i>
                     <button
@@ -348,7 +308,7 @@ export default function BrandsPage() {
                 <>
                   <div className="table-responsive">
                     <table className="table table-striped table-hover">
-                      <thead className="table-dark">
+                      <thead className="table-primary">
                         <tr>
                           <th id="table-header-id">ID</th>
                           <th id="table-header-name">Brand Name</th>
