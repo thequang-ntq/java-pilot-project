@@ -67,6 +67,7 @@
     - [2026-06-01](#2026-06-01)
     - [2026-06-02](#2026-06-02)
     - [2026-06-05](#2026-06-05)
+    - [2026-06-12](#2026-06-12)
   - [Fix Bugs](#fix-bugs)
     - [2026-05-02](#2026-05-02-1)
     - [2026-05-04](#2026-05-04-1)
@@ -1049,6 +1050,11 @@ Login with an admin account first and get admin token.
    2.1. Lifecycle: Login success -> BE response access token & refresh token to FE, FE set in LocalStorage. When requests need access token, refresh in interceptors if access token expired, then set access token in Header.Authorization `Bearer {token}` and request to BE. BE check real user has permit for that request to API in SecurityConfig (If need authenticated or hasRole -> check JWT token), then get and check valid JWT token in JwtAuthenticationFilter -> go to serviceImpl (check valid)
    - In BE:
 
+### 2026-06-12
+
+1. Block negative price / quantity (onChange in input, onKeyDown in input block -, e, E) in ProductsPage & ProductFormPage
+2. Change price / quantity input to text, "." separate unit thousands (utils, ProductsPage, ProductFormPage), Number to parseNumber
+
 ## Fix Bugs
 
 ### 2026-05-02
@@ -1088,6 +1094,7 @@ Login with an admin account first and get admin token.
 | 2026-06-01               | sanitize Backend & Frontend (size, type), UX improvements Frontend                                 | Spring Boot, React |
 | 2026-06-02               | Restructure architecture Backend & Frontend, UX improvements Frontend                              | Spring Boot, React |
 | 2026-06-05 -> 2026-05-08 | Update README, merge conflict resolve.md                                                           | Track              |
+| 2026-06-12               | Block negative price while input                                                                   | FE                 |
 
 ## Future Work
 

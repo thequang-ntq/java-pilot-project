@@ -8,7 +8,12 @@ import {
   updateProduct,
 } from "../../services/products-api";
 import { getBrands } from "../../services/brands-api";
-import { sanitize, filterInput } from "../../utils/utils";
+import {
+  sanitize,
+  filterInput,
+  formatNumber,
+  parseNumber,
+} from "../../utils/utils";
 import NoProductImage from "../../assets/no-product-image.jpeg";
 import {
   BASE_URL,
@@ -231,8 +236,8 @@ export default function ProductFormPage() {
     // If has image then save its url,
     const formData = new FormData();
     formData.append("productName", sanitize(name));
-    formData.append("quantity", parseInt(quantity));
-    formData.append("price", parseFloat(price));
+    formData.append("quantity", parseInt(parseNumber(quantity)));
+    formData.append("price", parseFloat(parseNumber(price)));
     formData.append("brandId", parseInt(brandId));
     formData.append("saleDate", saleDate);
     formData.append("description", sanitize(description));
@@ -343,12 +348,14 @@ export default function ProductFormPage() {
                         id="product-quantity"
                         name="productQuantity"
                         className={`field-input ${errors.quantity ? "field-input-error" : ""}`}
-                        type="number"
-                        min="0"
+                        type="text"
+                        inputMode="numeric"
                         placeholder="Enter quantity"
                         value={quantity}
                         onChange={(e) => {
-                          setQuantity(e.target.value);
+                          const value = e.target.value;
+                          const formattedValue = formatNumber(value);
+                          setQuantity(formattedValue);
                         }}
                         onFocus={() => {
                           clearError("quantity");
@@ -371,13 +378,15 @@ export default function ProductFormPage() {
                         id="product-price"
                         className={`field-input ${errors.price ? "field-input-error" : ""}`}
                         name="productPrice"
-                        type="number"
-                        min="0"
+                        type="text"
+                        inputMode="numeric"
                         step="1000"
                         placeholder="Enter price"
                         value={price}
                         onChange={(e) => {
-                          setPrice(e.target.value);
+                          const value = e.target.value;
+                          const formattedValue = formatNumber(value);
+                          setPrice(formattedValue);
                         }}
                         onFocus={() => {
                           clearError("price");

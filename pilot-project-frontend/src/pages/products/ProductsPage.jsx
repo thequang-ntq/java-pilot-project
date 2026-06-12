@@ -7,7 +7,13 @@ import { getProducts, deleteProduct } from "../../services/products-api";
 import useAuth from "../../context/use-auth";
 import NoProductImage from "../../assets/no-product-image.jpeg";
 import { BASE_URL } from "../../utils/constants";
-import { formatPrice, formatDate, filterInput } from "../../utils/utils";
+import {
+  formatPrice,
+  formatDate,
+  filterInput,
+  formatNumber,
+  parseNumber,
+} from "../../utils/utils";
 import {
   errorToast,
   successToast,
@@ -47,10 +53,12 @@ export default function ProductsPage() {
 
   // Validation message
   const validationMessage =
-    priceFrom !== "" && priceTo !== "" && Number(priceFrom) > Number(priceTo)
+    priceFrom !== "" &&
+    priceTo !== "" &&
+    parseNumber(priceFrom) > parseNumber(priceTo)
       ? '"From price" can\'t be greater than "To price".'
-      : (priceFrom !== "" && Number(priceFrom) < 0) ||
-          (priceTo !== "" && Number(priceTo) < 0)
+      : (priceFrom !== "" && parseNumber(priceFrom) < 0) ||
+          (priceTo !== "" && parseNumber(priceTo) < 0)
         ? "Price cannot be negative."
         : "";
 
@@ -100,8 +108,8 @@ export default function ProductsPage() {
   // Check if  price from > price to
   // setState
   useEffect(() => {
-    const fromNum = Number(priceFrom);
-    const toNum = Number(priceTo);
+    const fromNum = parseNumber(priceFrom);
+    const toNum = parseNumber(priceTo);
 
     const invalidRange = priceFrom !== "" && priceTo !== "" && fromNum > toNum;
 
@@ -116,6 +124,7 @@ export default function ProductsPage() {
   // Load for first time, or when list changes (by change page / search)
   // setPage or setAppliedSearch -> fetch products again
   useEffect(() => {
+    console.log(appliedFilters.priceFrom, appliedFilters.priceTo);
     fetchProducts(
       page,
       appliedFilters.search,
@@ -125,7 +134,7 @@ export default function ProductsPage() {
   }, [page, appliedFilters]);
 
   // Handle state from navigation, after add/edit and Toast
-  // Change location state, setAppliedSearch, but state.current make sure to run just 1 time
+  // Change location state, setAppliedFilters, but state.current make sure to run just 1 time
   useEffect(() => {
     if (locationStateHandled.current) return;
 
@@ -224,7 +233,11 @@ export default function ProductsPage() {
 
   // Search -> apply search keyword, page = 1
   const handleSearch = () => {
-    setAppliedFilters({ search, priceFrom, priceTo });
+    setAppliedFilters({
+      search,
+      priceFrom: String(parseNumber(priceFrom)),
+      priceTo: String(parseNumber(priceTo)),
+    });
     setPage(1);
   };
 
@@ -327,12 +340,15 @@ export default function ProductsPage() {
                           <input
                             className="input"
                             name="priceFrom"
-                            type="number"
-                            min="0"
-                            step="1000"
+                            type="text"
+                            inputMode="numeric"
                             placeholder="From price..."
                             value={priceFrom}
-                            onChange={(e) => setPriceFrom(e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              const formattedValue = formatNumber(value);
+                              setPriceFrom(formattedValue);
+                            }}
                             onKeyDown={handleKeyDown}
                             autoComplete="on"
                           />
@@ -346,12 +362,15 @@ export default function ProductsPage() {
                           <input
                             className="input"
                             name="priceTo"
-                            type="number"
-                            min="0"
-                            step="1000"
+                            type="text"
+                            inputMode="numeric"
                             placeholder="To price..."
                             value={priceTo}
-                            onChange={(e) => setPriceTo(e.target.value)}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              const formattedValue = formatNumber(value);
+                              setPriceTo(formattedValue);
+                            }}
                             onKeyDown={handleKeyDown}
                             autoComplete="on"
                           />

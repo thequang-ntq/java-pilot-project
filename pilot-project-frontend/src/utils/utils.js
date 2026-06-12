@@ -41,3 +41,19 @@ export function formatDate(dateStr) {
   if (!dateStr) return "—";
   return new Date(dateStr).toLocaleDateString("en-GB");
 }
+
+// Function change text to number with separate unit thousands
+// Using for quantity, vietnamese price
+export const formatNumber = (value) => {
+  if (!value) return "";
+  // Delete all context not number
+  const cleanValue = value.toString().replace(/\D/g, "");
+  // Add "." to separate unit thousands
+  return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
+// Convert from text formatted to number to save to database (for example: "1.000" -> 1000)
+// Using for quantity, vietnamese price
+export const parseNumber = (value) => {
+  return Number(value.replace(/\./g, ""));
+};
